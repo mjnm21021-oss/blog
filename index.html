@@ -30,17 +30,130 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== ヒーロー ===== */
+  /* ===== ヒーロー (HTML/CSS版) ===== */
   .hero {
+    position: relative;
     width: 100%;
-    background: #fff;
-    border-bottom: 4px solid #e63946;
+    background: #fafafa;
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
   }
-  .hero img {
-    width: 100%;
-    aspect-ratio: 1280 / 670;
-    object-fit: cover;
-    display: block;
+  /* 左の赤縦帯 */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  /* 右の赤帯 + BUILD IN PUBLIC */
+  .hero::after {
+    content: 'BUILD IN PUBLIC';
+    position: absolute;
+    top: 0; right: 0;
+    width: 56px; height: 100%;
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    writing-mode: vertical-rl;
+    display: flex;
+    align-items: center;
+    padding-top: 60px;
+  }
+  /* 背景の薄い「5」 */
+  .hero-bg-num {
+    position: absolute;
+    top: -40px; left: -30px;
+    font-size: 420px;
+    font-weight: 900;
+    color: #f0f0f0;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  /* ドットグリッド */
+  .hero-dots {
+    position: absolute;
+    top: 0; left: 0;
+    width: calc(100% - 56px);
+    height: 100%;
+    background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 80px;
+  }
+  .hero-label {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .hero-num {
+    font-size: clamp(160px, 20vw, 260px);
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 0.85;
+    flex-shrink: 0;
+  }
+  .hero-text {
+    padding-top: 20px;
+  }
+  .hero-text .line1 {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-text .line2 {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .hero-text .line3 {
+    font-size: clamp(26px, 3.5vw, 44px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-sep {
+    width: 100px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px 0;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 700;
+    color: #999;
+  }
+  .hero-indicator {
+    position: absolute;
+    bottom: 40px;
+    right: 100px;
+    display: flex;
+    gap: 10px;
+    z-index: 1;
+  }
+  .hero-indicator span {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #d8d8d8;
+  }
+  .hero-indicator span:first-child {
+    background: var(--color-accent);
   }
 
   /* ===== メインコンテンツ ===== */
@@ -420,10 +533,26 @@
 </head>
 <body>
 
-<!-- ヒーロー -->
+<!-- ヒーロー (HTML/CSS) -->
 <div class="hero">
-  <img src="eyecatch_blog.png" alt="1日で5体のAIエージェントチームを作った話" id="hero-img"
-       onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1280 670%22><rect fill=%22%23fafafa%22 width=%221280%22 height=%22670%22/></svg>'">
+  <div class="hero-dots"></div>
+  <div class="hero-bg-num">5</div>
+  <div class="hero-inner">
+    <div class="hero-label">—— 1日の記録</div>
+    <div class="hero-title">
+      <div class="hero-num">5</div>
+      <div class="hero-text">
+        <div class="line1">体の</div>
+        <div class="line2">AIエージェント</div>
+        <div class="line3">チームを作った話</div>
+      </div>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">OpenClaw × Claude</div>
+  </div>
+  <div class="hero-indicator">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
 </div>
 
 <div class="container">
