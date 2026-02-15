@@ -30,12 +30,11 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== ヒーロー (HTML/CSS版) ===== */
+  /* ===== ヒーロー カルーセル ===== */
   .hero {
     position: relative;
     width: 100%;
     background: #fafafa;
-    padding: 60px 0 50px;
     overflow: hidden;
     border-bottom: 4px solid var(--color-accent);
   }
@@ -46,6 +45,7 @@
     top: 0; left: 0;
     width: 8px; height: 100%;
     background: var(--color-accent);
+    z-index: 2;
   }
   /* 右の赤帯 + BUILD IN PUBLIC */
   .hero::after {
@@ -62,17 +62,7 @@
     display: flex;
     align-items: center;
     padding-top: 60px;
-  }
-  /* 背景の薄い「5」 */
-  .hero-bg-num {
-    position: absolute;
-    top: -40px; left: -30px;
-    font-size: 420px;
-    font-weight: 900;
-    color: #f0f0f0;
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
+    z-index: 2;
   }
   /* ドットグリッド */
   .hero-dots {
@@ -83,13 +73,38 @@
     background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px);
     background-size: 30px 30px;
     pointer-events: none;
+    z-index: 0;
   }
-  .hero-inner {
+
+  /* カルーセル トラック */
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform;
+  }
+  .carousel-slide {
+    min-width: 100%;
+    padding: 60px 0 60px;
+    position: relative;
+  }
+  .carousel-slide .slide-inner {
     position: relative;
     z-index: 1;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 80px;
+    padding: 0 80px 0 80px;
+  }
+
+  /* スライド1: メインフック */
+  .slide-main .hero-bg-num {
+    position: absolute;
+    top: -40px; left: -30px;
+    font-size: 420px;
+    font-weight: 900;
+    color: #f0f0f0;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
   }
   .hero-label {
     font-size: 20px;
@@ -139,21 +154,135 @@
     font-weight: 700;
     color: #999;
   }
-  .hero-indicator {
+
+  /* スライド2: エージェント一覧 */
+  .slide-agents .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .slide-agents .agent-icon-card {
+    text-align: center;
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.2s;
+  }
+  .slide-agents .agent-icon-card:hover {
+    transform: translateY(-4px);
+  }
+  .slide-agents .agent-icon-card .icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+  .slide-agents .agent-icon-card .name {
+    font-size: 16px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .slide-agents .agent-icon-card .role {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+  .slide-agents .agent-icon-card.main-agent {
+    border: 2px solid var(--color-accent);
+  }
+  .slide-agents .slide-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 32px;
+    color: #333;
+  }
+  .slide-agents .slide-title span {
+    color: var(--color-accent);
+  }
+
+  /* スライド3: 読み方ガイド */
+  .slide-guide .slide-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 32px;
+    color: #333;
+  }
+  .slide-guide .guide-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+  }
+  .slide-guide .guide-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .slide-guide .guide-num {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 60px;
+    text-align: center;
+  }
+  .slide-guide .guide-content h4 {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .slide-guide .guide-content p {
+    font-size: 14px;
+    color: var(--color-text-light);
+    margin: 0;
+  }
+
+  /* カルーセル コントロール */
+  .carousel-controls {
     position: absolute;
-    bottom: 40px;
-    right: 100px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 3;
+  }
+  .carousel-dots {
     display: flex;
     gap: 10px;
-    z-index: 1;
   }
-  .hero-indicator span {
-    width: 14px; height: 14px;
+  .carousel-dots button {
+    width: 12px; height: 12px;
     border-radius: 50%;
-    background: #d8d8d8;
+    border: 2px solid #ccc;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s;
   }
-  .hero-indicator span:first-child {
+  .carousel-dots button.active {
     background: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: scale(1.2);
+  }
+  .carousel-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    background: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: #666;
+  }
+  .carousel-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 
   /* ===== メインコンテンツ ===== */
@@ -533,25 +662,105 @@
 </head>
 <body>
 
-<!-- ヒーロー (HTML/CSS) -->
+<!-- ヒーロー カルーセル -->
 <div class="hero">
   <div class="hero-dots"></div>
-  <div class="hero-bg-num">5</div>
-  <div class="hero-inner">
-    <div class="hero-label">—— 1日の記録</div>
-    <div class="hero-title">
-      <div class="hero-num">5</div>
-      <div class="hero-text">
-        <div class="line1">体の</div>
-        <div class="line2">AIエージェント</div>
-        <div class="line3">チームを作った話</div>
+
+  <div class="carousel-track" id="carouselTrack">
+
+    <!-- スライド1: メインフック -->
+    <div class="carousel-slide slide-main">
+      <div class="hero-bg-num">5</div>
+      <div class="slide-inner">
+        <div class="hero-label">—— OpenClaw 構築記録</div>
+        <div class="hero-title">
+          <div class="hero-num">5</div>
+          <div class="hero-text">
+            <div class="line1">体の</div>
+            <div class="line2">AIエージェント</div>
+            <div class="line3">チームを作った話</div>
+          </div>
+        </div>
+        <hr class="hero-sep">
+        <div class="hero-sub">OpenClaw × Claude</div>
       </div>
     </div>
-    <hr class="hero-sep">
-    <div class="hero-sub">OpenClaw × Claude</div>
+
+    <!-- スライド2: エージェント一覧 -->
+    <div class="carousel-slide slide-agents">
+      <div class="slide-inner">
+        <div class="slide-title">チーム構成 — <span>5 Agents</span></div>
+        <div class="agents-grid">
+          <div class="agent-icon-card main-agent">
+            <div class="icon">⚡</div>
+            <div class="name">Jarvis</div>
+            <div class="role">司令塔</div>
+          </div>
+          <div class="agent-icon-card">
+            <div class="icon">📊</div>
+            <div class="name">Analyst</div>
+            <div class="role">株分析</div>
+          </div>
+          <div class="agent-icon-card">
+            <div class="icon">✍️</div>
+            <div class="name">Scribe</div>
+            <div class="role">文章</div>
+          </div>
+          <div class="agent-icon-card">
+            <div class="icon">🔧</div>
+            <div class="name">Cloud</div>
+            <div class="role">技術</div>
+          </div>
+          <div class="agent-icon-card">
+            <div class="icon">🎨</div>
+            <div class="name">Pixel</div>
+            <div class="role">画像</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- スライド3: 読み方ガイド -->
+    <div class="carousel-slide slide-guide">
+      <div class="slide-inner">
+        <div class="slide-title">この記事の読み方</div>
+        <div class="guide-items">
+          <div class="guide-item">
+            <div class="guide-num">01</div>
+            <div class="guide-content">
+              <h4>エージェントの役割分担</h4>
+              <p>5体それぞれが何をやるか、どう連携するか</p>
+            </div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-num">02</div>
+            <div class="guide-content">
+              <h4>SOUL.mdの設計</h4>
+              <p>エージェントの「あり方」を定義するファイルの書き方</p>
+            </div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-num">03</div>
+            <div class="guide-content">
+              <h4>実際に動かしてみた結果</h4>
+              <p>朝ブリーフィング、モデル使い分け、ハマったポイント</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div class="hero-indicator">
-    <span></span><span></span><span></span><span></span><span></span>
+
+  <!-- カルーセルコントロール -->
+  <div class="carousel-controls">
+    <button class="carousel-btn" id="prevBtn">◀</button>
+    <div class="carousel-dots" id="carouselDots">
+      <button class="active" data-index="0"></button>
+      <button data-index="1"></button>
+      <button data-index="2"></button>
+    </div>
+    <button class="carousel-btn" id="nextBtn">▶</button>
   </div>
 </div>
 
@@ -754,16 +963,58 @@
 
 </div>
 
-<!-- スクロールフェードインアニメーション -->
+<!-- カルーセル + スクロールフェードイン -->
 <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+  // カルーセル
+  (() => {
+    const track = document.getElementById('carouselTrack');
+    const dots = document.querySelectorAll('#carouselDots button');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let current = 0;
+    const total = 3;
+    let autoTimer;
+
+    function goTo(i) {
+      current = ((i % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, idx) => d.classList.toggle('active', idx === current));
+    }
+
+    function startAuto() {
+      autoTimer = setInterval(() => goTo(current + 1), 5000);
+    }
+    function resetAuto() {
+      clearInterval(autoTimer);
+      startAuto();
+    }
+
+    prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+    nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+    dots.forEach(d => d.addEventListener('click', () => {
+      goTo(+d.dataset.index); resetAuto();
+    }));
+
+    // スワイプ対応
+    let startX = 0;
+    track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        goTo(current + (diff > 0 ? 1 : -1));
+        resetAuto();
       }
     });
-  }, { threshold: 0.1 });
 
+    startAuto();
+  })();
+
+  // スクロールフェードイン
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
