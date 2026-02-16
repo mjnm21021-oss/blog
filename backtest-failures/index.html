@@ -429,6 +429,120 @@
   .marker {
     background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
   }
+  /* キーメッセージ — 記事の核心 */
+  .key-message {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.8;
+    padding: 24px 28px;
+    margin: 32px 0;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 4px 16px rgba(230,57,70,0.08);
+    position: relative;
+  }
+  .key-message::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 48px;
+    color: var(--color-accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  /* コールアウトボックス — 気づき・注意 */
+  .callout-box {
+    padding: 20px 24px;
+    margin: 28px 0;
+    background: #fff8f0;
+    border-left: 4px solid #ffa940;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .callout-box.info {
+    background: #f0f7ff;
+    border-left-color: #4a90d9;
+  }
+  .callout-box.danger {
+    background: #fff5f5;
+    border-left-color: var(--color-accent);
+  }
+  .callout-box strong {
+    color: #1a1a1a;
+  }
+
+  /* 引用ブロック — 印象的なフレーズ */
+  .quote-block {
+    position: relative;
+    padding: 28px 32px 28px 48px;
+    margin: 36px 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.9;
+    color: #333;
+  }
+  .quote-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--color-accent), transparent);
+    border-radius: 4px;
+  }
+
+  /* CTAボタン */
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(230,57,70,0.3);
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230,57,70,0.4);
+  }
+  .cta-btn::before {
+    display: block;
+    position: absolute;
+    top: -50%;
+    left: -30%;
+    transform: rotate(30deg);
+    width: 70px;
+    height: 100px;
+    content: '';
+    background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.4), rgba(255,255,255,0));
+    animation: btn-shine 3s infinite linear;
+  }
+  @keyframes btn-shine {
+    0% { left: -30%; }
+    15% { left: 120%; }
+    100% { left: 120%; }
+  }
+
+  /* 数字ハイライト */
+  .num-highlight {
+    font-size: 1.3em;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
 
   .footer {
     text-align: center;
@@ -845,7 +959,7 @@
 
     <p class="fade-in">そう思った瞬間が、私の最大の失敗の始まりでした。</p>
 
-    <p class="fade-in">バックテスト（過去のデータを使った戦略の検証）で出た数字があまりにも良すぎて、私は浮かれていました。でも、<span class="marker">うまくいきすぎているときこそ、何かがおかしい</span>。この直感が、致命的なバグを見つけるきっかけになりました。</p>
+    <div class="key-message fade-in">うまくいきすぎているときこそ、何かがおかしい。この直感が、致命的なバグを見つけるきっかけになりました。</div>
 
     <p class="fade-in">今回は、AIと一緒にトレーディングシステムを作る中で遭遇した3つの失敗談をお話しします。特に「先読みバイアス」という、見た目は完璧なのに実際には使えない戦略になってしまう罠について、詳しく書きます。</p>
 
@@ -859,11 +973,12 @@
 
     <p class="fade-in">バックテストのv4（バージョン4）を回したとき、結果は衝撃的でした。</p>
 
-    <ul class="fade-in">
-      <li><strong>年率リターン：63.27%</strong></li>
-      <li><strong>勝率：56.2%</strong></li>
-      <li><strong>最大ドローダウン：-18.3%</strong></li>
-    </ul>
+    <div class="callout-box danger fade-in">
+      <strong>バグあり の異常な成績:</strong><br>
+      • 年率リターン：<span class="num-highlight">63.27%</span><br>
+      • 勝率：<span class="num-highlight">56.2%</span><br>
+      • 最大ドローダウン：-18.3%
+    </div>
 
     <p class="fade-in">普通、年率10-15%出れば優秀な戦略です。プロの運用でも20%を超えれば一流。それが63%。しかもドローダウン（最大の損失幅）は20%未満。</p>
 
