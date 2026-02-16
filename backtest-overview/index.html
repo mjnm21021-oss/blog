@@ -115,34 +115,23 @@
     letter-spacing: 0.1em;
   }
   .hero-title {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    text-align: center;
   }
   .hero-num {
-    font-size: clamp(100px, 16vw, 180px);
+    font-size: clamp(80px, 14vw, 160px);
     font-weight: 900;
     color: #1a1a1a;
-    line-height: 0.85;
-    flex-shrink: 0;
+    line-height: 1;
   }
   .hero-text {
-    padding-top: 16px;
-  }
-  .hero-text .line1 {
-    font-size: clamp(22px, 3.2vw, 36px);
+    margin-top: 12px;
+    font-size: clamp(20px, 3vw, 32px);
     font-weight: 900;
     color: #333;
+    line-height: 1.4;
   }
-  .hero-text .line2 {
-    font-size: clamp(22px, 3.2vw, 36px);
-    font-weight: 900;
+  .hero-text .accent {
     color: var(--color-accent);
-  }
-  .hero-text .line3 {
-    font-size: clamp(20px, 2.8vw, 32px);
-    font-weight: 900;
-    color: #333;
   }
   .hero-sep {
     width: 80px;
@@ -562,11 +551,7 @@
     <div class="hero-label">トレードシステム開発 — 概要編</div>
     <div class="hero-title">
       <div class="hero-num">28,000</div>
-      <div class="hero-text">
-        <div class="line1">行のコードを</div>
-        <div class="line2">AIが書いた</div>
-        <div class="line3">7日間の記録</div>
-      </div>
+      <div class="hero-text">行のコードを<span class="accent">AIが書いた</span><br>7日間の記録</div>
     </div>
     <hr class="hero-sep">
     <div class="hero-sub">Claude Code × バックテスト</div>
