@@ -573,9 +573,61 @@
       margin-top: 48px;
     }
   }
+  /* ヘッダー */
+  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #eee; z-index: 100; }
+  .header-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .header-logo { color: #1a1a1a; text-decoration: none; font-size: 16px; font-weight: 900; }
+  .hamburger { display: none; background: none; border: none; font-size: 28px; color: #e63946; cursor: pointer; padding: 4px 8px; line-height: 1; }
+  @media (max-width: 768px) {
+    .hamburger { display: block; }
+  }
+  .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; display: none; }
+  .nav-overlay.open { display: block; }
+  .nav-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: #fff; z-index: 300; padding: 24px; overflow-y: auto; transition: right 0.3s ease; box-shadow: -2px 0 12px rgba(0,0,0,0.1); }
+  .nav-menu.open { right: 0; }
+  .nav-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #666; position: absolute; top: 16px; right: 16px; }
+  .nav-menu h2 { font-size: 14px; color: #999; margin: 20px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #eee; }
+  .nav-menu ul { list-style: none; padding: 0; margin: 0; }
+  .nav-menu li { margin: 6px 0; }
+  .nav-menu li::before { content: "→ "; color: #e63946; }
+  .nav-menu a { color: #1a1a1a; text-decoration: none; font-size: 14px; }
+  .nav-menu a:hover { color: #e63946; }
 </style>
 </head>
 <body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="./" class="header-logo">『<span style="color:#e63946">AI</span>』と暮らす『<span style="color:#e63946">非エンジニア</span>』の日常</a>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</div>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-menu" id="navMenu">
+  <button class="nav-close" id="navClose">✕</button>
+  <h2>メニュー</h2>
+  <ul>
+    <li><a href="./">🏠 ホーム</a></li>
+  </ul>
+  <h2>記事一覧</h2>
+  <ul>
+    <li><a href="./day1/">Day1: チーム構築</a></li>
+    <li><a href="./soul-md-merged/">SOUL.md: AI臭さ対策</a></li>
+    <li><a href="./comfyui/">ComfyUI: ローカル自動化</a></li>
+    <li><a href="./morning-briefing/">朝ブリーフィング</a></li>
+    <li><a href="./token-efficiency/">トークン効率化</a></li>
+    <li><a href="./cron-heartbeat/">cron + heartbeat</a></li>
+    <li><a href="./multi-agent-flow/">マルチエージェント連携</a></li>
+    <li><a href="./backtest-overview/">トレードシステム概要編</a></li>
+    <li><a href="./backtest-failures/">トレードシステム失敗編</a></li>
+    <li><a href="./backtest-method/">トレードシステム仕組み編</a></li>
+  </ul>
+  <h2>その他</h2>
+  <ul>
+    <li><a href="./about/">About</a></li>
+  </ul>
+</nav>
 
 <div class="hero">
   <div class="hero-title">『<span style="color:#e63946">AI</span>』と暮らす<br>『<span style="color:#e63946">非エンジニア</span>』の日常</div>
@@ -881,5 +933,18 @@
 </script>
 
 <!-- Analytics: 解析サービス導入時にここにスクリプトを追加 -->
+<script>
+(function() {
+  var h = document.getElementById('hamburger');
+  var o = document.getElementById('navOverlay');
+  var m = document.getElementById('navMenu');
+  var c = document.getElementById('navClose');
+  function open() { o.classList.add('open'); m.classList.add('open'); }
+  function close() { o.classList.remove('open'); m.classList.remove('open'); }
+  if (h) h.addEventListener('click', open);
+  if (c) c.addEventListener('click', close);
+  if (o) o.addEventListener('click', close);
+})();
+</script>
 </body>
 </html>
