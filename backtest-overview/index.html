@@ -1325,5 +1325,25 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 })();
 </script>
 
+<!-- Lightbox -->
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;cursor:zoom-out;justify-content:center;align-items:center;">
+  <img id="lightbox-img" style="max-width:92%;max-height:92%;border-radius:8px;box-shadow:0 4px 30px rgba(0,0,0,0.5);">
+  <span style="position:absolute;top:20px;right:28px;color:#fff;font-size:36px;cursor:pointer;font-weight:300;">&times;</span>
+</div>
+<script>
+(function(){
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.image-block img').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lb.style.display = 'flex';
+    });
+  });
+  lb.addEventListener('click', () => { lb.style.display = 'none'; });
+})();
+</script>
+
 </body>
 </html>
