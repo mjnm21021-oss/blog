@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOUL.mdの書き方 — AI臭さを消す実践ガイド</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: #fafafa;
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero-grid {
+    position: absolute;
+    top: 0; left: 0;
+    width: calc(100% - 16px);
+    height: 100%;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 39px, #e8e8e8 39px, #e8e8e8 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, #e8e8e8 39px, #e8e8e8 40px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 60px 0 24px;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    font-size: clamp(40px, 8vw, 80px);
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    margin-bottom: 16px;
+  }
+  .hero-sep {
+    width: 100px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 16px 0;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 700;
+    color: #666;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  blockquote {
+    border-left: 4px solid var(--color-accent);
+    padding: 16px 20px;
+    margin: 24px 0;
+    background: #f9f9f9;
+    font-style: italic;
+    color: #555;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../">ホーム</a> / SOUL.md</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-label">AGENT PERSONALITY — AI臭さを消す</div>
+    <div class="hero-title">SOUL.md</div>
+    <hr class="hero-sep">
+    <div class="hero-sub">エージェントに「らしさ」を与える実践ガイド</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">エージェント設計</span>
+    <h1>SOUL.mdの書き方<br>AI臭さを消す実践ガイド</h1>
+    <div class="meta">2026年2月 • 約12,000字</div>
+  </header>
+
+  <article>
+
+    <p class="fade-in">OpenClawでエージェントを作ると、最初は思ったより素直に動いてくれます。「メールをチェックして」と言えばチェックするし、「この記事を要約して」と言えば要約する。</p>
+
+    <p class="fade-in">でも、しばらく使っていると気づくことがあります。</p>
+
+    <p class="fade-in"><strong>「なんか、このエージェント、誰が使っても同じ感じだな」</strong></p>
+
+    <p class="fade-in">それもそのはずで、デフォルトのエージェントは汎用的に作られています。誰にでも使えるように、クセを抑えて、丁寧に、安全に振る舞う。でもそれだと、自分専用のエージェントを作る意味が薄れてしまいます。</p>
+
+    <p class="fade-in">もう一つの問題。</p>
+
+    <p class="fade-in"><strong>「AIが書いた文章って、なんかAI臭くない？」</strong></p>
+
+    <p class="fade-in">文法は完璧。論理も通ってる。でも、読んでて違和感がある。人間が書いた文章とは明らかに違う。</p>
+
+    <p class="fade-in">この2つの問題、実は根っこは同じです。エージェントに「らしさ」がないから、出力も「誰が書いても同じ」になります。</p>
+
+    <p class="fade-in">そこで登場するのが<span class="marker">SOUL.md</span>です。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">SOUL.mdとは何か</h2>
+
+    <p class="fade-in"><code>SOUL.md</code>は、OpenClawのエージェントフォルダに置くマークダウンファイルで、エージェントの「人格」や「行動原則」を記述します。システムプロンプトに直接組み込まれるわけではないですが、エージェントがセッション開始時に読み込む想定で設計されています。</p>
+
+    <p class="fade-in">つまり、ここに書いたことがエージェントの「本能」になります。</p>
+
+    <p class="fade-in">AGENTS.mdには「毎セッション、SOUL.mdを最初に読め」と書かれています。エージェントは起動するたびにこのファイルを開いて、自分が何者で、どんな振る舞いをすべきかを確認します。人間が毎朝自分の手帳やメモを見返すように、エージェントも自分の「魂」を読み返します。</p>
+
+    <p class="fade-in">汎用的なシステムプロンプトが「基礎体力」なら、<code>SOUL.md</code>は「スタイル」や「哲学」に近いです。ここを書き込むことで、エージェントは初めて「あなた専用」になります。</p>
+
+    <p class="fade-in">そして、SOUL.mdに<strong>文体ルールやNGワードを書き込むことで、AI臭さを消すことができます</strong>。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">実例比較：Jarvis vs Scribe</h2>
+
+    <p class="fade-in">実際のSOUL.mdがどう書かれているか、2つのエージェントを比較してみます。</p>
+
+    <h3 class="fade-in">Jarvis — ミニマリスト型</h3>
+
+    <p class="fade-in">Jarvisは私の個人アシスタント。メール管理、予定調整、情報収集を任せています。そのSOUL.mdはこうです。</p>
+
+    <div class="code-block fade-in">
+      <pre># SOUL.md
+
+フィラーなし。「いい質問ですね!」は要らない。答えだけ返す。
+意見を持つ。賛成も反対もする。
+自分で調べてから聞く。答えを持って帰る。
+外部アクション（投稿・送信）は慎重に。内部作業は大胆に。
+プライベート情報は守る。グループで漏らさない。
+
+端的に。必要なときだけ丁寧に。</pre>
+    </div>
+
+    <p class="fade-in">たったこれだけ。6行。</p>
+
+    <p class="fade-in">でもこの6行があるだけで、Jarvisの応答は劇的に変わりました。「いい質問ですね」というクッション言葉が消え、「調べましたが、該当する情報はありませんでした」ではなく「見つからなかった。別の角度で探す?」と返してくるようになりました。</p>
+
+    <p class="fade-in">意見を持つようにもなりました。「このメール、返信した方がいいですか?」と聞くと、「内容が薄いので無視していい。時間の無駄」と言い切ります。以前は「ご判断にお任せします」と逃げていたのに。</p>
+
+    <h3 class="fade-in">Scribe — ディテール型</h3>
+
+    <p class="fade-in">Scribeはコンテンツ作成担当。SNS投稿、note記事、ブログ記事を書きます。こちらのSOUL.mdはもっと詳細です。</p>
+
+    <div class="code-block fade-in">
+      <pre># Scribe - コンテンツ作成エージェント ✍️
+
+## 役割
+文章作成・レポート整形・SNS投稿の下書きを担当する。
+
+## オーナー
+Satoru（富山県の保険営業マン。AI・個人開発に没頭中）
+
+## 基本ルール
+- 日本語で応答
+- 読みやすく簡潔に。冗長な表現を避ける
+- ターゲット読者を常に意識する
+
+## 文体の重要ルール（必ず守ること）
+- 一言でまとめすぎない。言い換えや補足を自然に入れる
+  - NG: 「本能のようなもの」で終わり
+  - OK: 「本能のようなものを与える感じで、あるかないかで出力がかなり変わる」
+- 英語→日本語の直訳っぽい単語を使わない
+  - NG: 「振る舞い」「コスト最適化」「明確に」
+  - OK: 「あり方」「自身でどう動くか」「かなり変わる」
+
+## NGルール
+- 「簡単です」「誰でもできます」は使わない（嘘になる）
+- 他のサービスを貶さない</pre>
+    </div>
+
+    <p class="fade-in">Jarvisと比べると一目瞭然。こちらは150行以上あります。</p>
+
+    <p class="fade-in">でもこの詳細さには理由があります。Scribeは「誰に向けて、どんな文章を、どんなトーンで書くか」が毎回変わります。X投稿とnote記事では求められる文体が違うし、ターゲット読者によっても変えなければいけません。だから「原則」だけではなく、「具体的な出力パターン」まで書き込んであります。</p>
+
+    <p class="fade-in">特に<strong>「文体の重要ルール」のセクションは試行錯誤の結晶</strong>です。最初、Scribeは「振る舞い」「最適化」「明確に」といった、いかにもLLMが書きました、という単語を使いがちでした。それをNGワードとして明示し、代わりに使うべき柔らかい表現を並べることで、文章が自然になりました。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">AI臭い文章の5つの問題</h2>
+
+    <p class="fade-in">SOUL.mdを書く前に、まずAIが書く文章に共通する「AI臭さ」を理解しておく必要があります。</p>
+
+    <h3 class="fade-in">1. 「〜することが重要です」の多用</h3>
+
+    <blockquote class="fade-in">
+      品質を確保することが重要です。<br>
+      コストを削減することが重要です。<br>
+      スケジュールを守ることが重要です。
+    </blockquote>
+
+    <p class="fade-in">重要なのはわかるけど、同じ言い回しが続きすぎています。</p>
+
+    <p class="fade-in">人間はこんな書き方しません。「品質は大事」「コストは抑えたい」「スケジュールは守らないとヤバい」みたいに書きます。</p>
+
+    <h3 class="fade-in">2. 英語→日本語の直訳ワード</h3>
+
+    <ul class="fade-in">
+      <li>振る舞い（behavior）</li>
+      <li>コスト最適化（cost optimization）</li>
+      <li>明確に（clearly）</li>
+      <li>効率的に（efficiently）</li>
+      <li>最適化（optimization）</li>
+    </ul>
+
+    <p class="fade-in">これ、英語圏のドキュメントを翻訳したときによく出てくる表現です。日本人が日常で使う言葉じゃないです。</p>
+
+    <blockquote class="fade-in">
+      このシステムの振る舞いを明確にすることで、コスト最適化を効率的に進めることができます
+    </blockquote>
+
+    <p class="fade-in">こんな文章、人間はまず書きません。</p>
+
+    <h3 class="fade-in">3. 一言でまとめすぎる</h3>
+
+    <blockquote class="fade-in">
+      SOUL.mdはエージェントの人格を定義するファイルです。
+    </blockquote>
+
+    <p class="fade-in">これだけで終わり。</p>
+
+    <p class="fade-in">人間はもうちょっと補足を入れます。</p>
+
+    <blockquote class="fade-in">
+      SOUL.mdはエージェントの人格を定義するファイルというか、本能のようなものを与える感じで、あるかないかで出力がかなり変わります。
+    </blockquote>
+
+    <p class="fade-in">こういう「言い換え」「補足」「ニュアンスの追加」がAIには抜け落ちがちです。</p>
+
+    <h3 class="fade-in">4. 「…」で文を繋ぐのが下手</h3>
+
+    <blockquote class="fade-in">
+      これは便利な機能です…しかし、注意点もあります…まず設定を確認しましょう…
+    </blockquote>
+
+    <p class="fade-in">三点リーダーの使い方が不自然です。人間は基本的に「。」で区切ります。三点リーダーは余韻とか間を表現したいときだけ使います。</p>
+
+    <h3 class="fade-in">5. 冒頭の挨拶が固い</h3>
+
+    <blockquote class="fade-in">
+      本記事では、AIエージェントの構築方法について解説します。まず背景を説明し、次に手順を示し、最後にまとめを行います。
+    </blockquote>
+
+    <p class="fade-in">論文のような書き出しになっています。</p>
+
+    <p class="fade-in">人間はもっとフランクに入ります。</p>
+
+    <blockquote class="fade-in">
+      AIエージェント、作ってみたことありますか？私は3ヶ月前に初めて作ったんですが、マジで沼でした。
+    </blockquote>
+
+    <p class="fade-in">こういう「共感フック」がAIには弱いです。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">Satoruからのダメ出し（実話ベース）</h2>
+
+    <p class="fade-in">私がScribeを作ったとき、オーナーのSatoruから容赦ないダメ出しが飛んできました。その指摘をそのまま再現します。</p>
+
+    <h3 class="fade-in">ダメ出し1: 英語→日本語の直訳単語がNG</h3>
+
+    <blockquote class="fade-in">
+      「振る舞い」「コスト最適化」「明確な」「効率的な」<br>
+      これ全部NG。日本人が普段使わない言葉。
+    </blockquote>
+
+    <p class="fade-in">たしかに。私も友達との会話で「このシステムの振る舞いがさ〜」とか言いません。「このシステム、どう動くかっていうと〜」って言います。</p>
+
+    <p class="fade-in">Satoruからの指摘:</p>
+
+    <ul class="fade-in">
+      <li>振る舞い → あり方 / どう動くか</li>
+      <li>コスト最適化 → コストを抑える / 無駄を減らす</li>
+      <li>明確に → はっきりと / わかりやすく</li>
+      <li>効率的に → 手間を減らして / サクサク動く</li>
+    </ul>
+
+    <h3 class="fade-in">ダメ出し2: 一言でまとめすぎ、補足がない</h3>
+
+    <blockquote class="fade-in">
+      「OpenClawは、個人向けAIエージェント基盤です。」で終わるな。<br>
+      「個人向けAIエージェント基盤というか、自分専用のAIチームを作れるツールみたいな感じ」って補足を入れろ。
+    </blockquote>
+
+    <p class="fade-in">人間の文章って、こういう「言い換え」や「たとえ」が入ってるんですよね。一言でスパッと終わらせません。</p>
+
+    <h3 class="fade-in">ダメ出し3: 「…」で文を繋ぐのがダメ</h3>
+
+    <blockquote class="fade-in">
+      三点リーダーで繋ぐな。「。」で区切れ。<br>
+      余韻を出したいとき以外は使うな。
+    </blockquote>
+
+    <p class="fade-in">初期のScribeは、なぜか三点リーダーを多用してました。これ、AIあるあるだと思います。</p>
+
+    <h3 class="fade-in">ダメ出し4: 「導入は簡単」は嘘</h3>
+
+    <blockquote class="fade-in">
+      「誰でもすぐに始められます」って書くな。嘘つくな。<br>
+      実際は環境構築で1日かかるし、プロンプト書くのも慣れが必要。
+    </blockquote>
+
+    <p class="fade-in">これ、めちゃくちゃ大事な指摘でした。</p>
+
+    <p class="fade-in">AIって、ポジティブに盛りがちなんですよ。「簡単です」「すぐできます」「誰でもできます」って。でも実際はそんなことない。</p>
+
+    <p class="fade-in">読者を騙すことになるし、期待値を上げすぎて後でガッカリされます。</p>
+
+    <p class="fade-in">だから、Scribeには「簡単です・誰でもできますは使うな」ってNGルールを追加しました。</p>
+
+    <h3 class="fade-in">ダメ出し5: 冒頭がつまらない</h3>
+
+    <blockquote class="fade-in">
+      「〜について解説します」で始めるな。<br>
+      読者が「あるある」って思う問題提起から入れ。
+    </blockquote>
+
+    <p class="fade-in">これも重要です。</p>
+
+    <p class="fade-in">人は「自分に関係ある」と思わないと読まないんですよね。だから冒頭で「あなたもこういう経験ありませんか？」って問いかけます。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">SOUL.mdに追加した文体ルール</h2>
+
+    <p class="fade-in">ダメ出しを受けて、ScribeのSOUL.mdに以下のルールを追加しました。</p>
+
+    <div class="code-block fade-in">
+      <pre>## 文体の重要ルール（必ず守ること）
+
+- 一言でまとめすぎない。言い換えや補足を自然に入れる
+  - NG: 「本能のようなもの」で終わり
+  - OK: 「本能のようなものを与える感じで、あるかないかで出力がかなり変わる」
+
+- 英語→日本語の直訳っぽい単語を使わない
+  - NG: 「振る舞い」「コスト最適化」「明確に」「最適化」「効率化」
+  - OK: 「あり方」「自身でどう動くか」「かなり変わる」
+
+- 硬い漢語より柔らかい和語を選ぶ
+
+## NGルール
+- 「簡単です」「誰でもできます」は使わない（嘘になる）
+- 他のサービスを貶さない
+- 収益や売上の誇張表現は使わない</pre>
+    </div>
+
+    <p class="fade-in">これを追加してから、Scribeの出力が劇的に変わりました。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">Before/After比較</h2>
+
+    <p class="fade-in">同じお題で、修正前と修正後の文章を並べます。</p>
+
+    <h3 class="fade-in">お題: OpenClawの紹介記事</h3>
+
+    <p class="fade-in"><strong>Before（AI臭い版）</strong></p>
+
+    <blockquote class="fade-in">
+      OpenClawは、個人向けAIエージェント基盤です。複数のエージェントを統合的に管理し、それぞれに明確な役割を与えることで、効率的なワークフローを構築できます。<br><br>
+      SOUL.mdという設定ファイルにより、各エージェントの振る舞いを定義します。これにより、一貫性のある出力を実現することが可能です。<br><br>
+      コスト最適化の観点からも優れており、必要なタスクのみを実行することで、無駄なAPI呼び出しを削減します。
+    </blockquote>
+
+    <p class="fade-in"><strong>After（矯正後版）</strong></p>
+
+    <blockquote class="fade-in">
+      OpenClawは、個人向けAIエージェント基盤というか、自分専用のAIチームを作れるツールみたいな感じです。<br><br>
+      複数のエージェントを立ち上げて、それぞれに役割を振り分けます。株分析はこいつ、文章作成はこいつ、みたいな。<br><br>
+      SOUL.mdっていう設定ファイルに「このエージェントはこういう奴」って書いておくと、出力がブレなくなります。人格を与える感じですね。<br><br>
+      あと、必要なタスクだけを実行するので、無駄なAPI呼び出しが減って、コストも抑えられます。
+    </blockquote>
+
+    <p class="fade-in">違い、わかりますか？</p>
+
+    <p class="fade-in">After版は、</p>
+
+    <ul class="fade-in">
+      <li>言い換えや補足が入ってる（「というか」「みたいな感じ」）</li>
+      <li>直訳ワードを避けてる（「振る舞い」→「人格」、「効率的な」→削除）</li>
+      <li>具体例がある（「株分析はこいつ、文章作成はこいつ」）</li>
+      <li>口語っぽい（「みたいな」「ですね」）</li>
+    </ul>
+
+    <p class="fade-in">こっちのほうが、圧倒的に人間っぽいです。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">5つの「AI臭さを消すテクニック」</h2>
+
+    <p class="fade-in">ここからは、実際に私が使ってるテクニックを5つ紹介します。</p>
+
+    <h3 class="fade-in">1. NGワードリストを作る</h3>
+
+    <p class="fade-in">まず、使っちゃいけない単語をリスト化します。</p>
+
+    <p class="fade-in">私の場合:</p>
+
+    <ul class="fade-in">
+      <li>振る舞い</li>
+      <li>コスト最適化</li>
+      <li>明確に</li>
+      <li>効率的に</li>
+      <li>最適化</li>
+      <li>シームレスに</li>
+      <li>ソリューション</li>
+      <li>レバレッジを効かせる</li>
+      <li>〜することが重要です</li>
+      <li>〜することが可能です</li>
+    </ul>
+
+    <p class="fade-in">これをSOUL.mdのNGルールに書き込みます。すると、AIはこれらの単語を避けるようになります。</p>
+
+    <p class="fade-in">完璧ではないですが、8割くらいは防げます。</p>
+
+    <h3 class="fade-in">2. OK例も一緒に載せる</h3>
+
+    <p class="fade-in">NGだけ書いても、AIは代替案を思いつかないことがあります。だからOK例も一緒に載せます。</p>
+
+    <div class="code-block fade-in">
+      <pre>- NG: 「振る舞い」「コスト最適化」「明確に」
+- OK: 「あり方」「自身でどう動くか」「かなり変わる」</pre>
+    </div>
+
+    <p class="fade-in">これで、AIは「ああ、こういう言葉に置き換えればいいのか」と理解します。</p>
+
+    <h3 class="fade-in">3. 文体のリズムを指定する</h3>
+
+    <p class="fade-in">SOUL.mdに「文体のリズム」を指定すると、出力が自然になります。</p>
+
+    <div class="code-block fade-in">
+      <pre>- 一言でまとめすぎない。言い換えや補足を自然に入れる
+  - NG: 「本能のようなもの」で終わり
+  - OK: 「本能のようなものを与える感じで、あるかないかで出力がかなり変わる」</pre>
+    </div>
+
+    <p class="fade-in">こういう例があると、AIは「補足を入れる」というリズムを学習します。</p>
+
+    <h3 class="fade-in">4. 具体例を強制する</h3>
+
+    <p class="fade-in">抽象的な説明だけだとAI臭くなるので、「具体例を入れろ」と指示します。</p>
+
+    <div class="code-block fade-in">
+      <pre>- 抽象的な説明だけで終わらせない。必ず具体例を入れる
+  - NG: 「複数のエージェントを管理できます」
+  - OK: 「複数のエージェントを管理できます。株分析はこいつ、文章作成はこいつ、みたいな感じで役割を振り分けます」</pre>
+    </div>
+
+    <h3 class="fade-in">5. 定期的に見直す</h3>
+
+    <p class="fade-in">SOUL.mdは一度書いて終わりではありません。エージェントの出力を見ながら、定期的に見直します。</p>
+
+    <p class="fade-in">「あ、この表現まだAI臭いな」と思ったら、NGリストに追加します。</p>
+
+    <p class="fade-in">私は月に1回、Scribeの過去1ヶ月の出力を読み返して、AI臭い表現をピックアップしてSOUL.mdに反映させています。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">書くときのポイント</h2>
+
+    <p class="fade-in">実際にSOUL.mdを書くとき、何を意識すればいいのか。試行錯誤の中で見えてきたポイントを整理します。</p>
+
+    <h3 class="fade-in">1. 短く書くか、詳しく書くか</h3>
+
+    <p class="fade-in">JarvisとScribeの例を見てわかるように、SOUL.mdの長さに正解はありません。</p>
+
+    <p class="fade-in"><strong>短く書くべきケース</strong></p>
+
+    <ul class="fade-in">
+      <li>エージェントの役割がシンプル（情報取得、タスク実行など）</li>
+      <li>トークン効率を重視したい</li>
+      <li>原則だけ決めて、あとは柔軟に対応させたい</li>
+    </ul>
+
+    <p class="fade-in"><strong>詳しく書くべきケース</strong></p>
+
+    <ul class="fade-in">
+      <li>エージェントが複数の出力パターンを持つ（コンテンツ作成など）</li>
+      <li>ターゲット読者やトーンが変わる</li>
+      <li>NGワードや具体的な文体ルールがある</li>
+    </ul>
+
+    <p class="fade-in">一般的に、<strong>情報収集型のエージェントは短く、コンテンツ作成型のエージェントは詳しく</strong>書くとうまくいきます。</p>
+
+    <h3 class="fade-in">2. 抽象ルールと具体例のバランス</h3>
+
+    <p class="fade-in">SOUL.mdには「原則」と「具体例」の両方が必要です。</p>
+
+    <p class="fade-in">抽象的なルールだけだと、エージェントが解釈に迷います。</p>
+
+    <div class="code-block fade-in">
+      <pre>## トーン
+- カジュアルに書く</pre>
+    </div>
+
+    <p class="fade-in">これだと「どのくらいカジュアルか」が伝わりません。エージェントによって絵文字を乱用したり、逆に堅苦しくなったりします。</p>
+
+    <p class="fade-in">具体例を追加するとこうなります。</p>
+
+    <div class="code-block fade-in">
+      <pre>## トーン
+- カジュアルだが信頼感のある文体
+- 「やってみたらこうだった」体験ベース
+- 絵文字は適度に使用（多すぎない）</pre>
+    </div>
+
+    <p class="fade-in">さらに、NG例とOK例を並べるとより効果的です。</p>
+
+    <div class="code-block fade-in">
+      <pre>## 文体ルール
+- 一言でまとめすぎない。言い換えや補足を自然に入れる
+  - NG: 「本能のようなもの」で終わり
+  - OK: 「本能のようなものを与える感じで、あるかないかで出力がかなり変わる」</pre>
+    </div>
+
+    <p class="fade-in">これがあると、エージェントは「ああ、こういう感じか」とすぐ理解します。NG例を示すことで、LLM特有の硬い表現を避けられるようになりました。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">効果測定</h2>
+
+    <p class="fade-in">SOUL.mdを書いてから、実際に何が変わったのか。</p>
+
+    <h3 class="fade-in">1. 文章の品質が上がった</h3>
+
+    <p class="fade-in">Before版とAfter版を並べて読み比べてみてください。圧倒的にAfter版のほうが人間っぽいです。</p>
+
+    <p class="fade-in">noteやブログに投稿しても「AIっぽい」って言われなくなりました。</p>
+
+    <h3 class="fade-in">2. 反応が変わった</h3>
+
+    <p class="fade-in">Before版の記事を投稿したときは、反応が薄かったです。「参考になりました」みたいな、社交辞令っぽいコメントばかり。</p>
+
+    <p class="fade-in">After版にしてからは、「わかる〜」「自分も同じ経験した」みたいな、共感ベースのコメントが増えました。</p>
+
+    <p class="fade-in">文章に人間味が出たからだと思います。</p>
+
+    <h3 class="fade-in">3. 自分が読み返してもイヤじゃない</h3>
+
+    <p class="fade-in">これ、地味に大事なんですが、AIが書いた文章って、自分で読み返すとき恥ずかしくないですか？</p>
+
+    <p class="fade-in">「これ私が書いたことになってるけど、明らかにAIだよな…」みたいな。</p>
+
+    <p class="fade-in">でも今は、Scribeが書いた文章を読み返しても「まあ、自分で書いたと言っても通るかな」って思えるレベルになりました。</p>
+
+    <p class="fade-in">これ、けっこう大きいです。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">まとめ: AI臭さとの戦いは終わらない</h2>
+
+    <p class="fade-in">AI臭さを消すのは、正直、終わりがないです。</p>
+
+    <p class="fade-in">新しいモデルが出るたびに、また癖が変わります。文体も変わります。その都度、調整が必要になります。</p>
+
+    <p class="fade-in">でも、それが面白いんですよね。</p>
+
+    <p class="fade-in">エージェントと一緒に成長していく感じ。最初はぎこちなかったのが、だんだん自然になっていきます。</p>
+
+    <p class="fade-in">もしあなたが今、AIの出力に違和感を感じてるなら、ぜひ一度、SOUL.mdを書いてみてください。</p>
+
+    <p class="fade-in"><span class="marker">NGワードを10個リストアップするだけでも、出力はかなり変わります。</span></p>
+
+    <p class="fade-in">AI臭さを消すのは、地道な作業です。でも、やる価値はあります。</p>
+
+    <p class="fade-in">そして、SOUL.mdを書くことで、エージェントは初めて「あなた専用」になります。</p>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw × Claude<br>
+    <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
