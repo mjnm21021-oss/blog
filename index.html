@@ -110,6 +110,33 @@
     opacity: 0.7;
   }
 
+  /* タブナビゲーション */
+  .tabs-nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    border-bottom: 2px solid #eee;
+  }
+  .tab-btn {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover {
+    color: #666;
+  }
+  .tab-btn.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+
   .articles {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -771,9 +798,15 @@
     />
   </div>
 
+  <!-- タブナビゲーション -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="blog">ブログ</button>
+    <button class="tab-btn" data-tab="news">海外AI（X投稿）</button>
+  </div>
+
   <div class="articles">
 
-    <a href="news-ai-cartel/" class="article-card fade-in">
+    <a href="news-ai-cartel/" class="article-card fade-in" data-category="news">
       <div class="article-card-thumb" style="background: linear-gradient(135deg, #ffe5e5 0%, #fafafa 100%);">
         <div style="font-size: 50px; font-weight: 900; color: #333; line-height: 0.9; display: flex; flex-direction: column; align-items: center;">
           <span style="font-size: 0.4em; color: #999;">$500</span>
@@ -792,7 +825,7 @@
       </div>
     </a>
 
-    <a href="news-shumer/" class="article-card fade-in">
+    <a href="news-shumer/" class="article-card fade-in" data-category="news">
       <div class="article-card-thumb" style="background: linear-gradient(135deg, #fff5f5 0%, #fafafa 100%);">
         <div style="font-size: 64px; font-weight: 900; color: #ff3c3c; line-height: 1;">81M</div>
         <div style="font-size: 11px; font-weight: 900; color: #e63946; letter-spacing: 0.1em; margin-top: 12px;">BREAKING NEWS</div>
@@ -808,7 +841,7 @@
       </div>
     </a>
 
-    <a href="backtest-overview/" class="article-card fade-in">
+    <a href="backtest-overview/" class="article-card fade-in" data-category="blog">
       <div class="article-card-thumb" style="background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px); background-size: 30px 30px;">
         <div style="font-size: 48px; font-weight: 900; color: #1a1a1a; line-height: 1; position: relative;">28k</div>
         <div style="font-size: 11px; font-weight: 900; color: #e63946; letter-spacing: 0.1em; margin-top: 12px;">BACKTEST</div>
@@ -824,7 +857,7 @@
       </div>
     </a>
 
-    <a href="backtest-failures/" class="article-card fade-in">
+    <a href="backtest-failures/" class="article-card fade-in" data-category="blog">
       <div class="article-card-thumb" style="background: linear-gradient(135deg, #ffe5e5 0%, #fafafa 100%);">
         <div style="font-size: 80px; font-weight: 900; color: #e63946; line-height: 1;">63%</div>
         <div style="font-size: 32px; font-weight: 900; color: #666; line-height: 1; margin-top: 8px;">→31%</div>
@@ -840,7 +873,7 @@
       </div>
     </a>
 
-    <a href="backtest-method/" class="article-card fade-in">
+    <a href="backtest-method/" class="article-card fade-in" data-category="blog">
       <div class="article-card-thumb" style="background-image: linear-gradient(0deg, #f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px); background-size: 28px 28px;">
         <div style="font-size: 48px; font-weight: 900; color: #1a1a1a; line-height: 1; letter-spacing: 0.05em; margin-bottom: 16px;">RULES</div>
         <div style="font-size: 12px; font-weight: 900; color: #666; text-align: center; line-height: 1.4;">CLAUDE.md<br>+ Skills<br>+ Memory</div>
@@ -855,7 +888,7 @@
       </div>
     </a>
 
-    <a href="day1/" class="article-card fade-in">
+    <a href="day1/" class="article-card fade-in" data-category="blog">
       <div class="article-card-thumb thumb-day1">
         <div class="thumb-num">5</div>
         <div class="thumb-label">AGENTS TEAM</div>
@@ -871,7 +904,7 @@
       </div>
     </a>
 
-    <a href="soul-md-merged/" class="article-card fade-in">
+    <a href="soul-md-merged/" class="article-card fade-in" data-category="blog">
       <div class="article-card-thumb thumb-soul">
         <div class="thumb-title">SOUL</div>
         <div class="thumb-label">人格定義<br>AI臭さ対策</div>
@@ -887,7 +920,7 @@
       </div>
     </a>
 
-    <a href="comfyui/" class="article-card fade-in">
+    <a href="comfyui/" class="article-card fade-in" data-category="blog">
       <div class="article-card-thumb thumb-comfy">
         <div class="thumb-title">COMFY<br>UI</div>
         <div class="thumb-label">API AUTO</div>
@@ -903,7 +936,7 @@
       </div>
     </a>
 
-    <a href="morning-briefing/" class="article-card fade-in card-hidden">
+    <a href="morning-briefing/" class="article-card fade-in card-hidden" data-category="blog">
       <div class="article-card-thumb thumb-morning">
         <div class="thumb-num">7</div>
         <div class="thumb-label">AM BRIEFING</div>
@@ -919,7 +952,7 @@
       </div>
     </a>
 
-    <a href="token-efficiency/" class="article-card fade-in card-hidden">
+    <a href="token-efficiency/" class="article-card fade-in card-hidden" data-category="blog">
       <div class="article-card-thumb thumb-token">
         <div class="thumb-num">83</div>
         <div class="thumb-percent">%</div>
@@ -935,7 +968,7 @@
       </div>
     </a>
 
-    <a href="cron-heartbeat/" class="article-card fade-in card-hidden">
+    <a href="cron-heartbeat/" class="article-card fade-in card-hidden" data-category="blog">
       <div class="article-card-thumb thumb-cron">
         <div class="thumb-title">cron<br><span class="vs">vs</span><br>beat</div>
       </div>
@@ -949,7 +982,7 @@
       </div>
     </a>
 
-    <a href="multi-agent-flow/" class="article-card fade-in card-hidden">
+    <a href="multi-agent-flow/" class="article-card fade-in card-hidden" data-category="blog">
       <div class="article-card-thumb thumb-multi">
         <div class="thumb-num">5</div>
         <div class="thumb-label">AGENTS FLOW</div>
@@ -1005,6 +1038,49 @@
 </div>
 
 <script>
+  // タブ切り替え機能
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const articleCards = document.querySelectorAll('.article-card');
+  const loadMoreBtn = document.getElementById('loadMore');
+  
+  // タブクリック時の処理
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      
+      // タブのアクティブ状態を切り替え
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // 記事カードの表示/非表示を切り替え
+      articleCards.forEach(card => {
+        const cardCategory = card.dataset.category;
+        if (cardCategory === targetTab) {
+          card.style.display = '';
+          card.classList.remove('card-hidden');
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      
+      // 「もっと読む」ボタンをリセット（全カード表示）
+      if (loadMoreBtn) {
+        loadMoreBtn.style.display = 'block';
+        loadMoreBtn.textContent = 'もっと読む';
+      }
+    });
+  });
+  
+  // ページ読み込み時にデフォルトで「ブログ」タブを表示
+  window.addEventListener('DOMContentLoaded', () => {
+    articleCards.forEach(card => {
+      const cardCategory = card.dataset.category;
+      if (cardCategory !== 'blog') {
+        card.style.display = 'none';
+      }
+    });
+  });
+
   // Fade-in animation
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
