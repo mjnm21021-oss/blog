@@ -408,6 +408,120 @@
     background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
   }
 
+  /* キーメッセージ — 記事の核心 */
+  .key-message {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.8;
+    padding: 24px 28px;
+    margin: 32px 0;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 4px 16px rgba(230,57,70,0.08);
+    position: relative;
+  }
+  .key-message::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 48px;
+    color: var(--color-accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  /* コールアウトボックス — 気づき・注意 */
+  .callout-box {
+    padding: 20px 24px;
+    margin: 28px 0;
+    background: #fff8f0;
+    border-left: 4px solid #ffa940;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .callout-box.info {
+    background: #f0f7ff;
+    border-left-color: #4a90d9;
+  }
+  .callout-box.danger {
+    background: #fff5f5;
+    border-left-color: var(--color-accent);
+  }
+  .callout-box strong {
+    color: #1a1a1a;
+  }
+
+  /* 引用ブロック — 印象的なフレーズ */
+  .quote-block {
+    position: relative;
+    padding: 28px 32px 28px 48px;
+    margin: 36px 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.9;
+    color: #333;
+  }
+  .quote-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--color-accent), transparent);
+    border-radius: 4px;
+  }
+
+  /* CTAボタン — 次記事・外部誘導 */
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(230,57,70,0.3);
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230,57,70,0.4);
+  }
+  .cta-btn::before {
+    display: block;
+    position: absolute;
+    top: -50%;
+    left: -30%;
+    transform: rotate(30deg);
+    width: 70px;
+    height: 100px;
+    content: '';
+    background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.4), rgba(255,255,255,0));
+    animation: btn-shine 3s infinite linear;
+  }
+  @keyframes btn-shine {
+    0% { left: -30%; }
+    15% { left: 120%; }
+    100% { left: 120%; }
+  }
+
+  /* 数字ハイライト */
+  .num-highlight {
+    font-size: 1.3em;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
   /* Stats Cards */
   .stats-cards {
     display: grid;
@@ -878,9 +992,9 @@
 
     <p class="fade-in">私はエンジニアではありません。Pythonのコードを1行も書けません。それでも今、私のPCの中では毎朝自動的に株のトレードシステムが動いています。</p>
 
-    <p class="fade-in">このシステムを作ったのは、私ではなくAI（Claude Code）です。私がやったことは<span class="marker">「何を作りたいか」を伝えただけ</span>です。7日間で28,000行のコードが生まれ、65個のファイルが作られ、69回のコミット（バージョン管理システムへの記録）が行われました。</p>
+    <p class="fade-in">このシステムを作ったのは、私ではなくAI（Claude Code）です。私がやったことは<span class="marker">「何を作りたいか」を伝えただけ</span>です。<span class="num-highlight">7</span>日間で<span class="num-highlight">28,000</span>行のコードが生まれ、<span class="num-highlight">65</span>個のファイルが作られ、<span class="num-highlight">69</span>回のコミット（バージョン管理システムへの記録）が行われました。</p>
 
-    <p class="fade-in">これは「AIを使えば誰でもエンジニアになれる」という話ではありません。<strong>「AIに任せれば、エンジニアでなくてもシステムが作れる」</strong>という話です。</p>
+    <div class="key-message fade-in">AIに任せれば、エンジニアでなくてもシステムが作れる。<br>これは「誰でもエンジニアになれる」という話ではない。</div>
 
     <p class="fade-in">この記事は3本シリーズの1本目です。ここでは全体像とインパクトをお伝えします。</p>
 
@@ -922,7 +1036,7 @@
 
     <p class="fade-in">投資で勝ちたいから——ではありません。</p>
 
-    <p class="fade-in">このシステムのコンセプトは<span class="marker">「勝つため」ではなく「負け方を理解する」</span>です。</p>
+    <div class="quote-block fade-in">このシステムのコンセプトは「勝つため」ではなく<span class="marker">「負け方を理解する」</span>こと。</div>
 
     <p class="fade-in">私は過去に何度か株で損をしました。そのたびに「なぜ負けたのか分からない」というモヤモヤが残りました。感情で売買していたので、記録もなく、検証のしようがありませんでした。</p>
 
@@ -989,9 +1103,7 @@
 
     <h2 class="fade-in">AIとどうやって開発したのか</h2>
 
-    <p class="fade-in">ここが一番のポイントです。</p>
-
-    <p class="fade-in">私はPythonを書けません。Git（バージョン管理ツール）の使い方も知りませんでした。それでもシステムができたのは、<strong>AIとの役割分担が機能した</strong>からです。</p>
+    <div class="callout-box info fade-in"><strong>ここが一番のポイントです。</strong><br>私はPythonを書けません。Gitの使い方も知りませんでした。それでもシステムができたのは、AIとの役割分担が機能したからです。</div>
 
     <h3 class="fade-in">役割分担</h3>
 
@@ -1120,7 +1232,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
       <li><strong>サーバー代</strong>: 0円（自分のPCで動かしている）</li>
     </ul>
 
-    <p class="fade-in">つまり、月額100ドル + APIの利用料でシステムが作れました。エンジニアを雇ったら数十万円かかるであろう規模のシステムです。</p>
+    <div class="callout-box danger fade-in">つまり、<span class="num-highlight">月額100ドル</span> + APIの利用料でシステムが作れました。<br>エンジニアを雇ったら数十万円かかるであろう規模のシステムです。</div>
 
     <hr class="divider">
 
@@ -1135,15 +1247,13 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
       <li><strong>ダッシュボードの文字化け</strong>: 日本語の銘柄名がブラウザで正しく表示されなかった</li>
     </ul>
 
-    <p class="fade-in">これらの問題はすべて、AIに「ここがおかしい」と伝えて修正してもらいました。私がやったことは「問題を見つけて報告する」だけです。修正方法を考えるのも、コードを直すのも、すべてAIがやりました。</p>
+    <div class="callout-box fade-in"><strong>ポイント:</strong> これらの問題はすべて、AIに「ここがおかしい」と伝えて修正してもらいました。私がやったことは「問題を見つけて報告する」だけです。修正方法を考えるのも、コードを直すのも、すべてAIがやりました。</div>
 
     <hr class="divider">
 
     <h2 class="fade-in">AIで何ができるのか</h2>
 
-    <p class="fade-in">今回の経験で分かったことは、<span class="marker">「AIは指示があれば大量のコードを書ける」</span>ということです。</p>
-
-    <p class="fade-in">ただし、AIは「何を作るか」を決められません。それは人間の仕事です。</p>
+    <div class="key-message fade-in">AIは指示があれば大量のコードを書ける。<br>ただし「何を作るか」を決められるのは、人間だけ。</div>
 
     <p class="fade-in">私はエンジニアではありませんが、「EOD型のトレードシステムが欲しい」「リスク管理が必要だ」「ダッシュボードで見たい」といった要求を出すことはできました。AIはそれを受け取って、形にしてくれました。</p>
 
@@ -1157,9 +1267,9 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <p class="fade-in">私はエンジニアではありません。でも、AIと協働することで、28,000行のトレードシステムを作ることができました。</p>
 
-    <p class="fade-in">これは「AIがすごい」という話であると同時に、<strong>「人間が何を作りたいかを言語化する能力の重要性」</strong>を示す話でもあります。</p>
+    <div class="quote-block fade-in">これは「AIがすごい」という話であると同時に、「人間が何を作りたいかを言語化する能力」がどれだけ大事かを示す話でもあります。</div>
 
-    <p class="fade-in">AIは道具です。使い方次第で、できることの幅が大きく広がります。</p>
+    <p class="fade-in">AIは道具です。使い方次第で、できることの幅がかなり変わります。</p>
 
     <p class="fade-in">この記事が、「AIで何かを作ってみたい」と思っている非エンジニアの方の参考になれば幸いです。</p>
 
