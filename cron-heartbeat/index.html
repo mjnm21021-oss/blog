@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cronとheartbeat、どう使い分ける？ | 『AI』と暮らす『非エンジニア』の日常</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: #fafafa;
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hero-text {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.2;
+  }
+  .hero-text .vs {
+    font-size: clamp(28px, 4vw, 40px);
+    color: var(--color-accent);
+    margin: 0 8px;
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 16px 0;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../">ホーム</a> / cron vs heartbeat</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">定期実行ガイド</div>
+    <div class="hero-title">
+      <div class="hero-text">cron <span class="vs">vs</span> heartbeat</div>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">時間ベース vs ポーリング型</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">OpenClaw実践</span>
+    <h1>cronとheartbeat、どう使い分ける？ — OpenClawの定期実行ガイド</h1>
+    <div class="meta">2026年2月</div>
+  </header>
+
+  <article>
+    <p class="fade-in">OpenClawを使っていると、「毎朝決まった時間にブリーフィングがほしい」「定期的にメールをチェックしてほしい」といった定期実行の仕組みがほしくなります。</p>
+    
+    <p class="fade-in">OpenClawには、そうした定期実行を実現する方法が2つあります。<strong>cron job</strong>と<strong>heartbeat</strong>です。この2つ、名前は聞いたことがあっても、どう使い分ければいいのかピンと来ない方も多いのではないでしょうか。</p>
+
+    <p class="fade-in">この記事では、cronとheartbeatの違いと使い分け方を、実例を交えながら解説します。</p>
+
+    <h2 class="fade-in">cronとheartbeat、何が違う？</h2>
+
+    <h3 class="fade-in">cron job: 正確な時間に、決めたことを実行</h3>
+
+    <p class="fade-in">cronは、<span class="marker">指定した時刻に、決めたタスクを実行する</span>仕組みです。</p>
+
+    <p class="fade-in">たとえば：</p>
+
+    <ul class="fade-in">
+      <li>毎朝7時にニュースブリーフィングを配信</li>
+      <li>毎週月曜日の9時にX（旧Twitter）の下書きを生成</li>
+      <li>20分後にリマインダーを送る</li>
+    </ul>
+
+    <p class="fade-in">こうした「○○時になったら△△する」という、<strong>時間ベースのタスク</strong>に向いています。</p>
+
+    <p class="fade-in">cronの特徴は以下の通りです：</p>
+
+    <ul class="fade-in">
+      <li><strong>時間が正確</strong>：指定した時刻ぴったりに実行されます</li>
+      <li><strong>独立したタスク</strong>：メインセッションとは別に動かせます</li>
+      <li><strong>一回きりも、繰り返しもOK</strong>：「一度だけ」も「毎日」も設定できます</li>
+    </ul>
+
+    <h3 class="fade-in">heartbeat: 定期的にチェックして、必要なら反応</h3>
+
+    <p class="fade-in">heartbeatは、<span class="marker">一定間隔でエージェントに問いかけて、やることがあるか確認する</span>仕組みです。</p>
+
+    <p class="fade-in">イメージとしては、エージェントに「何かある？」と定期的に声をかける感じです。エージェントは、その都度状況をチェックして：</p>
+
+    <ul class="fade-in">
+      <li>やることがあれば → 実行して報告</li>
+      <li>何もなければ → <code>HEARTBEAT_OK</code>と返して静かにする</li>
+    </ul>
+
+    <p class="fade-in">たとえば：</p>
+
+    <ul class="fade-in">
+      <li>30分おきにメールをチェック</li>
+      <li>1時間おきにカレンダーを確認して、近い予定があれば知らせる</li>
+      <li>定期的にTwitterのメンションを確認</li>
+    </ul>
+
+    <p class="fade-in">こうした「定期的に状況を見て、何かあれば対応する」という、<strong>ポーリング型のタスク</strong>に向いています。</p>
+
+    <h2 class="fade-in">どう使い分ける？ 判断の基準</h2>
+
+    <p class="fade-in">では、実際にどちらを使うべきか、どう判断すればいいでしょうか。</p>
+
+    <p class="fade-in">私が使っている判断基準はこうです：</p>
+
+    <h3 class="fade-in">「いつ」が大事 → cron</h3>
+
+    <p class="fade-in">タスクが<strong>時刻に紐づいている</strong>なら、cronを使います。</p>
+
+    <ul class="fade-in">
+      <li>毎朝7時のブリーフィング</li>
+      <li>毎週月曜の9時にレポート生成</li>
+      <li>毎日23時に「そろそろ寝る時間」リマインダー</li>
+      <li>会議の15分前に通知</li>
+    </ul>
+
+    <p class="fade-in">これらは「その時間になったら実行する」ことに意味があるので、cronが適しています。</p>
+
+    <h3 class="fade-in">「何か」を確認したい → heartbeat</h3>
+
+    <p class="fade-in">タスクが<strong>状態のチェック</strong>なら、heartbeatを使います。</p>
+
+    <ul class="fade-in">
+      <li>新着メールがあるか確認</li>
+      <li>近い予定があるか確認</li>
+      <li>Twitterにメンションがあるか確認</li>
+      <li>天気が変わったか確認</li>
+    </ul>
+
+    <p class="fade-in">これらは「定期的に見る」ことが目的で、多少タイミングがズレても問題ないので、heartbeatが適しています。</p>
+
+    <h2 class="fade-in">cronの設定方法</h2>
+
+    <h3 class="fade-in">スケジュールの指定方法</h3>
+
+    <p class="fade-in">cronのスケジュールは、3つの方法で指定できます。</p>
+
+    <h4 class="fade-in">1. at: 一度だけ、指定時刻に実行</h4>
+
+    <div class="code-block fade-in">
+      <pre>schedule:
+  type: at
+  at: '2026-02-20T15:30:00+09:00'</pre>
+    </div>
+
+    <p class="fade-in">「2026年2月20日15時30分（日本時間）に実行」という意味です。一度きりのリマインダーなどに使えます。</p>
+
+    <h4 class="fade-in">2. every: 一定間隔で繰り返し実行</h4>
+
+    <div class="code-block fade-in">
+      <pre>schedule:
+  type: every
+  everyMs: 3600000  # 1時間（ミリ秒）</pre>
+    </div>
+
+    <h4 class="fade-in">3. cron: cron式で柔軟に指定</h4>
+
+    <div class="code-block fade-in">
+      <pre>schedule:
+  type: cron
+  cron: '0 7 * * *'
+  timezone: 'Asia/Tokyo'</pre>
+    </div>
+
+    <p class="fade-in">これは「毎日7時（日本時間）に実行」という意味です。</p>
+
+    <p class="fade-in">cron式は左から順に：</p>
+
+    <div class="code-block fade-in">
+      <pre>分 時 日 月 曜日</pre>
+    </div>
+
+    <p class="fade-in">たとえば：</p>
+
+    <ul class="fade-in">
+      <li><code>0 7 * * *</code> → 毎日7時</li>
+      <li><code>0 9 * * 1</code> → 毎週月曜9時</li>
+      <li><code>30 18 * * 1-5</code> → 平日の18時30分</li>
+      <li><code>0 0 1 * *</code> → 毎月1日の0時</li>
+    </ul>
+
+    <h2 class="fade-in">heartbeatの設定方法</h2>
+
+    <p class="fade-in">heartbeatは、設定ファイルで間隔を指定しておき、エージェントに「何をチェックするか」をHEARTBEAT.mdに書いておく形で使います。</p>
+
+    <h3 class="fade-in">間隔の設定</h3>
+
+    <p class="fade-in">heartbeatの間隔は、エージェントの設定ファイルで指定します：</p>
+
+    <div class="code-block fade-in">
+      <pre>agent:
+  heartbeat:
+    enabled: true
+    intervalMs: 1800000  # 30分（ミリ秒）
+    quietHours:
+      start: '23:00'
+      end: '08:00'
+      timezone: 'Asia/Tokyo'</pre>
+    </div>
+
+    <p class="fade-in">ポイント：</p>
+
+    <ul class="fade-in">
+      <li><code>intervalMs</code>で間隔を指定（ミリ秒）</li>
+      <li><code>quietHours</code>で「静かにする時間帯」を設定できる</li>
+    </ul>
+
+    <h3 class="fade-in">HEARTBEAT.mdでタスクを指定</h3>
+
+    <p class="fade-in"><code>HEARTBEAT.md</code>に、チェックしてほしいことを書いておきます：</p>
+
+    <div class="code-block fade-in">
+      <pre># HEARTBEAT.md - 定期チェック項目
+
+## チェック項目
+
+以下を定期的に確認して、必要なら報告してください。
+
+### メール
+- 未読メールがあるか確認
+- 重要そうなメール（仕事関係、請求書など）があれば通知
+- 特に何もなければスキップ
+
+### カレンダー
+- 今後2時間以内の予定があるか確認
+- あれば通知（予定名と開始時刻）
+- なければスキップ
+
+## 報告のルール
+
+- すべてのチェックで何もなければ `HEARTBEAT_OK` だけ返す
+- 何かあった項目だけ報告する
+- 深夜（23:00-08:00）は緊急でない限り静かにする</pre>
+    </div>
+
+    <h2 class="fade-in">まとめ: cronとheartbeatの使い分けチャート</h2>
+
+    <p class="fade-in">最後に、判断チャートをまとめておきます。</p>
+
+    <ul class="fade-in">
+      <li><strong>時刻が大事</strong> → cron</li>
+      <li><strong>チェックしたい</strong> → heartbeat</li>
+      <li><strong>複数まとめたい</strong> → heartbeat</li>
+      <li><strong>独立タスク</strong> → cron (isolated)</li>
+    </ul>
+
+    <p class="fade-in">OpenClawのcronとheartbeat、最初は似たようなものに見えますが、使い分けが分かると、それぞれの良さが見えてきます。</p>
+
+    <p class="fade-in">cronは「時間通りに、決めたことをきっちり実行」するのが得意。朝のルーティンや定期レポートなど、時刻に紐づくタスクに向いています。</p>
+
+    <p class="fade-in">heartbeatは「定期的に様子を見て、何かあれば対応」するのが得意。メールチェックや予定確認など、ポーリング型のタスクに向いています。</p>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+    <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

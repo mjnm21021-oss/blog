@@ -206,6 +206,107 @@
     color: #999;
     margin-top: 8px;
   }
+  /* Morning briefingのサムネ */
+  .thumb-morning {
+    background: linear-gradient(135deg, #fff5e1 0%, #fafafa 100%);
+  }
+  .thumb-morning .thumb-num {
+    font-size: 120px;
+    font-weight: 900;
+    color: #ff9a3c;
+    line-height: 1;
+    position: relative;
+  }
+  .thumb-morning .thumb-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+  }
+  .thumb-morning .thumb-sub {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+    margin-top: 4px;
+  }
+  /* Token efficiencyのサムネ */
+  .thumb-token {
+    background-image: radial-gradient(circle, #e8e8e8 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+  }
+  .thumb-token .thumb-num {
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+  .thumb-token .thumb-percent {
+    font-size: 40px;
+    font-weight: 900;
+    color: #333;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .thumb-token .thumb-label {
+    font-size: 12px;
+    font-weight: 900;
+    color: #666;
+    letter-spacing: 0.1em;
+    margin-top: 16px;
+  }
+  /* Cron vs heartbeatのサムネ */
+  .thumb-cron {
+    background-image: 
+      linear-gradient(0deg, #f5f5f5 1px, transparent 1px),
+      linear-gradient(90deg, #f5f5f5 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .thumb-cron .thumb-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    text-align: center;
+  }
+  .thumb-cron .thumb-title .vs {
+    font-size: 20px;
+    color: var(--color-accent);
+  }
+  /* Multi-agent flowのサムネ */
+  .thumb-multi {
+    background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px);
+    background-size: 30px 30px;
+  }
+  .thumb-multi .thumb-num {
+    font-size: 120px;
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1;
+    position: relative;
+  }
+  .thumb-multi .thumb-num::before {
+    content: '5';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: #f0f0f0;
+    z-index: -1;
+  }
+  .thumb-multi .thumb-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+  }
+  .thumb-multi .thumb-sub {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+    margin-top: 4px;
+  }
   .article-card-content {
     flex: 1;
     padding: 32px 32px 32px 0;
@@ -316,6 +417,68 @@
           Midjourney、DALL-Eの月額課金に疲れた？ローカルで動かせば電気代以外タダ。何枚でも生成し放題。ComfyUIのインストールからFlux2導入、API自動化、Telegram連携まで全部書く。
         </div>
         <div class="meta">2026年2月 • 約7,500字</div>
+      </div>
+    </a>
+
+    <a href="morning-briefing/" class="article-card fade-in">
+      <div class="article-card-thumb thumb-morning">
+        <div class="thumb-num">7</div>
+        <div class="thumb-label">AM BRIEFING</div>
+        <div class="thumb-sub">毎朝自動</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">自動化実践</span>
+        <h2>OpenClawで朝ブリーフィングを自動化した話</h2>
+        <div class="desc">
+          毎朝7時に天気予報、傘判定、市場情報がTelegramに届く。OpenClawのcron機能と気象庁API、Web検索を組み合わせた朝のルーティン自動化。プロンプト設計から実際の運用まで。
+        </div>
+        <div class="meta">2026年2月</div>
+      </div>
+    </a>
+
+    <a href="token-efficiency/" class="article-card fade-in">
+      <div class="article-card-thumb thumb-token">
+        <div class="thumb-num">83</div>
+        <div class="thumb-percent">%</div>
+        <div class="thumb-label">削減</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">コスト削減</span>
+        <h2>AGENTS.mdを83%削減した話 — OpenClawのトークン効率化</h2>
+        <div class="desc">
+          AGENTS.md 4,800字→823字、SOUL.md 1,200字→149字。APIコストを5分の1にした実践記録。XMLタグ構造化、memory_search活用、offset/limit部分読みの具体的な方法。
+        </div>
+        <div class="meta">2026年2月</div>
+      </div>
+    </a>
+
+    <a href="cron-heartbeat/" class="article-card fade-in">
+      <div class="article-card-thumb thumb-cron">
+        <div class="thumb-title">cron<br><span class="vs">vs</span><br>beat</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">OpenClaw実践</span>
+        <h2>cronとheartbeat、どう使い分ける？ — OpenClawの定期実行ガイド</h2>
+        <div class="desc">
+          時間ベースのcronとポーリング型のheartbeat、どちらを使うべきか？実例を交えた判断基準、設定方法、よくある失敗例とトラブルシューティング。HEARTBEAT.mdの書き方も解説。
+        </div>
+        <div class="meta">2026年2月</div>
+      </div>
+    </a>
+
+    <a href="multi-agent-flow/" class="article-card fade-in">
+      <div class="article-card-thumb thumb-multi">
+        <div class="thumb-num">5</div>
+        <div class="thumb-label">AGENTS FLOW</div>
+        <div class="thumb-sub">連携の裏側</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">マルチエージェント</span>
+        <h2>5体のAIエージェントが実際どう連携してるか — マルチエージェントの裏側</h2>
+        <div class="desc">
+          Jarvis、Scribe、Analyst、Pixel、Cloudの5体構成。sessions_spawnとsessions_sendによる連携、SOUL.mdの重要性、X投稿作成からブログ公開までの実際のワークフロー。執筆者: Scribe
+        </div>
+        <div class="meta">2026年2月</div>
       </div>
     </a>
 

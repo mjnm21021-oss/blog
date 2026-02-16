@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGENTS.mdを83%削減した話 | 『AI』と暮らす『非エンジニア』の日常</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: #fafafa;
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero-chart {
+    position: absolute;
+    top: 50%;
+    right: -50px;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 200px;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .hero-chart-bar {
+    position: absolute;
+    bottom: 0;
+    width: 60px;
+    background: var(--color-accent);
+  }
+  .hero-chart-bar:nth-child(1) { left: 0; height: 180px; }
+  .hero-chart-bar:nth-child(2) { left: 80px; height: 140px; }
+  .hero-chart-bar:nth-child(3) { left: 160px; height: 30px; }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-num {
+    font-size: clamp(100px, 15vw, 160px);
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 0.85;
+    flex-shrink: 0;
+  }
+  .hero-percent {
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1;
+  }
+  .hero-text {
+    padding-top: 8px;
+  }
+  .hero-text .line1 {
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 16px 0;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../">ホーム</a> / トークン効率化</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-chart">
+    <div class="hero-chart-bar"></div>
+    <div class="hero-chart-bar"></div>
+    <div class="hero-chart-bar"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-label">TOKEN EFFICIENCY</div>
+    <div class="hero-title">
+      <div class="hero-num">83</div>
+      <div class="hero-text">
+        <div class="hero-percent">%</div>
+        <div class="line1">削減</div>
+      </div>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">AGENTS.md 4,800字 → 823字</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">コスト削減</span>
+    <h1>AGENTS.mdを83%削減した話 — OpenClawのトークン効率化</h1>
+    <div class="meta">2026年2月</div>
+  </header>
+
+  <article>
+    <p class="fade-in">OpenClawでエージェントを動かしていると、毎回のAPI呼び出しにコンテキストが乗ります。つまり、AGENTS.mdやSOUL.mdといった「誰であるか」を示すファイルが、会話のたびに送られ続けるわけです。</p>
+    
+    <p class="fade-in">これがコストに直結します。</p>
+
+    <p class="fade-in">私は最近、エージェントのコンテキストファイルを大幅に削減しました。具体的には以下の数字です。</p>
+
+    <ul class="fade-in">
+      <li>AGENTS.md: 4,800字 → 823字（83%削減）</li>
+      <li>SOUL.md: 1,200字 → 149字（88%削減）</li>
+    </ul>
+
+    <p class="fade-in">結果として、<span class="marker">APIコストは約5分の1</span>になりました。</p>
+
+    <h2 class="fade-in">なぜ削減が必要だったのか</h2>
+
+    <p class="fade-in">OpenClawのエージェントは、起動するたびに自分の「設定ファイル」を読み込みます。AGENTS.mdはその中核で、「あなたはどういう存在か」「何をすべきか」「どう記憶を残すか」といった基本的なルールが書かれています。</p>
+
+    <p class="fade-in">問題は、このファイルが毎回API呼び出しに含まれることです。</p>
+
+    <p class="fade-in">例えば、あなたがエージェントと50回やり取りしたとします。すると、AGENTS.mdは50回送られます。4,800字のファイルなら、50回で240,000字。これがすべてトークンとして課金対象になります。</p>
+
+    <h2 class="fade-in">実施した削減策</h2>
+
+    <h3 class="fade-in">1. AGENTS.mdの削減</h3>
+
+    <p class="fade-in">まず、AGENTS.mdから「毎回読む必要がない情報」を削り始めました。</p>
+
+    <p class="fade-in">削減前：</p>
+
+    <div class="code-block fade-in">
+      <pre>## Memory
+
+You wake up fresh each session. These files are your continuity:
+
+- **Daily notes:** `memory/YYYY-MM-DD.md` (create `memory/` if needed) — raw logs of what happened
+- **Long-term:** `MEMORY.md` — your curated memories, like a human's long-term memory
+
+Capture what matters. Decisions, context, things to remember. Skip the secrets unless asked to keep them.</pre>
+    </div>
+
+    <p class="fade-in">削減後：</p>
+
+    <div class="code-block fade-in">
+      <pre>&lt;memory&gt;
+- 毎セッション読む: SOUL.md, USER.md, memory/今日.md, memory/昨日.md
+- メイン会話のみ: MEMORY.md（memory_search推奨）
+- 毎日作成: memory/YYYY-MM-DD.md
+&lt;/memory&gt;</pre>
+    </div>
+
+    <p class="fade-in">このように、XML風のタグで構造化し、箇条書きに変えました。</p>
+
+    <h3 class="fade-in">2. XMLタグによる構造化</h3>
+
+    <p class="fade-in">削減とあわせて、内容をXMLタグで区切りました。これにより、必要な部分だけを読み取りやすくなります。</p>
+
+    <p class="fade-in">使ったタグは以下の通りです。</p>
+
+    <ul class="fade-in">
+      <li><code>&lt;boot&gt;</code>: 起動時に読むファイルリスト</li>
+      <li><code>&lt;memory&gt;</code>: メモリファイルの扱い方</li>
+      <li><code>&lt;safety&gt;</code>: 外部送信時の注意事項</li>
+      <li><code>&lt;groups&gt;</code>: グループチャットでのルール</li>
+      <li><code>&lt;heartbeat&gt;</code>: ハートビートの動き方</li>
+      <li><code>&lt;token_efficiency&gt;</code>: トークン削減のための工夫</li>
+    </ul>
+
+    <h3 class="fade-in">3. MEMORY.mdの読み方を変更</h3>
+
+    <p class="fade-in">MEMORY.mdは、長期記憶を保存するファイルです。ここには過去の重要な出来事、学んだこと、ユーザーの好みなどが蓄積されていきます。</p>
+
+    <p class="fade-in">問題は、このファイルが時間とともに肥大化することです。</p>
+
+    <p class="fade-in">変更前：</p>
+    <div class="code-block fade-in">
+      <pre>メイン会話では、MEMORY.mdを読んでください。</pre>
+    </div>
+
+    <p class="fade-in">変更後：</p>
+    <div class="code-block fade-in">
+      <pre>MEMORY.mdは全文読み禁止。memory_search()で必要部分だけ引く。</pre>
+    </div>
+
+    <p class="fade-in"><code>memory_search()</code>は、キーワードで検索して該当部分だけを返す関数です。これにより、必要な情報だけを取得できます。</p>
+
+    <h2 class="fade-in">削減の効果</h2>
+
+    <p class="fade-in">削減後、APIコストは約5分の1になりました。</p>
+
+    <p class="fade-in">具体的な数字は以下の通りです。</p>
+
+    <h3 class="fade-in">削減前</h3>
+
+    <ul class="fade-in">
+      <li>AGENTS.md: 4,800字（約1,600トークン）</li>
+      <li>SOUL.md: 1,200字（約400トークン）</li>
+      <li>合計: 約2,000トークン/回</li>
+    </ul>
+
+    <p class="fade-in">1日に100回呼び出すと、200,000トークン。</p>
+
+    <p class="fade-in">Claude APIの料金（2024年2月時点）で計算すると：</p>
+    <ul class="fade-in">
+      <li>Input: $3/million tokens</li>
+      <li>200,000 tokens/日 = $0.6/日 = 約$18/月</li>
+    </ul>
+
+    <h3 class="fade-in">削減後</h3>
+
+    <ul class="fade-in">
+      <li>AGENTS.md: 823字（約275トークン）</li>
+      <li>SOUL.md: 149字（約50トークン）</li>
+      <li>合計: 約325トークン/回</li>
+    </ul>
+
+    <p class="fade-in">1日に100回呼び出すと、32,500トークン。</p>
+
+    <ul class="fade-in">
+      <li>32,500 tokens/日 = $0.1/日 = 約$3/月</li>
+    </ul>
+
+    <p class="fade-in">月額で約$15（約2,000円）の削減です。</p>
+
+    <h2 class="fade-in">削減のコツ</h2>
+
+    <p class="fade-in">実際に削減してみて、いくつかコツがわかりました。</p>
+
+    <h3 class="fade-in">1. 説明を削る</h3>
+
+    <p class="fade-in">「なぜこうするのか」という理由の説明は、人間には有用ですが、エージェントには不要です。エージェントは「こうする」という指示だけあれば動きます。</p>
+
+    <h3 class="fade-in">2. 重複を削る</h3>
+
+    <p class="fade-in">同じことを違う言い回しで繰り返している部分は、1回だけ言えば十分です。</p>
+
+    <h3 class="fade-in">3. 箇条書きにする</h3>
+
+    <p class="fade-in">文章を箇条書きに変えるだけで、トークン数は減ります。</p>
+
+    <h2 class="fade-in">まとめ</h2>
+
+    <p class="fade-in">AGENTS.mdとSOUL.mdを大幅に削減し、APIコストを約5分の1にしました。</p>
+
+    <p class="fade-in">削減のポイントは以下の通りです。</p>
+
+    <ul class="fade-in">
+      <li>説明、理由、例示を削る</li>
+      <li>箇条書きにする</li>
+      <li>XMLタグで構造化する</li>
+      <li>MEMORY.mdは全文読みせず、memory_search()を使う</li>
+      <li>ファイルはoffset/limitで部分読み</li>
+    </ul>
+
+    <p class="fade-in">OpenClawを24時間動かしている人、複数のエージェントを運用している人には、同じような削減をお勧めします。</p>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+    <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

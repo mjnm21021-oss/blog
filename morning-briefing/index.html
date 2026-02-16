@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClawで朝ブリーフィングを自動化した話 | 『AI』と暮らす『非エンジニア』の日常</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, #fff5e1 0%, #fafafa 100%);
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: linear-gradient(to bottom, #ff9a3c, #e63946);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: linear-gradient(to bottom, #ff9a3c, #e63946);
+  }
+  .hero-bg-num {
+    position: absolute;
+    top: -30px; right: -20px;
+    font-size: 380px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .hero-num {
+    font-size: clamp(120px, 18vw, 200px);
+    font-weight: 900;
+    color: #ff9a3c;
+    line-height: 0.85;
+    flex-shrink: 0;
+  }
+  .hero-text {
+    padding-top: 16px;
+  }
+  .hero-text .line1 {
+    font-size: clamp(24px, 3.5vw, 40px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-text .line2 {
+    font-size: clamp(24px, 3.5vw, 40px);
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 16px 0;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../">ホーム</a> / 朝ブリーフィング自動化</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-bg-num">7</div>
+  <div class="hero-inner">
+    <div class="hero-label">MORNING AUTOMATION</div>
+    <div class="hero-title">
+      <div class="hero-num">7</div>
+      <div class="hero-text">
+        <div class="line1">毎朝</div>
+        <div class="line2">時に届く</div>
+        <div class="line1">ブリーフィング</div>
+      </div>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">OpenClaw cron × 気象庁API × Telegram</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">自動化実践</span>
+    <h1>OpenClawで朝ブリーフィングを自動化した話</h1>
+    <div class="meta">2026年2月</div>
+  </header>
+
+  <article>
+    <p class="fade-in">毎朝、目が覚めてスマホを手に取ると、Telegramに今日の情報がすでに届いています。富山の天気予報、今日の傘が必要かどうかの判定、そして株式市場の概況と注目銘柄トップ3です。</p>
+    
+    <p class="fade-in">この仕組みを作ってから、朝の情報収集がとても楽になりました。以前は天気アプリを開いて、Yahoo!ファイナンスを見て、ニュースサイトを巡回していました。それが今では、一つのメッセージを読むだけで済みます。</p>
+
+    <p class="fade-in">この記事では、OpenClawのcron機能を使って朝のブリーフィングを自動化した方法を紹介します。技術的な詳細から実際の運用まで、実際にどう作ったのかを書いていきます。</p>
+
+    <h2 class="fade-in">何が届くのか</h2>
+
+    <p class="fade-in">毎朝7時、Telegramに以下の内容が届きます。</p>
+
+    <h3 class="fade-in">天気情報</h3>
+
+    <ul class="fade-in">
+      <li>今日と明日の天気概況</li>
+      <li>最高気温と最低気温</li>
+      <li>降水確率（時間帯別）</li>
+      <li>風の強さや注意報の有無</li>
+    </ul>
+
+    <h3 class="fade-in">傘判定</h3>
+
+    <p class="fade-in">子供が小学生なので、下校時間に傘が必要かどうかが重要です。下校時間は14時から16時の間なので、その時間帯の降水確率を見て判定します。</p>
+
+    <ul class="fade-in">
+      <li>降水確率50%以上: 「傘を持たせてください」</li>
+      <li>降水確率30-40%: 「傘があると安心です」</li>
+      <li>降水確率20%以下: 「傘は不要です」</li>
+    </ul>
+
+    <p class="fade-in">この判定があるだけで、朝の準備がスムーズになりました。ランドセルに傘を入れるかどうか、すぐに決められます。</p>
+
+    <h2 class="fade-in">OpenClawのcron機能とは</h2>
+
+    <p class="fade-in">OpenClawには、AIエージェントに定期的なタスクを実行させるcron機能があります。Linuxのcronと似ていますが、AIエージェントが実行主体になる点が大きく違います。</p>
+
+    <h3 class="fade-in">基本的な仕組み</h3>
+
+    <p class="fade-in">OpenClawのcronは、<code>agentTurn</code>という機能を使います。これは、指定した時刻にAIエージェントを起動して、あらかじめ用意したプロンプトを実行させる機能です。</p>
+
+    <p class="fade-in">重要な特徴として、isolated sessionで動きます。つまり、通常のチャットセッションとは別の、独立したセッションで実行されます。これにより、日常の会話履歴に影響されず、毎回同じタスクを確実に実行できます。</p>
+
+    <h3 class="fade-in">cronジョブの設定</h3>
+
+    <p class="fade-in">cronジョブは、OpenClawの設定ファイルに記述します。私の場合、以下のように設定しました。</p>
+
+    <div class="code-block fade-in">
+      <pre>cron:
+  - schedule: "0 7 * * *"
+    agent: jarvis
+    task: morning-briefing
+    prompt: |
+      今日の朝のブリーフィングを作成してください。
+      
+      1. 富山の天気情報を気象庁APIから取得
+      2. 14-16時の降水確率から傘判定
+      3. マーケット情報を収集して要約
+      4. すべてをまとめてTelegramに送信
+    isolated: true
+    timezone: Asia/Tokyo</pre>
+    </div>
+
+    <p class="fade-in">この設定により、毎朝7時（日本時間）に、Jarvisエージェントが起動して、朝のブリーフィングを作成します。</p>
+
+    <h2 class="fade-in">天気情報の取得</h2>
+
+    <p class="fade-in">天気情報は、気象庁が提供している予報APIから取得します。このAPIは無料で使えて、信頼性も高いです。</p>
+
+    <h3 class="fade-in">気象庁APIについて</h3>
+
+    <p class="fade-in">気象庁は、各地域の天気予報データをJSON形式で公開しています。富山県のデータは以下のURLで取得できます。</p>
+
+    <div class="code-block fade-in">
+      <pre>https://www.jma.go.jp/bosai/forecast/data/forecast/160000.json</pre>
+    </div>
+
+    <p class="fade-in"><code>160000</code>は富山県を示す地域コードです。このAPIにアクセスすると、今日と明日の天気予報、週間予報、気温、降水確率などが含まれたJSONデータが返ってきます。</p>
+
+    <h2 class="fade-in">まとめ</h2>
+
+    <p class="fade-in">OpenClawのcron機能を使って、朝のブリーフィングを自動化しました。毎朝7時に、天気予報、傘判定、マーケット情報がTelegramに届きます。</p>
+
+    <p class="fade-in">この仕組みを作って得られたものは、単なる時間の節約だけではありません。朝の情報収集という精神的な負担が減り、家族との時間や自分の準備に集中できるようになりました。</p>
+
+    <p class="fade-in">OpenClawを使っている方で、毎朝の情報収集に時間を取られている方は、ぜひ試してみてください。プロンプトを調整するだけで、自分専用のブリーフィングシステムが作れます。</p>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+    <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
