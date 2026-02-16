@@ -532,6 +532,60 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
 
   .footer {
     text-align: center;
@@ -1073,10 +1127,11 @@
     <p class="fade-in">バックテストのv4（バージョン4）を回したとき、結果は衝撃的でした。</p>
 
     <div class="callout-box danger fade-in">
-      <strong>バグあり の異常な成績:</strong><br>
-      • 年率リターン：<span class="num-highlight">63.27%</span><br>
+      <strong>⚠️ バグあり の異常な成績:</strong><br>
+      • 年率リターン：<span class="big-number">63.27%</span><br>
       • 勝率：<span class="num-highlight">56.2%</span><br>
-      • 最大ドローダウン：-18.3%
+      • 最大ドローダウン：-18.3%<br><br>
+      <span class="pulse-highlight">普通は年率10-15%。これは明らかに異常。</span>
     </div>
 
     <p class="fade-in">普通、年率10-15%出れば優秀な戦略です。プロの運用でも20%を超えれば一流。それが63%。しかもドローダウン（最大の損失幅）は20%未満。</p>
@@ -1191,9 +1246,12 @@
 
     <p class="fade-in">2024年11月のある朝、ペーパートレード（仮想の取引）のログを見て、絶句しました。</p>
 
-    <p class="fade-in"><strong>5016 JX金属：想定エントリー価格2,779円 → 実際の計算価格3,100円</strong></p>
-
-    <p class="fade-in">差額321円。率にして+11.5%のズレ。</p>
+    <div class="callout-box danger fade-in">
+      <strong>⚠️ 決算ギャップアップ事故</strong><br>
+      <strong>5016 JX金属：</strong><br>
+      想定エントリー価格<span class="num-highlight">2,779円</span> → 実際の計算価格<span class="num-highlight">3,100円</span><br>
+      差額<span class="num-highlight">321円</span>（<span class="big-number">+11.5%</span>のズレ）
+    </div>
 
     <p class="fade-in">何が起きたのか。前日の夕方、JX金属が決算を発表していました。内容が良かったため、翌朝の寄り付きで大きくギャップアップ（窓を開けて上昇）したのです。</p>
 

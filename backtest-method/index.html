@@ -508,6 +508,60 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
 
   .footer {
     text-align: center;
@@ -1022,15 +1076,17 @@
 
     <h2 id="sec-1" class="fade-in">なぜ「ルールブック」が必要なのか</h2>
 
-    <p class="fade-in">AIは賢いですが、あなたのプロジェクトの「常識」は知りません。毎回同じ説明を繰り返すのは面倒ですし、人間が忘れてしまうこともあります。そこで私は、AIに仕事のルールを教え込む3層構造を作りました。</p>
+    <p class="fade-in">AIは賢いですが、あなたのプロジェクトの「常識」は知りません。毎回同じ説明を繰り返すのは面倒ですし、人間が忘れてしまうこともあります。そこで私は、<span class="pulse-highlight">AIに仕事のルールを教え込む3層構造</span>を作りました。</p>
 
-    <ul class="fade-in">
-      <li><strong>CLAUDE.md</strong> — プロジェクト全体のルールブック</li>
-      <li><strong>Skills</strong> — 特定の作業に特化した専門マニュアル</li>
-      <li><strong>Memory</strong> — 過去の失敗や判断を記録した長期記憶</li>
-    </ul>
-
-    <p class="fade-in">この3つを組み合わせることで、AIは「前回の教訓を覚えていて、ルールに従って、専門的な作業もこなせる」存在になります。</p>
+    <div class="callout-box info fade-in">
+      <h3>📚 AIを育てる3層構造</h3>
+      <ul>
+        <li><strong>CLAUDE.md</strong> — プロジェクト全体のルールブック</li>
+        <li><strong>Skills</strong> — 特定の作業に特化した専門マニュアル</li>
+        <li><strong>Memory</strong> — 過去の失敗や判断を記録した長期記憶</li>
+      </ul>
+      <p>この3つを組み合わせることで、AIは「前回の教訓を覚えていて、ルールに従って、専門的な作業もこなせる」存在になります。</p>
+    </div>
 
     <h2 id="sec-2" class="fade-in">CLAUDE.md — AIへのルールブック</h2>
 
