@@ -543,6 +543,53 @@
 
   <div class="articles">
 
+    <a href="blog/backtest-overview/" class="article-card fade-in">
+      <div class="article-card-thumb" style="background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px); background-size: 30px 30px;">
+        <div style="font-size: 100px; font-weight: 900; color: #1a1a1a; line-height: 1; position: relative;">28k</div>
+        <div style="font-size: 11px; font-weight: 900; color: #e63946; letter-spacing: 0.1em; margin-top: 12px;">BACKTEST</div>
+        <div style="font-size: 10px; font-weight: 700; color: #999; margin-top: 4px;">概要編</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">トレードシステム開発</span>
+        <h2>非エンジニアがAIに28,000行のトレードシステムを作らせた話【概要編】</h2>
+        <div class="desc">
+          7日間で生まれた自動トレードシステムの全体像。Claude Codeとの役割分担、バックテスト結果、毎朝の自動運用の仕組み。プログラミング経験不要で作ったEOD型トレードシステムの記録。
+        </div>
+        <div class="meta">2026年2月 • 約7,200字</div>
+      </div>
+    </a>
+
+    <a href="blog/backtest-failures/" class="article-card fade-in">
+      <div class="article-card-thumb" style="background: linear-gradient(135deg, #ffe5e5 0%, #fafafa 100%);">
+        <div style="font-size: 80px; font-weight: 900; color: #e63946; line-height: 1;">63%</div>
+        <div style="font-size: 32px; font-weight: 900; color: #666; line-height: 1; margin-top: 8px;">→31%</div>
+        <div style="font-size: 11px; font-weight: 900; color: #e63946; letter-spacing: 0.1em; margin-top: 12px;">FAILURES</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">トレードシステム開発</span>
+        <h2>AIも見逃した先読みバイアス — 年率63%→31%に半減した話【失敗編】</h2>
+        <div class="desc">
+          バックテストで見つかった3つの致命的なバグ：未来情報リーク、ハードコーディング、データ欠損。AIが書いたコードでも見落とす罠と、その対策。失敗から学んだチェックリスト公開。
+        </div>
+        <div class="meta">2026年2月 • 約8,400字</div>
+      </div>
+    </a>
+
+    <a href="blog/backtest-method/" class="article-card fade-in">
+      <div class="article-card-thumb" style="background-image: linear-gradient(0deg, #f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px); background-size: 28px 28px;">
+        <div style="font-size: 48px; font-weight: 900; color: #1a1a1a; line-height: 1; letter-spacing: 0.05em; margin-bottom: 16px;">RULES</div>
+        <div style="font-size: 12px; font-weight: 900; color: #666; text-align: center; line-height: 1.4;">CLAUDE.md<br>+ Skills<br>+ Memory</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">トレードシステム開発</span>
+        <h2>CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む【仕組み編】</h2>
+        <div class="desc">
+          AIが「ルールを守って、過去から学んで、チームで働く同僚」になる仕組み。CLAUDE.md、Skills、Memory、Agent Teams、マルチAIレビューの5つの仕組みを解説。投資以外にも応用可能。
+        </div>
+        <div class="meta">2026年2月 • 約9,500字</div>
+      </div>
+    </a>
+
     <a href="day1/" class="article-card fade-in">
       <div class="article-card-thumb thumb-day1">
         <div class="thumb-num">5</div>
@@ -677,6 +724,24 @@
 
   // Search functionality
   const articlesData = [
+    {
+      title: '非エンジニアがAIに28,000行のトレードシステムを作らせた話【概要編】',
+      desc: '7日間で生まれた自動トレードシステムの全体像。Claude Codeとの役割分担、バックテスト結果、毎朝の自動運用の仕組み。プログラミング経験不要で作ったEOD型トレードシステムの記録。',
+      tag: 'トレードシステム開発',
+      url: 'blog/backtest-overview/'
+    },
+    {
+      title: 'AIも見逃した先読みバイアス — 年率63%→31%に半減した話【失敗編】',
+      desc: 'バックテストで見つかった3つの致命的なバグ：未来情報リーク、ハードコーディング、データ欠損。AIが書いたコードでも見落とす罠と、その対策。失敗から学んだチェックリスト公開。',
+      tag: 'トレードシステム開発',
+      url: 'blog/backtest-failures/'
+    },
+    {
+      title: 'CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む【仕組み編】',
+      desc: 'AIが「ルールを守って、過去から学んで、チームで働く同僚」になる仕組み。CLAUDE.md、Skills、Memory、Agent Teams、マルチAIレビューの5つの仕組みを解説。投資以外にも応用可能。',
+      tag: 'トレードシステム開発',
+      url: 'blog/backtest-method/'
+    },
     {
       title: '1日で5体のエージェントチームを作った話 — 設定ファイルから失敗例まで全部書く',
       desc: 'Jarvis、Analyst、Scribe、Cloud、Pixelの5体構成。openclaw.jsonの実例、SOUL.mdの書き方、トークン効率化の3つの手、ハマったポイントまで実践レベルで全公開。',

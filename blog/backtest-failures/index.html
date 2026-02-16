@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIも見逃した先読みバイアス — 年率63%→31%に半減した話</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: #fafafa;
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero-dots {
+    position: absolute;
+    top: 0; left: 0;
+    width: calc(100% - 8px);
+    height: 100%;
+    background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+  .hero-bg-arrow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 320px;
+    font-weight: 900;
+    color: #f5f5f5;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 60px 0 24px;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hero-num-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-num {
+    font-size: clamp(60px, 10vw, 100px);
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1;
+  }
+  .hero-num.before {
+    color: #999;
+    text-decoration: line-through;
+  }
+  .hero-num.after {
+    color: var(--color-accent);
+  }
+  .hero-arrow {
+    font-size: clamp(40px, 6vw, 60px);
+    color: var(--color-accent);
+    font-weight: 900;
+  }
+  .hero-text {
+    text-align: center;
+    margin-top: 16px;
+  }
+  .hero-text .line1 {
+    font-size: clamp(20px, 2.8vw, 32px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 16px auto;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+    text-align: center;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .article-meta-block {
+    background: #f8f9fa;
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 0 0 40px 0;
+  }
+  .article-meta-block dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .article-meta-block dt {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .article-meta-block dd {
+    font-size: 14px;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .agent-attribution {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin: 48px 0 32px 0;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .feedback-section {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .feedback-section p {
+    margin: 0 0 8px 0;
+    color: var(--color-text-light);
+  }
+  .feedback-section p:last-child {
+    margin-bottom: 0;
+  }
+  .feedback-section a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .feedback-section a:hover {
+    text-decoration: underline;
+  }
+
+  .next-read {
+    margin: 40px 0 48px 0;
+  }
+  .next-read h3 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--color-text);
+  }
+  .next-read-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .next-read-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+  }
+  .next-read-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+  .next-read-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .next-read-card .content {
+    flex: 1;
+  }
+  .next-read-card .title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  .next-read-card .desc {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .code-copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: var(--font-main);
+    background: rgba(255, 255, 255, 0.9);
+    color: #666;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+  .code-copy-button:hover {
+    background: #fff;
+    color: #e63946;
+    border-color: #e63946;
+    box-shadow: 0 2px 4px rgba(230, 57, 70, 0.1);
+  }
+  .code-copy-button.copied {
+    background: #e63946;
+    color: #fff;
+    border-color: #e63946;
+  }
+
+  @media (max-width: 768px) {
+    .header-inner {
+      padding: 0 16px;
+    }
+    .logo {
+      font-size: 16px;
+    }
+    .breadcrumb {
+      font-size: 11px;
+    }
+    .hero {
+      padding: 40px 0 30px;
+    }
+    .hero-bg-arrow {
+      font-size: 200px;
+    }
+    .hero-inner {
+      padding: 0 16px;
+    }
+    .hero-label {
+      font-size: 12px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .hero-title {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hero-num-group {
+      gap: 12px;
+    }
+    .hero-num {
+      font-size: 56px;
+    }
+    .hero-arrow {
+      font-size: 36px;
+    }
+    .hero-text .line1 {
+      font-size: 18px;
+    }
+    .hero-sep {
+      width: 60px;
+      height: 2px;
+      margin: 12px auto;
+    }
+    .hero-sub {
+      font-size: 12px;
+    }
+    .container {
+      padding: 0 16px;
+    }
+    .article-header h1 {
+      font-size: 24px;
+    }
+    article h2 {
+      font-size: 20px;
+      padding: 12px 16px;
+      margin: 48px 0 20px;
+    }
+    article h3 {
+      font-size: 17px;
+      margin: 32px 0 14px;
+    }
+    article p {
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+    .code-block {
+      font-size: 12px;
+      padding: 20px 16px;
+      margin: 20px 0;
+    }
+    .next-read h3 {
+      font-size: 18px;
+    }
+    .next-read-card {
+      padding: 16px 20px;
+    }
+    .next-read-card .icon {
+      font-size: 24px;
+    }
+    .next-read-card .title {
+      font-size: 15px;
+    }
+    .next-read-card .desc {
+      font-size: 12px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../../">ホーム</a> / トレードシステム失敗編</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-bg-arrow">→</div>
+  <div class="hero-inner">
+    <div class="hero-label">トレードシステム開発 — 失敗編</div>
+    <div class="hero-title">
+      <div class="hero-num-group">
+        <div class="hero-num before">63%</div>
+        <div class="hero-arrow">→</div>
+        <div class="hero-num after">31%</div>
+      </div>
+    </div>
+    <div class="hero-text">
+      <div class="line1">AIも見逃した先読みバイアス</div>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">バックテストの3つの失敗</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">トレードシステム開発</span>
+    <h1>AIも見逃した先読みバイアス — 年率63%→31%に半減した話</h1>
+    <div class="meta">2026年2月 • 約8,500字</div>
+  </header>
+
+  <article>
+
+    <div class="article-meta-block">
+      <dl>
+        <dt>最終更新:</dt>
+        <dd>2026年2月</dd>
+        <dt>対象読者:</dt>
+        <dd>AIにバックテストを任せたい方、トレードシステム開発の失敗例を知りたい方</dd>
+        <dt>前提:</dt>
+        <dd>概要編を読んでいると理解しやすい</dd>
+        <dt>所要時間:</dt>
+        <dd>約25分</dd>
+        <dt>この記事でできること:</dt>
+        <dd>AIでも見逃すバグの種類と、その対策が学べる</dd>
+      </dl>
+    </div>
+
+    <p class="fade-in">「年率63%！これはすごい戦略ができた！」</p>
+
+    <p class="fade-in">そう思った瞬間が、私の最大の失敗の始まりでした。</p>
+
+    <p class="fade-in">バックテスト（過去のデータを使った戦略の検証）で出た数字があまりにも良すぎて、私は浮かれていました。でも、<span class="marker">うまくいきすぎているときこそ、何かがおかしい</span>。この直感が、致命的なバグを見つけるきっかけになりました。</p>
+
+    <p class="fade-in">今回は、AIと一緒にトレーディングシステムを作る中で遭遇した3つの失敗談をお話しします。特に「先読みバイアス」という、見た目は完璧なのに実際には使えない戦略になってしまう罠について、詳しく書きます。</p>
+
+    <p class="fade-in">AIは確かに便利ですが、万能ではありません。人間の直感と、仕組みで防ぐ工夫が必要でした。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">失敗①：未来が見えていた戦略（先読みバイアス）</h2>
+
+    <h3 class="fade-in">年率63%という異常な数字</h3>
+
+    <p class="fade-in">バックテストのv4（バージョン4）を回したとき、結果は衝撃的でした。</p>
+
+    <ul class="fade-in">
+      <li><strong>年率リターン：63.27%</strong></li>
+      <li><strong>勝率：56.2%</strong></li>
+      <li><strong>最大ドローダウン：-18.3%</strong></li>
+    </ul>
+
+    <p class="fade-in">普通、年率10-15%出れば優秀な戦略です。プロの運用でも20%を超えれば一流。それが63%。しかもドローダウン（最大の損失幅）は20%未満。</p>
+
+    <p class="fade-in">「天才か？」と一瞬思いましたが、すぐに冷静になりました。うまくいきすぎている。何かがおかしい。</p>
+
+    <h3 class="fade-in">バグを疑った理由</h3>
+
+    <p class="fade-in">実は、このバージョンで大きな変更を加えていました。それは「ポジションサイズの計算方法」です。</p>
+
+    <p class="fade-in">以前は固定金額で売買していましたが、v4では株価に応じて調整するようにしました。高い株は少なく、安い株は多く買う。リスクを均等にするための工夫です。</p>
+
+    <p class="fade-in">でも、このロジックを組み込んだ瞬間に成績が跳ね上がった。変更と結果のタイミングが一致しすぎていました。</p>
+
+    <h3 class="fade-in">発見：未来の情報を使っていた</h3>
+
+    <p class="fade-in">コードをじっくり見直しました。そして見つけたのが、この一行。</p>
+
+    <div class="code-block fade-in">
+      <pre># ポジションサイズ = 目標金額 ÷ 当日の終値</pre>
+    </div>
+
+    <p class="fade-in">一見、何も問題なさそうに見えます。でも、よく考えてください。</p>
+
+    <p class="fade-in"><strong>当日の終値は、取引する時点ではまだ見えていません。</strong></p>
+
+    <p class="fade-in">私の戦略は「寄り付き（朝の取引開始時）で買う」というものです。朝9時の時点で、その日の夕方15時につく終値はわかりません。でも、バックテストでは「当日の終値」を使って計算していたのです。</p>
+
+    <p class="fade-in">これを<span class="marker">「先読みバイアス（ルックアヘッドバイアス）」</span>と言います。未来の情報を使ってしまうバグです。</p>
+
+    <h3 class="fade-in">具体例で見る怖さ</h3>
+
+    <p class="fade-in">例えば、ある株が：</p>
+    <ul class="fade-in">
+      <li>前日終値：1,000円</li>
+      <li>当日始値：1,050円（+5%ギャップアップ）</li>
+      <li>当日終値：1,100円（さらに上昇）</li>
+    </ul>
+
+    <p class="fade-in">私のバグったコードは、1,100円でポジションサイズを計算していました。つまり、「1,100円になると知っている」前提で、1,050円で買う判断をしていたのです。</p>
+
+    <p class="fade-in">当然、勝率は上がります。でも現実には、朝の時点で夕方の終値はわかりません。</p>
+
+    <h3 class="fade-in">修正内容：全部前日ベースに</h3>
+
+    <p class="fade-in">この発見から、徹底的に修正しました。</p>
+
+    <p class="fade-in"><strong>修正前</strong>：</p>
+    <ul class="fade-in">
+      <li>ポジションサイズ → 当日終値で計算</li>
+      <li>ストップロス判定 → 当日の値動きで判断</li>
+      <li>決済 → 当日の終値で即日決済</li>
+    </ul>
+
+    <p class="fade-in"><strong>修正後</strong>：</p>
+    <ul class="fade-in">
+      <li>ポジションサイズ → <strong>前日終値</strong>で計算</li>
+      <li>ストップロス判定 → <strong>前日引け値</strong>基準で判断</li>
+      <li>決済 → 即日ではなく<strong>翌日の寄り付き</strong>で決済</li>
+    </ul>
+
+    <p class="fade-in">つまり、「今見えている情報だけ」で判断するように変えました。</p>
+
+    <h3 class="fade-in">修正後の結果：年率31%</h3>
+
+    <p class="fade-in">修正版を走らせました。結果は：</p>
+
+    <ul class="fade-in">
+      <li><strong>年率リターン：31.48%</strong></li>
+      <li><strong>勝率：52.1%</strong></li>
+      <li><strong>最大ドローダウン：-24.7%</strong></li>
+    </ul>
+
+    <p class="fade-in">63%から31%へ、<span class="marker">ほぼ半減</span>しました。</p>
+
+    <p class="fade-in">ショックでした。でも、これが本当の実力です。それでも年率30%なら十分優秀な戦略です。大事なのは、「現実に再現できる数字」であることでした。</p>
+
+    <h3 class="fade-in">なぜ発見できたのか</h3>
+
+    <p class="fade-in">実は、私はAIに「自動レビュー機能（Skills）」を仕込んでいました。コードを書くたびに、AIが自動でチェックリストを走らせます。</p>
+
+    <p class="fade-in">その中に、こういう項目がありました：</p>
+
+    <ul class="fade-in">
+      <li>「未来の情報を使っていないか？」</li>
+      <li>「取引時点で見えるデータだけで判断しているか？」</li>
+      <li>「タイムスタンプは正しいか？」</li>
+    </ul>
+
+    <p class="fade-in">AIがこのチェックリストで警告を出してくれたので、怪しい部分を重点的に調べることができました。</p>
+
+    <p class="fade-in">もしこの仕組みがなかったら、「年率63%の天才戦略！」と勘違いして、実際のお金を投入していたかもしれません。結果は大損です。</p>
+
+    <h3 class="fade-in">先読みバイアスの怖さ</h3>
+
+    <p class="fade-in">この失敗で学んだのは、先読みバイアスの本当の怖さです。</p>
+
+    <ul class="fade-in">
+      <li>バックテストの見た目は完璧</li>
+      <li>エラーも出ない</li>
+      <li>コードも一見正しく見える</li>
+      <li>でも、現実では絶対に再現できない</li>
+    </ul>
+
+    <p class="fade-in">完璧に見えるからこそ、気づきにくい。だからこそ、致命的です。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">失敗②：決算で3,100円が消えた話（決算跨ぎ事故）</h2>
+
+    <h3 class="fade-in">ある朝の衝撃</h3>
+
+    <p class="fade-in">2024年11月のある朝、ペーパートレード（仮想の取引）のログを見て、絶句しました。</p>
+
+    <p class="fade-in"><strong>5016 JX金属：想定エントリー価格2,779円 → 実際の計算価格3,100円</strong></p>
+
+    <p class="fade-in">差額321円。率にして+11.5%のズレ。</p>
+
+    <p class="fade-in">何が起きたのか。前日の夕方、JX金属が決算を発表していました。内容が良かったため、翌朝の寄り付きで大きくギャップアップ（窓を開けて上昇）したのです。</p>
+
+    <p class="fade-in">私の戦略は「下がった株を拾う逆張り」です。想定していた2,779円なら妥当な買い場でした。でも、いきなり3,100円でスタートされたら、もう買い場ではありません。高値掴みです。</p>
+
+    <h3 class="fade-in">原因：2つのミス</h3>
+
+    <p class="fade-in">調査した結果、2つのミスが重なっていました。</p>
+
+    <p class="fade-in"><strong>ミス1：決算カレンダーの未設定</strong></p>
+
+    <p class="fade-in">決算発表日を回避する仕組みは一応ありました。でも、データベースに決算日が入っていませんでした。仕組みはあるのに、データがない。意味がありませんでした。</p>
+
+    <p class="fade-in"><strong>ミス2：発注日の1日ズレバグ</strong></p>
+
+    <p class="fade-in">コードに微妙なロジックミスがあり、「決算発表の翌日」を「前日」と誤認識していました。だから、決算翌日の大ギャップアップに突っ込む形になっていました。</p>
+
+    <h3 class="fade-in">不幸中の幸い：ペーパートレード中だった</h3>
+
+    <p class="fade-in">この事故が起きたのは、まだペーパートレード（仮想の取引）中でした。実際のお金は動いていません。</p>
+
+    <p class="fade-in">もし実運用に入っていたら、本当に3,100円で買い注文が入っていたかもしれません。損失は数十万円です。</p>
+
+    <p class="fade-in"><span class="marker">ペーパートレードは面倒です。でも、こういう事故を実弾前に発見できるから、やる価値があります。</span></p>
+
+    <h3 class="fade-in">対応：決算データを全部入れた</h3>
+
+    <p class="fade-in">まず、決算カレンダーのデータを整備しました。</p>
+
+    <ul class="fade-in">
+      <li><strong>過去10年分の決算発表日：157,716件</strong></li>
+    </ul>
+
+    <p class="fade-in">日本取引所グループ（JPX）が公開している決算短信データを全部取り込みました。これで、「決算前後は取引しない」ルールが機能するようになりました。</p>
+
+    <h3 class="fade-in">意外な発見：決算回避は逆効果だった</h3>
+
+    <p class="fade-in">せっかく15万件以上のデータを入れたので、決算の影響を統計的に分析してみました。</p>
+
+    <p class="fade-in">すると、意外な結果が出ました。</p>
+
+    <p class="fade-in"><strong>「決算前に取引を避ける」は、逆張り戦略では逆効果だった。</strong></p>
+
+    <p class="fade-in">普通は「決算はギャンブルだから避けろ」と言われます。でも、私の戦略は「下がった株を拾う逆張り」です。</p>
+
+    <p class="fade-in">決算で大きく下がった株（ギャップダウン）は、実は良質なエントリーシグナルでした。過剰反応で売られすぎた株が、その後リバウンドするケースが多かったのです。</p>
+
+    <p class="fade-in">直感に反する結論でしたが、データは明確でした。</p>
+
+    <p class="fade-in">結局、「決算前は避ける」ルールは外し、「ギャップアップの日は避ける（高値掴みを防ぐ）」ルールだけ残しました。</p>
+
+    <h3 class="fade-in">教訓：直感とデータは違う</h3>
+
+    <p class="fade-in">この失敗で学んだのは、「直感で決めずに、データで検証する」ことの重要性です。</p>
+
+    <ul class="fade-in">
+      <li>直感：「決算は危険だから避けるべき」</li>
+      <li>データ：「逆張り戦略では決算ギャップダウンは良い機会」</li>
+    </ul>
+
+    <p class="fade-in">もしデータを見ずに直感だけで決めていたら、逆に収益機会を失っていました。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">失敗③：3%のデータで180度違う結論が出た話</h2>
+
+    <h3 class="fade-in">最初の分析：「決算はプラスイベント」</h3>
+
+    <p class="fade-in">決算の影響を最初に分析したとき（v1）、データ量は4,966件でした。</p>
+
+    <p class="fade-in">結果は：</p>
+    <ul class="fade-in">
+      <li><strong>決算前後で買った銘柄のリターン：+2.3%</strong></li>
+      <li><strong>決算を避けた銘柄のリターン：+1.8%</strong></li>
+    </ul>
+
+    <p class="fade-in">「決算はプラスイベントだ。積極的に狙うべき」という結論でした。</p>
+
+    <h3 class="fade-in">データを増やしたら結論が反転</h3>
+
+    <p class="fade-in">でも、気になったので全期間のデータを取り込みました（v2）。件数は157,716件。元の31倍です。</p>
+
+    <p class="fade-in">結果は：</p>
+    <ul class="fade-in">
+      <li><strong>決算前後で買った銘柄のリターン：+1.1%</strong></li>
+      <li><strong>決算を避けた銘柄のリターン：+1.9%</strong></li>
+    </ul>
+
+    <p class="fade-in"><strong>結論が真逆になりました。</strong></p>
+
+    <p class="fade-in">最初の4,966件は、全体の約3%でした。<span class="marker">たった3%のサンプルで判断していたら、間違った結論にたどり着いていました。</span></p>
+
+    <h3 class="fade-in">なぜこんなことが起きたのか</h3>
+
+    <p class="fade-in">おそらく、最初の4,966件は「データが取りやすかった期間」に偏っていました。具体的には、比較的相場が良かった2020-2022年あたりです。</p>
+
+    <p class="fade-in">この期間は全体的に株価が上がりやすく、決算後のギャップアップも多かった。だから「決算はプラス」という結論になったのでしょう。</p>
+
+    <p class="fade-in">でも、全期間（2015-2024年）で見ると、リーマンショック後の調整やコロナショックなど、厳しい相場も含まれます。すると、決算のギャップダウンによるダメージも大きくなり、結論が変わりました。</p>
+
+    <h3 class="fade-in">データ量が結論を変える</h3>
+
+    <p class="fade-in">この経験から学んだのは：</p>
+
+    <ul class="fade-in">
+      <li><strong>サンプル数が少ないと、結論が偏る</strong></li>
+      <li><strong>データの期間が偏ると、結論が偏る</strong></li>
+      <li><strong>「とりあえず分析した」では足りない</strong></li>
+    </ul>
+
+    <p class="fade-in">統計の教科書には「サンプルサイズが大事」と書いてありますが、実際に体験すると、その重要性が骨身に染みます。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">AIは万能じゃない。でも、仕組みで防げる</h2>
+
+    <h3 class="fade-in">AIが見逃すミス</h3>
+
+    <p class="fade-in">今回の3つの失敗、実はどれもAIが最初に書いたコードに含まれていました。</p>
+
+    <ul class="fade-in">
+      <li>先読みバイアス：AIが「当日終値でサイジング」と書いた</li>
+      <li>決算跨ぎ：AIが決算カレンダーのセットアップを忘れた</li>
+      <li>データ偏り：AIが「とりあえず取れたデータで分析」と提案した</li>
+    </ul>
+
+    <p class="fade-in">AIは便利です。でも、<strong>致命的なミスを見逃します</strong>。</p>
+
+    <h3 class="fade-in">仕組みで防ぐ3つの工夫</h3>
+
+    <p class="fade-in">だからこそ、私は3つの仕組みを作りました。</p>
+
+    <p class="fade-in"><strong>①ルール文書（CLAUDE.md）</strong></p>
+
+    <p class="fade-in">AIに渡す指示書です。こういう項目を書いています：</p>
+
+    <ul class="fade-in">
+      <li>「未来の情報を使ってはいけない」</li>
+      <li>「タイムスタンプは必ず前日以前にする」</li>
+      <li>「決済は翌日寄り付き以降にする」</li>
+    </ul>
+
+    <p class="fade-in">これを毎回AIに読ませることで、同じミスを繰り返さないようにしています。</p>
+
+    <p class="fade-in"><strong>②自動レビュー（Skills）</strong></p>
+
+    <p class="fade-in">AIがコードを書いたら、自動でチェックリストを走らせます。</p>
+
+    <ul class="fade-in">
+      <li>先読みバイアスチェック</li>
+      <li>データ範囲チェック</li>
+      <li>タイムスタンプ検証</li>
+    </ul>
+
+    <p class="fade-in">人間がレビューする前に、AIが自分で自分をチェックする仕組みです。</p>
+
+    <p class="fade-in"><strong>③ペーパートレード</strong></p>
+
+    <p class="fade-in">どんなに注意しても、バグは出ます。だから、実際のお金を使う前に、仮想の取引で検証します。</p>
+
+    <p class="fade-in">JX金属の事故も、ペーパートレード中だったから実害ゼロでした。もし実運用だったら、数十万円の損失でした。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">まとめ：失敗から学ぶ</h2>
+
+    <h3 class="fade-in">3つの失敗から得た教訓</h3>
+
+    <p class="fade-in"><strong>失敗①：先読みバイアス</strong></p>
+    <ul class="fade-in">
+      <li>うまくいきすぎているときこそ疑え</li>
+      <li>未来の情報を使っていないか、徹底的にチェック</li>
+      <li>自動レビューの仕組みが命を救う</li>
+    </ul>
+
+    <p class="fade-in"><strong>失敗②：決算跨ぎ事故</strong></p>
+    <ul class="fade-in">
+      <li>仕組みはあってもデータがなければ意味がない</li>
+      <li>直感とデータは違う。検証が必須</li>
+      <li>ペーパートレードは面倒でも絶対やる</li>
+    </ul>
+
+    <p class="fade-in"><strong>失敗③：データ量で結論が反転</strong></p>
+    <ul class="fade-in">
+      <li>サンプル数が少ないと結論が偏る</li>
+      <li>できる限り全期間のデータを使う</li>
+      <li>「とりあえず」の分析は危険</li>
+    </ul>
+
+    <h3 class="fade-in">AIは道具。使い方が全て</h3>
+
+    <p class="fade-in">AIは確かにすごいです。私一人では絶対に作れなかったシステムを、数ヶ月で作れました。</p>
+
+    <p class="fade-in">でも、AIは万能ではありません。致命的なミスも平気で見逃します。</p>
+
+    <p class="fade-in">だからこそ：</p>
+    <ul class="fade-in">
+      <li><strong>ルール（CLAUDE.md）で制約を与える</strong></li>
+      <li><strong>自動レビュー（Skills）でセルフチェックさせる</strong></li>
+      <li><strong>ペーパートレードで実弾前に検証する</strong></li>
+      <li><strong>失敗を文書化して同じミスを繰り返さない</strong></li>
+    </ul>
+
+    <p class="fade-in">この4つの仕組みがあるから、私はAIを信頼して使えています。</p>
+
+    <h3 class="fade-in">失敗は恥ずかしくない</h3>
+
+    <p class="fade-in">正直、この記事を書くのは恥ずかしいです。「年率63%のはずが31%でした」なんて、失敗を晒しているようなものです。</p>
+
+    <p class="fade-in">でも、失敗から学ぶことのほうが、成功から学ぶことより多い。</p>
+
+    <p class="fade-in">そして、私の失敗を共有することで、誰かが同じ失敗を避けられるなら、それは価値があると思います。</p>
+
+    <div class="agent-attribution">
+      📝 ドラフト: AIエージェント（Scribe） / 監修: 筆者
+    </div>
+
+    <div class="feedback-section">
+      <p>💭 <strong>バックテストで失敗した経験はありますか？</strong></p>
+      <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+    <div class="next-read">
+      <h3>シリーズ 次に読む</h3>
+      <div class="next-read-cards">
+        <a href="../backtest-overview/" class="next-read-card">
+          <div class="icon">📊</div>
+          <div class="content">
+            <div class="title">【概要編】非エンジニアがAIに28,000行のトレードシステムを作らせた話</div>
+            <div class="desc">7日間で28,000行のコードが生まれた経緯</div>
+          </div>
+        </a>
+        <a href="../backtest-method/" class="next-read-card">
+          <div class="icon">⚙️</div>
+          <div class="content">
+            <div class="title">【仕組み編】CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む</div>
+            <div class="desc">AIが同じミスを繰り返さないための3層構造</div>
+          </div>
+        </a>
+        <a href="../../blog/day1/" class="next-read-card">
+          <div class="icon">🧠</div>
+          <div class="content">
+            <div class="title">1日で5体のエージェントチームを作った話</div>
+            <div class="desc">設定ファイルから失敗例まで全部書く</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+    <small><a href="../../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const preBlocks = document.querySelectorAll('pre');
+    preBlocks.forEach(function(pre) {
+      const button = document.createElement('button');
+      button.className = 'code-copy-button';
+      button.textContent = 'コピー';
+      button.addEventListener('click', function() {
+        const code = pre.querySelector('code') || pre;
+        const text = code.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          button.textContent = 'Copied!';
+          button.classList.add('copied');
+          setTimeout(function() {
+            button.textContent = 'コピー';
+            button.classList.remove('copied');
+          }, 1500);
+        }).catch(function(err) {
+          console.error('コピーに失敗しました:', err);
+        });
+      });
+      pre.appendChild(button);
+    });
+  });
+</script>
+
+<section style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px 24px; margin: 48px 0; border-radius: 4px;">
+  <h3 style="font-size: 16px; font-weight: 900; margin-bottom: 12px; color: #856404;">⚠️ 免責事項</h3>
+  <p style="font-size: 14px; line-height: 1.8; color: #856404; margin: 0;">
+    この記事は私の個人的な経験と学習過程を共有するものであり、投資助言や推奨を目的としたものではありません。記事中の戦略、手法、結果は過去のデータに基づくものであり、将来の成果を保証するものではありません。投資にはリスクが伴います。実際の投資判断は、ご自身の責任において行ってください。また、記事中の数値や事例は説明のために単純化・匿名化している部分があります。
+  </p>
+</section>
+
+<!-- Analytics: 解析サービス導入時にここにスクリプトを追加 -->
+</body>
+</html>

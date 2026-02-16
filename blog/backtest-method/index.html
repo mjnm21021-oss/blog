@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む【仕組み編】</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: #fafafa;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero-dots {
+    position: absolute;
+    top: 0; left: 0;
+    width: calc(100% - 8px);
+    height: 100%;
+    background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+  .hero-bg-text {
+    position: absolute;
+    top: -20px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 200px;
+    font-weight: 900;
+    color: #f5f5f5;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    font-size: clamp(60px, 10vw, 120px);
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .hero-subtitle {
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 12px;
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px auto;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .article-meta-block {
+    background: #f8f9fa;
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 0 0 40px 0;
+  }
+  .article-meta-block dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .article-meta-block dt {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .article-meta-block dd {
+    font-size: 14px;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .agent-attribution {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin: 48px 0 32px 0;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .feedback-section {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .feedback-section p {
+    margin: 0 0 8px 0;
+    color: var(--color-text-light);
+  }
+  .feedback-section p:last-child {
+    margin-bottom: 0;
+  }
+  .feedback-section a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .feedback-section a:hover {
+    text-decoration: underline;
+  }
+
+  .next-read {
+    margin: 40px 0 48px 0;
+  }
+  .next-read h3 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--color-text);
+  }
+  .next-read-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .next-read-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+  }
+  .next-read-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+  .next-read-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .next-read-card .content {
+    flex: 1;
+  }
+  .next-read-card .title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  .next-read-card .desc {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .code-copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: var(--font-main);
+    background: rgba(255, 255, 255, 0.9);
+    color: #666;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+  .code-copy-button:hover {
+    background: #fff;
+    color: #e63946;
+    border-color: #e63946;
+    box-shadow: 0 2px 4px rgba(230, 57, 70, 0.1);
+  }
+  .code-copy-button.copied {
+    background: #e63946;
+    color: #fff;
+    border-color: #e63946;
+  }
+
+  @media (max-width: 768px) {
+    .header-inner {
+      padding: 0 16px;
+    }
+    .logo {
+      font-size: 16px;
+    }
+    .breadcrumb {
+      font-size: 11px;
+    }
+    .hero {
+      padding: 50px 0 40px;
+    }
+    .hero-bg-text {
+      font-size: 100px;
+      top: -10px;
+    }
+    .hero-inner {
+      padding: 0 16px;
+    }
+    .hero-label {
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: 60px;
+      margin-bottom: 16px;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+    }
+    .hero-sep {
+      width: 60px;
+      height: 2px;
+      margin: 16px auto;
+    }
+    .hero-sub {
+      font-size: 12px;
+    }
+    .container {
+      padding: 0 16px;
+    }
+    .article-header h1 {
+      font-size: 24px;
+    }
+    article h2 {
+      font-size: 20px;
+      padding: 12px 16px;
+      margin: 48px 0 20px;
+    }
+    article h3 {
+      font-size: 17px;
+      margin: 32px 0 14px;
+    }
+    article p {
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+    .code-block {
+      font-size: 12px;
+      padding: 20px 16px;
+      margin: 20px 0;
+    }
+    .next-read h3 {
+      font-size: 18px;
+    }
+    .next-read-card {
+      padding: 16px 20px;
+    }
+    .next-read-card .icon {
+      font-size: 24px;
+    }
+    .next-read-card .title {
+      font-size: 15px;
+    }
+    .next-read-card .desc {
+      font-size: 12px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../../">ホーム</a> / トレードシステム仕組み編</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-bg-text">RULES</div>
+  <div class="hero-inner">
+    <div class="hero-label">トレードシステム開発 — 仕組み編</div>
+    <div class="hero-title">CLAUDE.md</div>
+    <div class="hero-subtitle">AIに"社内ルール"を教え込む</div>
+    <hr class="hero-sep">
+    <div class="hero-sub">Skills + Memory + Agent Teams</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">トレードシステム開発</span>
+    <h1>CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む【仕組み編】</h1>
+    <div class="meta">2026年2月 • 約9,500字</div>
+  </header>
+
+  <article>
+
+    <div class="article-meta-block">
+      <dl>
+        <dt>最終更新:</dt>
+        <dd>2026年2月</dd>
+        <dt>対象読者:</dt>
+        <dd>AIに複雑なルールを守らせたい人、チーム開発的な仕組みに興味がある人</dd>
+        <dt>前提:</dt>
+        <dd>Claude Codeの基本操作は理解している（前回記事参照）</dd>
+        <dt>所要時間:</dt>
+        <dd>約25分</dd>
+        <dt>この記事でできること:</dt>
+        <dd>AIが「ルールを守って、過去から学んで、チームで働く同僚」になる仕組みが理解できる</dd>
+      </dl>
+    </div>
+
+    <p class="fade-in">こんにちは。前回まで、AIに自動でバックテスト（過去データを使った投資戦略の検証）を任せようとして失敗した話と、その概要をお伝えしてきました。今回は、その失敗から学んで構築した「AIに仕事を教え込む仕組み」を具体的に紹介します。</p>
+
+    <p class="fade-in">この仕組みは投資に限らず、Webアプリ開発やデータ分析、日常の自動化など、どんな分野でも応用できます。AIを単なる「質問に答えるツール」から「ルールを守って働く同僚」に変える方法です。</p>
+
+    <h2 class="fade-in">なぜ「ルールブック」が必要なのか</h2>
+
+    <p class="fade-in">AIは賢いですが、あなたのプロジェクトの「常識」は知りません。毎回同じ説明を繰り返すのは面倒ですし、人間が忘れてしまうこともあります。そこで私は、AIに仕事のルールを教え込む3層構造を作りました。</p>
+
+    <ul class="fade-in">
+      <li><strong>CLAUDE.md</strong> — プロジェクト全体のルールブック</li>
+      <li><strong>Skills</strong> — 特定の作業に特化した専門マニュアル</li>
+      <li><strong>Memory</strong> — 過去の失敗や判断を記録した長期記憶</li>
+    </ul>
+
+    <p class="fade-in">この3つを組み合わせることで、AIは「前回の教訓を覚えていて、ルールに従って、専門的な作業もこなせる」存在になります。</p>
+
+    <h2 class="fade-in">CLAUDE.md — AIへのルールブック</h2>
+
+    <p class="fade-in">CLAUDE.mdは、プロジェクトのルートディレクトリ（一番上のフォルダ）に置く設定ファイルです。Claude Code（Anthropic社が提供するAI開発ツール）は、起動するたびにこのファイルを読み込んで、プロジェクトのルールを理解します。</p>
+
+    <h3 class="fade-in">新人に渡すマニュアルのようなもの</h3>
+
+    <p class="fade-in">会社に新人が入ってきたとき、口頭で「これはダメ、あれはこうして」と伝えるより、マニュアルを渡す方が確実ですよね。CLAUDE.mdはまさにそれです。</p>
+
+    <p class="fade-in">私のプロジェクトでは、こんなルールを書いています。</p>
+
+    <p class="fade-in"><strong>具体例：</strong></p>
+
+    <div class="code-block fade-in">
+      <pre>## API呼び出しのルール
+- データ取得APIは data/ フォルダ内のスクリプトのみが呼び出す
+- 戦略コードや分析コードから直接APIを叩かない
+- 理由：未来情報のリーク防止、コスト管理の一元化</pre>
+    </div>
+
+    <p class="fade-in">これにより、AIがうっかり「今日の株価を取得してバックテストに使う」といった致命的なミスを防げます。</p>
+
+    <h3 class="fade-in">バグが見つかったら即追記</h3>
+
+    <p class="fade-in">CLAUDE.mdの素晴らしい点は、「育てられる」ことです。</p>
+
+    <p class="fade-in">例えば、ある日AIが設定値をコードに直接書き込んで（ハードコーディング）しまいました。これは後でメンテナンスが大変になるので、すぐにCLAUDE.mdに追記しました。</p>
+
+    <div class="code-block fade-in">
+      <pre>## 設定管理
+- すべての設定はconfig.pyに集約する
+- コード内に数値を直接書き込まない
+- 変更が必要なときは必ずconfig.pyを編集</pre>
+    </div>
+
+    <p class="fade-in">次回からAIは同じミスをしません。バグが見つかるたびにルールを追記していけば、CLAUDE.mdは「同じ失敗を繰り返さないプロジェクトの知恵」が蓄積された、生きたドキュメントになります。</p>
+
+    <h3 class="fade-in">自己レビューの強制</h3>
+
+    <p class="fade-in">私は特に重要なルールとして、「バックテスト結果を出すたびに5項目の自己レビューを実行する」を書いています。</p>
+
+    <p class="fade-in">この5項目は、過去に私がやらかした失敗から生まれたチェックリストです。</p>
+
+    <ul class="fade-in">
+      <li>未来情報が混入していないか</li>
+      <li>データの欠損が結果に影響していないか</li>
+      <li>手数料とスリッページ（注文のズレ）を考慮しているか</li>
+      <li>極端なパラメータになっていないか</li>
+      <li>結果が現実的か（年利1000%とか怪しい数字が出ていないか）</li>
+    </ul>
+
+    <p class="fade-in">AIはこのリストを毎回確認してくれるので、私が忘れていても大丈夫です。人間のチェックリストと違い、AIは「面倒だから飛ばす」ことがありません。</p>
+
+    <h2 class="fade-in">Skills — AIに専門スキルを教え込む</h2>
+
+    <p class="fade-in">CLAUDE.mdがプロジェクト全体のルールなら、Skillsは「特定の作業に特化したマニュアル」です。</p>
+
+    <p class="fade-in">私は <code>.claude/skills/</code> というフォルダに、6つのスキルファイルを用意しています。</p>
+
+    <h3 class="fade-in">スキルファイルの例</h3>
+
+    <ul class="fade-in">
+      <li><strong>backtest-review.md</strong> — バックテスト結果を出すたびに先読みチェック</li>
+      <li><strong>strategy-dev.md</strong> — 戦略開発時の制約ルール</li>
+      <li><strong>daily-trading-ops.md</strong> — 毎朝の運用ルーティン手順</li>
+      <li><strong>ledger-invariants.md</strong> — ポートフォリオ更新時の不変条件チェック</li>
+      <li><strong>multi-ai-review.md</strong> — ChatGPTやGeminiへのレビュー依頼を自動準備</li>
+      <li><strong>agent-teams.md</strong> — 複数AIエージェントを使う際のルール</li>
+    </ul>
+
+    <p class="fade-in">Claude Codeは、会話に特定のキーワードが出ると、自動的に該当するスキルを読み込みます。例えば「バックテスト結果を確認して」と言えば、backtest-review.mdが読み込まれて、先ほどの5項目チェックが自動で走ります。</p>
+
+    <h3 class="fade-in">なぜスキルを分けるのか</h3>
+
+    <p class="fade-in">全部CLAUDE.mdに書いてもいいのですが、それだと巨大になって読みづらくなります。また、AIに渡すコンテキスト（文脈情報）にも上限があるので、必要な情報だけを必要なときに読み込む方が効率的です。</p>
+
+    <p class="fade-in">「この作業にはこのマニュアル」と分けることで、AIは的確に専門知識を活用できます。</p>
+
+    <h3 class="fade-in">実際の効果</h3>
+
+    <p class="fade-in">以前、私が手動で確認していた「ポートフォリオの不変条件」（資産の合計が一致しているか、マイナス残高がないかなど）を、ledger-invariants.mdに書いてAIに任せたところ、チェック漏れがゼロになりました。</p>
+
+    <p class="fade-in">人間は疲れていると「まあ大丈夫だろう」と飛ばしてしまいますが、AIは毎回律儀に全項目を確認してくれます。この安心感は大きいです。</p>
+
+    <h2 class="fade-in">Memory — AIの長期記憶</h2>
+
+    <p class="fade-in">AIは会話をリセットすると、過去のやり取りを忘れてしまいます。これは不便です。毎回「前回こう決めたんだけど」と説明するのは面倒ですし、重要な判断が忘れ去られるリスクもあります。</p>
+
+    <p class="fade-in">そこでMEMORY.mdという、AIの「長期記憶ファイル」を作りました。</p>
+
+    <h3 class="fade-in">約108行の知見が蓄積</h3>
+
+    <p class="fade-in">私のMEMORY.mdには現在、約108行の記録があります。内容は大きく3つに分かれます。</p>
+
+    <ul class="fade-in">
+      <li><strong>過去のバグと教訓</strong><br>「2024年12月、日付処理でタイムゾーンのズレによりデータが1日ずれるバグが発生。以降、タイムゾーンはUTCで統一することに決定」など。</li>
+      <li><strong>設計の判断理由</strong><br>「なぜこのライブラリを採用したのか」「なぜこのフォルダ構成にしたのか」といった、プロジェクトの歴史。</li>
+      <li><strong>運用のノウハウ</strong><br>「月末は取引量が減るので、この戦略は休止する」「この時期はデータプロバイダのメンテナンスがあるから事前にキャッシュする」など。</li>
+    </ul>
+
+    <h3 class="fade-in">新しい会話でも過去を引き継ぐ</h3>
+
+    <p class="fade-in">AIとの会話を新しく始めても、MEMORY.mdを読み込めば過去の教訓を踏まえて開発してくれます。人間が毎回「前回こう決めたよね」と説明する必要がありません。</p>
+
+    <p class="fade-in">特に便利なのが、「過去に同じ問題で悩んだとき、どう解決したか」が記録されていることです。バグの再発を防ぐだけでなく、似た問題への対処法も素早く見つかります。</p>
+
+    <h3 class="fade-in">メモリの更新は簡単</h3>
+
+    <p class="fade-in">何か重要な判断をしたら、「今の話、MEMORY.mdに追記しておいて」と頼むだけです。AIが適切に要約して記録してくれます。</p>
+
+    <p class="fade-in">逆に、古くなった情報は「もうこのルールは使わないから削除して」と言えば消してくれます。MEMORY.mdは「育てるドキュメント」なのです。</p>
+
+    <h2 class="fade-in">Agent Teams — AI同士のチーム開発</h2>
+
+    <p class="fade-in">複雑なタスクを1つのAIに全部やらせるのは無理があります。そこで私は、Claude Codeに複数のAIエージェントを起動させて、チームで作業させる仕組みを導入しました。</p>
+
+    <h3 class="fade-in">役割分担が明確</h3>
+
+    <p class="fade-in">Agent Teamsでは、AIが以下のような役割に分かれます。</p>
+
+    <ul class="fade-in">
+      <li><strong>リーダー</strong> — 全体の計画を立て、メンバーに仕事を割り振り、最終レビューを行う</li>
+      <li><strong>実装担当</strong> — コードを書く</li>
+      <li><strong>分析担当</strong> — データを分析してレポートを作る</li>
+      <li><strong>テスト担当</strong> — バグがないか確認する</li>
+    </ul>
+
+    <p class="fade-in">重要なのは、<strong>リーダーはコードを書かない</strong>ことです。リーダーは計画と委譲とレビューに専念します。</p>
+
+    <h3 class="fade-in">なぜ役割を分けるのか</h3>
+
+    <p class="fade-in">最初は「リーダーが兼務してもいいだろう」と思い、リーダーにコードも書かせました。結果、大失敗。</p>
+
+    <p class="fade-in">リーダーが「自分で書いた方が早い」と判断して、メンバーを使わなくなってしまったのです。そして、1つのAIが全部やろうとして混乱し、ルール違反も続出しました。</p>
+
+    <p class="fade-in">そこで、agent-teams.mdに「リーダーはコードを書かない。必ずメンバーに委譲する」と厳格に書いたところ、ちゃんと役割分担されるようになりました。</p>
+
+    <h3 class="fade-in">各メンバーは担当外を変更しない</h3>
+
+    <p class="fade-in">もう1つ重要なルールが、「各メンバーは担当外のファイルを変更しない」です。</p>
+
+    <p class="fade-in">例えば、データ取得担当のAIが戦略コードをいじると、意図しない副作用が起きる可能性があります。チーム開発では「自分の担当領域を守る」ことが大切です。</p>
+
+    <p class="fade-in">これもagent-teams.mdに明記することで、AIたちが勝手に越境するのを防いでいます。</p>
+
+    <h3 class="fade-in">実際の運用例</h3>
+
+    <p class="fade-in">ある日、私が「新しい戦略を3つ開発して、それぞれバックテストして、結果を比較レポートにまとめて」と依頼しました。</p>
+
+    <p class="fade-in">すると、リーダーが以下のように動きました。</p>
+
+    <ul class="fade-in">
+      <li>戦略A担当、戦略B担当、戦略C担当の3つのメンバーを起動</li>
+      <li>各メンバーに戦略開発を指示</li>
+      <li>バックテスト担当メンバーが3つの戦略をテスト</li>
+      <li>レポート担当が結果を集約して比較表を作成</li>
+      <li>リーダーが全体をレビューして私に報告</li>
+    </ul>
+
+    <p class="fade-in">これが全て自動で進みました。私はコーヒーを飲んでいるだけで、1時間後には3つの戦略とレポートが完成していました。</p>
+
+    <h2 class="fade-in">マルチAIレビュー</h2>
+
+    <p class="fade-in">AIが書いたコードは、本当に正しいのでしょうか？</p>
+
+    <p class="fade-in">私は「AIの出力を別のAIにチェックさせる」仕組みも導入しています。</p>
+
+    <h3 class="fade-in">ChatGPTやGeminiにもレビューさせる</h3>
+
+    <p class="fade-in">重要な変更を行ったとき、私はClaude Codeだけでなく、ChatGPTやGoogleのGeminiにもコードをレビューさせます。</p>
+
+    <p class="fade-in">そのために、bundle_for_review.shというスクリプトを作りました。これは、プロジェクトの全コードを1つのテキストファイルに結合するスクリプトです。</p>
+
+    <p class="fade-in">このファイルをChatGPTやGeminiに貼り付けて、「このコードに問題がないかレビューしてください」と頼むだけ。</p>
+
+    <h3 class="fade-in">実際に改善できたコミット</h3>
+
+    <p class="fade-in">ある日、Claude Codeが書いたコードをChatGPTにレビューさせたところ、「このループは効率が悪い。こう書いた方が速い」という指摘を受けました。</p>
+
+    <p class="fade-in">確かにその通りだったので、改善版を採用しました。このコミット（変更履歴）は、GitHubにも記録されています。</p>
+
+    <p class="fade-in">別のAIの視点が入ることで、1つのAIでは見落とす問題に気づけるのです。</p>
+
+    <h3 class="fade-in">AI同士にクロスチェックさせる発想</h3>
+
+    <p class="fade-in">これは人間の世界でも同じです。同じ人がずっと見ていると、見落としが発生します。別の人に見てもらうと、新しい視点が加わります。</p>
+
+    <p class="fade-in">AIも同じで、Claude、ChatGPT、Geminiはそれぞれ得意分野や視点が異なります。だから、重要な判断では複数のAIに意見を聞くのが賢い使い方だと思います。</p>
+
+    <p class="fade-in">multi-ai-review.mdには、「どのAIにどんな質問をすると効果的か」といったノウハウも書いてあります。</p>
+
+    <h2 class="fade-in">この仕組みはトレード以外にも使える</h2>
+
+    <p class="fade-in">ここまで、私の投資プロジェクトを例に説明してきましたが、この仕組みは投資に限りません。</p>
+
+    <h3 class="fade-in">3層構造は汎用的</h3>
+
+    <ul class="fade-in">
+      <li><strong>CLAUDE.md</strong> — プロジェクトのルール</li>
+      <li><strong>Skills</strong> — 特定作業のマニュアル</li>
+      <li><strong>Memory</strong> — 過去の判断と教訓</li>
+    </ul>
+
+    <p class="fade-in">この3層構造は、どんなプロジェクトにも応用できます。</p>
+
+    <h3 class="fade-in">Webアプリ開発の例</h3>
+
+    <p class="fade-in">例えば、Webアプリを開発しているなら、こんな感じです。</p>
+
+    <p class="fade-in"><strong>CLAUDE.md</strong></p>
+    <div class="code-block fade-in">
+      <pre>## コーディング規約
+- コンポーネントは components/ に配置
+- API呼び出しは services/ に集約
+- スタイルはTailwind CSSを使用</pre>
+    </div>
+
+    <p class="fade-in"><strong>Skills</strong></p>
+    <ul class="fade-in">
+      <li>api-design.md — REST API設計のルール</li>
+      <li>component-dev.md — Reactコンポーネント開発のベストプラクティス</li>
+      <li>testing.md — テストの書き方</li>
+    </ul>
+
+    <p class="fade-in"><strong>Memory</strong></p>
+    <ul class="fade-in">
+      <li>過去に発生したバグと修正方法</li>
+      <li>なぜこのライブラリを採用したか</li>
+      <li>デプロイ時の注意事項</li>
+    </ul>
+
+    <h3 class="fade-in">データ分析の例</h3>
+
+    <p class="fade-in">データ分析プロジェクトなら、こうなります。</p>
+
+    <p class="fade-in"><strong>CLAUDE.md</strong></p>
+    <div class="code-block fade-in">
+      <pre>## データ処理のルール
+- 元データは絶対に上書きしない
+- 処理済みデータは processed/ に保存
+- 分析結果は reports/ にMarkdown形式で出力</pre>
+    </div>
+
+    <p class="fade-in"><strong>Skills</strong></p>
+    <ul class="fade-in">
+      <li>data-cleaning.md — データクリーニングの手順</li>
+      <li>visualization.md — グラフ作成のルール</li>
+      <li>statistical-test.md — 統計検定の実施方法</li>
+    </ul>
+
+    <p class="fade-in"><strong>Memory</strong></p>
+    <ul class="fade-in">
+      <li>過去の分析で使った手法</li>
+      <li>データの癖（この列は欠損が多い、など）</li>
+      <li>クライアントからのフィードバック</li>
+    </ul>
+
+    <h3 class="fade-in">自動化スクリプトの例</h3>
+
+    <p class="fade-in">日常業務の自動化でも使えます。</p>
+
+    <p class="fade-in"><strong>CLAUDE.md</strong></p>
+    <div class="code-block fade-in">
+      <pre>## 自動化のルール
+- 実行前に必ず確認メッセージを表示
+- ログは logs/ に日付付きで保存
+- エラー時はSlackに通知</pre>
+    </div>
+
+    <p class="fade-in"><strong>Skills</strong></p>
+    <ul class="fade-in">
+      <li>email-processing.md — メール処理の手順</li>
+      <li>file-management.md — ファイル整理のルール</li>
+      <li>notification.md — 通知の送り方</li>
+    </ul>
+
+    <p class="fade-in"><strong>Memory</strong></p>
+    <ul class="fade-in">
+      <li>過去に起きたトラブルと対処法</li>
+      <li>定期実行のスケジュール</li>
+      <li>誰にどんな通知を送るか</li>
+    </ul>
+
+    <p class="fade-in">どの分野でも、「AIに何を守らせたいか」を明文化すれば、同じ仕組みが使えます。</p>
+
+    <h2 class="fade-in">まとめ — AIを「ルールを守る同僚」にする</h2>
+
+    <p class="fade-in">AIは賢いですが、あなたのプロジェクトの常識は知りません。でも、ルールを教えれば、ちゃんと守ってくれます。</p>
+
+    <ul class="fade-in">
+      <li><strong>CLAUDE.md</strong> でプロジェクト全体のルールを教える</li>
+      <li><strong>Skills</strong> で専門的な作業のマニュアルを渡す</li>
+      <li><strong>Memory</strong> で過去の教訓を記録する</li>
+      <li><strong>Agent Teams</strong> で複雑な作業を分業させる</li>
+      <li><strong>マルチAIレビュー</strong> で複数の視点を取り入れる</li>
+    </ul>
+
+    <p class="fade-in">この5つの仕組みを組み合わせることで、AIは「ルールを守って、過去から学んで、チームで働く同僚」になります。</p>
+
+    <p class="fade-in">私はこの仕組みを作ってから、AIに任せられる作業が飛躍的に増えました。そして何より、「AIが勝手に暴走する」不安がなくなりました。</p>
+
+    <p class="fade-in">ルールを書くのは最初は面倒ですが、一度書けば何度も使えます。バグを見つけるたびに追記していけば、どんどん賢くなっていきます。</p>
+
+    <p class="fade-in">あなたも、AIに「新人マニュアル」を渡してみませんか？</p>
+
+    <p class="fade-in">きっと、AIとの付き合い方が変わると思います。</p>
+
+    <hr class="divider">
+
+    <p class="fade-in"><strong>シリーズ記事</strong></p>
+    <ul class="fade-in">
+      <li>前回：概要編「AIにバックテストを任せたら大失敗した話」</li>
+      <li>前々回：失敗編「未来情報リーク、ハードコーディング、そして学んだこと」</li>
+      <li>今回：仕組み編「CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む」</li>
+    </ul>
+
+    <p class="fade-in">（全3回完結）</p>
+
+    <div class="agent-attribution">
+      📝 ドラフト: AIエージェント（Scribe） / 監修: 筆者
+    </div>
+
+    <div class="feedback-section">
+      <p>💭 <strong>AIにルールを教え込む経験はありますか？</strong></p>
+      <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+    <div class="next-read">
+      <h3>シリーズ 次に読む</h3>
+      <div class="next-read-cards">
+        <a href="../backtest-overview/" class="next-read-card">
+          <div class="icon">📊</div>
+          <div class="content">
+            <div class="title">【概要編】非エンジニアがAIに28,000行のトレードシステムを作らせた話</div>
+            <div class="desc">7日間で生まれた自動トレードシステムの全体像</div>
+          </div>
+        </a>
+        <a href="../backtest-failures/" class="next-read-card">
+          <div class="icon">⚠️</div>
+          <div class="content">
+            <div class="title">【失敗編】AIも見逃した先読みバイアス — 年率63%→31%に半減した話</div>
+            <div class="desc">バックテストで見つかった3つの致命的なバグと、その対策</div>
+          </div>
+        </a>
+        <a href="../../blog/day1/" class="next-read-card">
+          <div class="icon">🧠</div>
+          <div class="content">
+            <div class="title">1日で5体のエージェントチームを作った話</div>
+            <div class="desc">設定ファイルから失敗例まで全部書く</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+    <small><a href="../../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const preBlocks = document.querySelectorAll('pre');
+    preBlocks.forEach(function(pre) {
+      const button = document.createElement('button');
+      button.className = 'code-copy-button';
+      button.textContent = 'コピー';
+      button.addEventListener('click', function() {
+        const code = pre.querySelector('code') || pre;
+        const text = code.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          button.textContent = 'Copied!';
+          button.classList.add('copied');
+          setTimeout(function() {
+            button.textContent = 'コピー';
+            button.classList.remove('copied');
+          }, 1500);
+        }).catch(function(err) {
+          console.error('コピーに失敗しました:', err);
+        });
+      });
+      pre.appendChild(button);
+    });
+  });
+</script>
+
+<section style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px 24px; margin: 48px 0; border-radius: 4px;">
+  <h3 style="font-size: 16px; font-weight: 900; margin-bottom: 12px; color: #856404;">⚠️ 免責事項</h3>
+  <p style="font-size: 14px; line-height: 1.8; color: #856404; margin: 0;">
+    本記事は個人的な体験談であり、投資を推奨するものではありません。本記事に記載された手法や戦略を真似した場合の結果について、筆者は一切の責任を負いません。CLAUDE.md、Skills、Memoryなどの仕組みは、筆者の個人的な運用方法であり、すべての環境で同様の効果を保証するものではありません。
+  </p>
+</section>
+
+<!-- Analytics: 解析サービス導入時にここにスクリプトを追加 -->
+</body>
+</html>

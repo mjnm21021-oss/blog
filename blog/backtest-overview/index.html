@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>非エンジニアがAIに28,000行のトレードシステムを作らせた話【概要編】</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 2px solid var(--color-accent);
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--color-text-light);
+  }
+  .breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .hero {
+    position: relative;
+    background: #fafafa;
+    padding: 60px 0 50px;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-accent);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--color-accent);
+  }
+  .hero-dots {
+    position: absolute;
+    top: 0; left: 0;
+    width: calc(100% - 8px);
+    height: 100%;
+    background-image: radial-gradient(circle, #e0e0e0 1.2px, transparent 1.2px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+  .hero-bg-num {
+    position: absolute;
+    top: -80px; left: -40px;
+    font-size: 520px;
+    font-weight: 900;
+    color: #f5f5f5;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 60px 0 24px;
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .hero-num {
+    font-size: clamp(100px, 16vw, 180px);
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 0.85;
+    flex-shrink: 0;
+  }
+  .hero-text {
+    padding-top: 16px;
+  }
+  .hero-text .line1 {
+    font-size: clamp(22px, 3.2vw, 36px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-text .line2 {
+    font-size: clamp(22px, 3.2vw, 36px);
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .hero-text .line3 {
+    font-size: clamp(20px, 2.8vw, 32px);
+    font-weight: 900;
+    color: #333;
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 16px 0;
+    border: none;
+  }
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin: 24px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e63946;
+    box-shadow: 16px 0 0 #f5a623, 32px 0 0 #4cd964;
+  }
+  .code-block pre {
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .marker {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.15) 60%);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .article-meta-block {
+    background: #f8f9fa;
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 0 0 40px 0;
+  }
+  .article-meta-block dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .article-meta-block dt {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .article-meta-block dd {
+    font-size: 14px;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .agent-attribution {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin: 48px 0 32px 0;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .feedback-section {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .feedback-section p {
+    margin: 0 0 8px 0;
+    color: var(--color-text-light);
+  }
+  .feedback-section p:last-child {
+    margin-bottom: 0;
+  }
+  .feedback-section a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .feedback-section a:hover {
+    text-decoration: underline;
+  }
+
+  .next-read {
+    margin: 40px 0 48px 0;
+  }
+  .next-read h3 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--color-text);
+  }
+  .next-read-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .next-read-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+  }
+  .next-read-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+  .next-read-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .next-read-card .content {
+    flex: 1;
+  }
+  .next-read-card .title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  .next-read-card .desc {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .code-copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: var(--font-main);
+    background: rgba(255, 255, 255, 0.9);
+    color: #666;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+  .code-copy-button:hover {
+    background: #fff;
+    color: #e63946;
+    border-color: #e63946;
+    box-shadow: 0 2px 4px rgba(230, 57, 70, 0.1);
+  }
+  .code-copy-button.copied {
+    background: #e63946;
+    color: #fff;
+    border-color: #e63946;
+  }
+
+  @media (max-width: 768px) {
+    .header-inner {
+      padding: 0 16px;
+    }
+    .logo {
+      font-size: 16px;
+    }
+    .breadcrumb {
+      font-size: 11px;
+    }
+    .hero {
+      padding: 40px 0 30px;
+    }
+    .hero-bg-num {
+      font-size: 280px;
+      top: -50px;
+      left: -20px;
+    }
+    .hero-inner {
+      padding: 0 16px;
+    }
+    .hero-label {
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      flex-direction: column;
+      gap: 0;
+    }
+    .hero-num {
+      font-size: 100px;
+      margin-bottom: 12px;
+    }
+    .hero-text {
+      padding-top: 0;
+    }
+    .hero-text .line1,
+    .hero-text .line2,
+    .hero-text .line3 {
+      font-size: 20px;
+    }
+    .hero-sep {
+      width: 60px;
+      height: 2px;
+      margin: 12px 0;
+    }
+    .hero-sub {
+      font-size: 12px;
+    }
+    .container {
+      padding: 0 16px;
+    }
+    .article-header h1 {
+      font-size: 24px;
+    }
+    article h2 {
+      font-size: 20px;
+      padding: 12px 16px;
+      margin: 48px 0 20px;
+    }
+    article h3 {
+      font-size: 17px;
+      margin: 32px 0 14px;
+    }
+    article p {
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+    .code-block {
+      font-size: 12px;
+      padding: 20px 16px;
+      margin: 20px 0;
+    }
+    .next-read h3 {
+      font-size: 18px;
+    }
+    .next-read-card {
+      padding: 16px 20px;
+    }
+    .next-read-card .icon {
+      font-size: 24px;
+    }
+    .next-read-card .title {
+      font-size: 15px;
+    }
+    .next-read-card .desc {
+      font-size: 12px;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <div class="breadcrumb"><a href="../../">ホーム</a> / トレードシステム概要編</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-bg-num">28k</div>
+  <div class="hero-inner">
+    <div class="hero-label">トレードシステム開発 — 概要編</div>
+    <div class="hero-title">
+      <div class="hero-num">28,000</div>
+      <div class="hero-text">
+        <div class="line1">行のコードを</div>
+        <div class="line2">AIが書いた</div>
+        <div class="line3">7日間の記録</div>
+      </div>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">Claude Code × バックテスト</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="article-header fade-in">
+    <span class="tag">トレードシステム開発</span>
+    <h1>非エンジニアがAIに28,000行のトレードシステムを作らせた話【概要編】</h1>
+    <div class="meta">2026年2月 • 約7,200字</div>
+  </header>
+
+  <article>
+
+    <div class="article-meta-block">
+      <dl>
+        <dt>最終更新:</dt>
+        <dd>2026年2月</dd>
+        <dt>対象読者:</dt>
+        <dd>AIを使ったシステム開発に興味がある非エンジニアの方</dd>
+        <dt>前提:</dt>
+        <dd>プログラミング経験は不要（AIに任せる前提）</dd>
+        <dt>所要時間:</dt>
+        <dd>約20分</dd>
+        <dt>この記事でできること:</dt>
+        <dd>AIにシステム開発を任せる際の考え方と、現実的な期待値が学べる</dd>
+      </dl>
+    </div>
+
+    <h2 class="fade-in">はじめに</h2>
+
+    <p class="fade-in">私はエンジニアではありません。Pythonのコードを1行も書けません。それでも今、私のPCの中では毎朝自動的に株のトレードシステムが動いています。</p>
+
+    <p class="fade-in">このシステムを作ったのは、私ではなくAI（Claude Code）です。私がやったことは<span class="marker">「何を作りたいか」を伝えただけ</span>です。7日間で28,000行のコードが生まれ、65個のファイルが作られ、69回のコミット（バージョン管理システムへの記録）が行われました。</p>
+
+    <p class="fade-in">これは「AIを使えば誰でもエンジニアになれる」という話ではありません。<strong>「AIに任せれば、エンジニアでなくてもシステムが作れる」</strong>という話です。</p>
+
+    <p class="fade-in">この記事は3本シリーズの1本目です。ここでは全体像とインパクトをお伝えします。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">どんなシステムを作ったのか</h2>
+
+    <p class="fade-in">作ったのは日本株のトレードシステムです。正式には「EOD型自動トレードシステム」と呼んでいます。</p>
+
+    <p class="fade-in">EODとは「End of Day」の略です。市場が閉まった後にデータを分析して、翌朝の取引で何を買うか・売るかを決めるタイプのシステムです。デイトレードのように秒単位で売買するのではなく、1日1回だけ判断します。</p>
+
+    <h3 class="fade-in">システムの構成</h3>
+
+    <p class="fade-in">システムの構成は5つの部門に分かれています：</p>
+
+    <ul class="fade-in">
+      <li><strong>データ取得部門</strong>: 株価や出来高（取引量）などの市場データを自動で集める</li>
+      <li><strong>分析部門</strong>: 集めたデータから売買のシグナル（買い時・売り時の合図）を生成する</li>
+      <li><strong>バックテスト部門</strong>: 過去のデータを使って「このルールで取引していたらどうなっていたか」を検証する</li>
+      <li><strong>リスク管理部門</strong>: 損失が大きくなりすぎないように監視する</li>
+      <li><strong>レポート部門</strong>: 現在のポジション（保有している株）や損益をダッシュボードに表示する</li>
+    </ul>
+
+    <p class="fade-in">ダッシュボードはHTML1枚で完結しています。ブラウザで開けば、今どの株をいくら持っているか、いくら儲かっているか（あるいは損しているか）がひと目で分かります。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">なぜ作ろうと思ったのか</h2>
+
+    <p class="fade-in">投資で勝ちたいから——ではありません。</p>
+
+    <p class="fade-in">このシステムのコンセプトは<span class="marker">「勝つため」ではなく「負け方を理解する」</span>です。</p>
+
+    <p class="fade-in">私は過去に何度か株で損をしました。そのたびに「なぜ負けたのか分からない」というモヤモヤが残りました。感情で売買していたので、記録もなく、検証のしようがありませんでした。</p>
+
+    <p class="fade-in">今回作ったシステムは、ルールベースで動きます。すべての判断に理由があり、すべての取引が記録されます。負けたときも「このルールがこの相場では機能しなかった」と分かります。</p>
+
+    <p class="fade-in">もちろん利益が出れば嬉しいですが、それ以上に<strong>「自分の投資の癖やルールの弱点を客観的に見たい」</strong>というのが動機です。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">バックテスト結果（あくまで過去データです）</h2>
+
+    <p class="fade-in">システムが完成したので、過去のデータで動かしてみました。これをバックテストと言います。</p>
+
+    <p class="fade-in">結果は以下の通りです：</p>
+
+    <ul class="fade-in">
+      <li><strong>年率リターン</strong>: +31%</li>
+      <li><strong>シャープレシオ</strong>: 1.12（リスクに対するリターンの効率を示す指標。1.0以上なら良好とされる）</li>
+      <li><strong>最大ドローダウン</strong>: -27%（最も大きく下落したときの損失幅）</li>
+    </ul>
+
+    <p class="fade-in">数字だけ見ると魅力的ですが、これはあくまで過去のデータに対する結果です。<span class="marker">未来の相場で同じ結果が出る保証は一切ありません。</span></p>
+
+    <p class="fade-in">バックテストには「過去に最適化されすぎて、未来では機能しない」という罠があります。過去の試験問題の答えを暗記しても、新しい問題は解けないのと同じです。</p>
+
+    <p class="fade-in">だから今、実際のお金は入れずにペーパートレード（仮想の取引）で様子を見ています。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">ペーパートレードと実弾投入の判断基準</h2>
+
+    <p class="fade-in">現在、システムは毎朝自動で動いています。ただし実際のお金は動かしていません。</p>
+
+    <p class="fade-in">初期資金は200万円を想定していますが、これは架空の金額です。システムは「200万円あったらこう動く」というシミュレーションを毎日実行しているだけです。</p>
+
+    <h3 class="fade-in">実弾投入の判断基準</h3>
+
+    <p class="fade-in">実弾（本物のお金）を投入するかどうかは、ペーパートレードの結果次第です。私は以下の判断基準を設けています：</p>
+
+    <ul class="fade-in">
+      <li>システムが安定して動作している（エラーで止まらない）</li>
+      <li>データ取得が毎日成功している</li>
+      <li>シグナル生成のロジックが想定通りに動いている</li>
+      <li>リスク管理が機能している（大きすぎるポジションを取っていない）</li>
+      <li>ダッシュボードで状況が正しく把握できている</li>
+      <li>少なくとも1ヶ月以上、ペーパートレードで上記がすべて問題ない</li>
+    </ul>
+
+    <p class="fade-in">これらの項目がすべてPASSになったら、200万円を入れて実弾運用を始めます。もちろん、それでも負ける可能性は十分にあります。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">AIとどうやって開発したのか</h2>
+
+    <p class="fade-in">ここが一番のポイントです。</p>
+
+    <p class="fade-in">私はPythonを書けません。Git（バージョン管理ツール）の使い方も知りませんでした。それでもシステムができたのは、<strong>AIとの役割分担が機能した</strong>からです。</p>
+
+    <h3 class="fade-in">役割分担</h3>
+
+    <p class="fade-in"><strong>私の役割</strong>:</p>
+    <ul class="fade-in">
+      <li>何を作るかを決める</li>
+      <li>どういう仕組みにするかを考える</li>
+      <li>できたものをチェックする</li>
+      <li>うまく動かないときに「ここがおかしい」と伝える</li>
+    </ul>
+
+    <p class="fade-in"><strong>AIの役割</strong>:</p>
+    <ul class="fade-in">
+      <li>コードを書く</li>
+      <li>ファイルを作る</li>
+      <li>エラーを修正する</li>
+      <li>テストを実行する</li>
+      <li>Gitにコミットする</li>
+    </ul>
+
+    <h3 class="fade-in">実際のやりとり</h3>
+
+    <p class="fade-in">具体的には、こんな感じでやりとりしました：</p>
+
+    <div class="code-block fade-in">
+      <pre>私: 「EOD型のトレードシステムを作りたい。
+    毎朝データを取得して、シグナルを生成して、
+    ポジションを管理する仕組み」
+
+AI: 「了解しました。まずディレクトリ構成を作ります」
+    → コードをガリガリ書く
+
+私: 「シグナルの生成ロジックに、
+    逆張りと順張りの複合ルールを入れたい」
+
+AI: 「追加しました。テクニカル指標を組み合わせています」
+    → コード更新
+
+私: 「バックテストを実行したらエラーが出た。
+    ログを見ると日付の形式がおかしい」
+
+AI: 「修正します」
+    → 該当箇所を直してテスト実行</pre>
+    </div>
+
+    <p class="fade-in">このやりとりを7日間続けた結果、28,000行のシステムができました。</p>
+
+    <p class="fade-in">私は「何を実現したいか」だけを伝え、「どうやって実現するか」は全部AIに任せました。AIは指示を受け取ると、必要なファイルを作り、コードを書き、テストして、動くまで修正してくれました。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">システムの毎朝の動き</h2>
+
+    <p class="fade-in">現在、システムは毎朝自動で以下の処理を実行しています：</p>
+
+    <ul class="fade-in">
+      <li><strong>データ取得</strong> (午前6時): 前日の市場データを取得する</li>
+      <li><strong>シグナル生成</strong> (午前7時): 今日買う銘柄・売る銘柄を決める</li>
+      <li><strong>注文</strong> (午前8時): ペーパートレードで仮想的に注文を出す</li>
+      <li><strong>約定確認</strong> (午後4時): 注文が成立したかを確認する</li>
+      <li><strong>レポート更新</strong> (午後5時): ダッシュボードを最新状態に更新する</li>
+    </ul>
+
+    <p class="fade-in">これらはすべて自動です。私は朝起きてダッシュボードを見るだけで、昨日何が起きたか、今日何が起きるかが分かります。</p>
+
+    <p class="fade-in">ただし、今はまだペーパートレードなので、実際の証券会社への注文は行っていません。システムが「この銘柄を買う」と判断しても、実際には買いません。ログに「買ったことにする」と記録されるだけです。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">技術的な話（少しだけ）</h2>
+
+    <p class="fade-in">システムは以下の構成になっています：</p>
+
+    <ul class="fade-in">
+      <li><strong>言語</strong>: Python</li>
+      <li><strong>総行数</strong>: 28,000行</li>
+      <li><strong>ファイル数</strong>: 65個</li>
+      <li><strong>コミット数</strong>: 69回</li>
+      <li><strong>ライブラリ</strong>: pandas（データ処理）、numpy（数値計算）、ta-lib（テクニカル指標）など</li>
+      <li><strong>データベース</strong>: SQLite（軽量なデータベース）</li>
+      <li><strong>ダッシュボード</strong>: HTML + JavaScript（グラフ表示にChart.jsを使用）</li>
+    </ul>
+
+    <div class="code-block fade-in">
+      <pre>/data_pipeline  → データ取得・整形
+/strategy       → シグナル生成ロジック
+/backtest       → 過去データでの検証
+/risk           → ポジション管理・損失管理
+/reporting      → ダッシュボード・レポート生成</pre>
+    </div>
+
+    <p class="fade-in">すべてのコードは私が書いたのではなく、AIが生成しました。私はディレクトリ名やファイル名を見て「ああ、ここにシグナル生成のロジックがあるんだな」と理解する程度です。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">なぜClaude Codeを選んだのか</h2>
+
+    <p class="fade-in">AIツールはいろいろありますが、今回はClaude Codeを選びました。理由は以下の通りです：</p>
+
+    <ul class="fade-in">
+      <li><strong>コマンドラインで動く</strong>: ブラウザを開かなくても、ターミナル（黒い画面）から直接指示を出せる</li>
+      <li><strong>ファイル操作が得意</strong>: 複数ファイルの作成・編集・削除を一度に処理できる</li>
+      <li><strong>コンテキストが長い</strong>: 大量のコードを一度に読み込んで理解できる</li>
+      <li><strong>コミットまでやってくれる</strong>: Gitへの記録も自動でやってくれるので、バージョン管理が楽</li>
+    </ul>
+
+    <p class="fade-in">特に「ファイル操作が得意」という点が大きかったです。Webブラウザ版のAIだと、コードをコピペして手動でファイルに貼り付ける必要がありますが、Claude Codeは「このファイルを作って」と言えば勝手に作ってくれます。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">開発期間と費用</h2>
+
+    <p class="fade-in">開発期間は7日間です。毎日2〜3時間ほど、AIと対話しながら進めました。</p>
+
+    <p class="fade-in">費用は以下の通りです：</p>
+
+    <ul class="fade-in">
+      <li><strong>Claude Codeの利用料</strong>: 月額20ドル（Anthropic Claude Proプラン）</li>
+      <li><strong>データ取得API</strong>: 無料（Yahoo Finance APIを使用）</li>
+      <li><strong>サーバー代</strong>: 0円（自分のPCで動かしている）</li>
+    </ul>
+
+    <p class="fade-in">つまり、月額20ドルだけでシステムが作れました。エンジニアを雇ったら数十万円かかるであろう規模のシステムです。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">苦労したこと</h2>
+
+    <p class="fade-in">すべてが順調だったわけではありません。以下のような問題がありました：</p>
+
+    <ul class="fade-in">
+      <li><strong>データ形式の不一致</strong>: APIから取得したデータの日付形式がバラバラで、バックテストでエラーが頻発した</li>
+      <li><strong>シグナルの遅延</strong>: シグナル生成のタイミングが遅れて、翌朝の注文に間に合わないことがあった</li>
+      <li><strong>リスク管理の抜け</strong>: ポジションサイズ（1銘柄に投入する金額）の上限チェックが漏れていて、想定以上に大きなポジションを取りかけた</li>
+      <li><strong>ダッシュボードの文字化け</strong>: 日本語の銘柄名がブラウザで正しく表示されなかった</li>
+    </ul>
+
+    <p class="fade-in">これらの問題はすべて、AIに「ここがおかしい」と伝えて修正してもらいました。私がやったことは「問題を見つけて報告する」だけです。修正方法を考えるのも、コードを直すのも、すべてAIがやりました。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">AIで何ができるのか</h2>
+
+    <p class="fade-in">今回の経験で分かったことは、<span class="marker">「AIは指示があれば大量のコードを書ける」</span>ということです。</p>
+
+    <p class="fade-in">ただし、AIは「何を作るか」を決められません。それは人間の仕事です。</p>
+
+    <p class="fade-in">私はエンジニアではありませんが、「EOD型のトレードシステムが欲しい」「リスク管理が必要だ」「ダッシュボードで見たい」といった要求を出すことはできました。AIはそれを受け取って、形にしてくれました。</p>
+
+    <p class="fade-in">つまり、<strong>「作りたいものがハッキリしていれば、エンジニアでなくても作れる」</strong>のが今の時代です。</p>
+
+    <p class="fade-in">もちろん、システムの品質や保守性（将来も使い続けられるか）については、プロのエンジニアが作るものには敵いません。でも、個人的な実験や小規模なツールなら、十分に実用的なものが作れます。</p>
+
+    <hr class="divider">
+
+    <h2 class="fade-in">おわりに</h2>
+
+    <p class="fade-in">私はエンジニアではありません。でも、AIと協働することで、28,000行のトレードシステムを作ることができました。</p>
+
+    <p class="fade-in">これは「AIがすごい」という話であると同時に、<strong>「人間が何を作りたいかを言語化する能力の重要性」</strong>を示す話でもあります。</p>
+
+    <p class="fade-in">AIは道具です。使い方次第で、できることの幅が大きく広がります。</p>
+
+    <p class="fade-in">この記事が、「AIで何かを作ってみたい」と思っている非エンジニアの方の参考になれば幸いです。</p>
+
+    <div class="agent-attribution">
+      📝 ドラフト: AIエージェント（Scribe） / 監修: 筆者
+    </div>
+
+    <div class="feedback-section">
+      <p>💭 <strong>AIに開発を任せた経験はありますか？</strong></p>
+      <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+    <div class="next-read">
+      <h3>シリーズ 次に読む</h3>
+      <div class="next-read-cards">
+        <a href="../backtest-failures/" class="next-read-card">
+          <div class="icon">⚠️</div>
+          <div class="content">
+            <div class="title">【失敗編】AIも見逃した先読みバイアス — 年率63%→31%に半減した話</div>
+            <div class="desc">バックテストで見つかった3つの致命的なバグと、その対策</div>
+          </div>
+        </a>
+        <a href="../backtest-method/" class="next-read-card">
+          <div class="icon">⚙️</div>
+          <div class="content">
+            <div class="title">【仕組み編】CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む</div>
+            <div class="desc">AIが同じミスを繰り返さないための3層構造</div>
+          </div>
+        </a>
+        <a href="../../blog/day1/" class="next-read-card">
+          <div class="icon">🧠</div>
+          <div class="content">
+            <div class="title">1日で5体のエージェントチームを作った話</div>
+            <div class="desc">設定ファイルから失敗例まで全部書く</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </article>
+
+  <footer class="footer">
+    <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+    <small><a href="../../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const preBlocks = document.querySelectorAll('pre');
+    preBlocks.forEach(function(pre) {
+      const button = document.createElement('button');
+      button.className = 'code-copy-button';
+      button.textContent = 'コピー';
+      button.addEventListener('click', function() {
+        const code = pre.querySelector('code') || pre;
+        const text = code.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          button.textContent = 'Copied!';
+          button.classList.add('copied');
+          setTimeout(function() {
+            button.textContent = 'コピー';
+            button.classList.remove('copied');
+          }, 1500);
+        }).catch(function(err) {
+          console.error('コピーに失敗しました:', err);
+        });
+      });
+      pre.appendChild(button);
+    });
+  });
+</script>
+
+<section style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px 24px; margin: 48px 0; border-radius: 4px;">
+  <h3 style="font-size: 16px; font-weight: 900; margin-bottom: 12px; color: #856404;">⚠️ 免責事項</h3>
+  <p style="font-size: 14px; line-height: 1.8; color: #856404; margin: 0;">
+    本記事は個人的な体験談であり、投資を推奨するものではありません。バックテスト結果は過去のデータに基づくものであり、将来の成果を保証するものではありません。トレードシステムの利用により生じた損失について、筆者は一切の責任を負いません。投資はご自身の判断と責任で行ってください。本記事に記載された手法や戦略を真似した場合の結果について、筆者は関知しません。システムの詳細な投資戦略やパラメータは意図的に記載していません（そのまま真似ても機能しません）。
+  </p>
+</section>
+
+<!-- Analytics: 解析サービス導入時にここにスクリプトを追加 -->
+</body>
+</html>

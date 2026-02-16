@@ -8,6 +8,30 @@
     <atom:link href="https://mjnm21021-oss.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む【仕組み編】</title>
+      <link>https://mjnm21021-oss.github.io/blog/backtest-method/</link>
+      <description>AIが「ルールを守って、過去から学んで、チームで働く同僚」になる仕組み</description>
+      <pubDate>Sun, 16 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>https://mjnm21021-oss.github.io/blog/backtest-method/</guid>
+    </item>
+    
+    <item>
+      <title>AIも見逃した先読みバイアス — 年率63%→31%に半減した話【失敗編】</title>
+      <link>https://mjnm21021-oss.github.io/blog/backtest-failures/</link>
+      <description>バックテストで見つかった3つの致命的なバグと対策</description>
+      <pubDate>Sun, 16 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>https://mjnm21021-oss.github.io/blog/backtest-failures/</guid>
+    </item>
+    
+    <item>
+      <title>非エンジニアがAIに28,000行のトレードシステムを作らせた話【概要編】</title>
+      <link>https://mjnm21021-oss.github.io/blog/backtest-overview/</link>
+      <description>7日間で生まれた自動トレードシステムの全体像</description>
+      <pubDate>Sun, 16 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>https://mjnm21021-oss.github.io/blog/backtest-overview/</guid>
+    </item>
+    
+    <item>
       <title>5体のAIエージェントが実際どう連携してるか — マルチエージェントの裏側</title>
       <link>https://mjnm21021-oss.github.io/blog/multi-agent-flow/</link>
       <description>5体のAIエージェントが実際どう連携してるか</description>
