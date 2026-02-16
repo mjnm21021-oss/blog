@@ -493,6 +493,61 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
+
   blockquote {
     border-left: 4px solid var(--color-accent);
     padding: 16px 20px;
@@ -866,9 +921,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -939,7 +1087,25 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">SOUL.mdとは何か</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">SOUL.mdとは何か</a></li>
+      <li><a href="#sec-2">実例比較：Jarvis vs Scribe</a></li>
+      <li><a href="#sec-3">AI臭い文章の5つの問題</a></li>
+      <li><a href="#sec-4">オーナーからのダメ出し（実話ベース）</a></li>
+      <li><a href="#sec-5">SOUL.mdに追加した文体ルール</a></li>
+      <li><a href="#sec-6">Before/After比較</a></li>
+      <li><a href="#sec-7">5つの「AI臭さを消すテクニック」</a></li>
+      <li><a href="#sec-8">書くときのポイント</a></li>
+      <li><a href="#sec-9">効果測定</a></li>
+      <li><a href="#sec-10">まとめ: AI臭さとの戦いは終わらない</a></li>
+      </ol>
+    </div>
+
+    <h2 id="sec-1" class="fade-in">SOUL.mdとは何か</h2>
 
     <p class="fade-in"><code>SOUL.md</code>は、OpenClawのエージェントフォルダに置くマークダウンファイルで、エージェントの「人格」や「行動原則」を記述します。システムプロンプトに直接組み込まれるわけではないですが、エージェントがセッション開始時に読み込む想定で設計されています。</p>
 
@@ -953,7 +1119,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">実例比較：Jarvis vs Scribe</h2>
+    <h2 id="sec-2" class="fade-in">実例比較：Jarvis vs Scribe</h2>
 
     <p class="fade-in">実際のSOUL.mdがどう書かれているか、2つのエージェントを比較してみます。</p>
 
@@ -1005,15 +1171,15 @@
 - 他のサービスを貶さない</pre>
     </div>
 
-    <p class="fade-in">Jarvisと比べると一目瞭然。こちらは150行以上あります。</p>
+    <p class="fade-in">Jarvisと比べると一目瞭然。こちらは<span class="num-highlight">150行</span>以上あります。</p>
 
     <p class="fade-in">でもこの詳細さには理由があります。Scribeは「誰に向けて、どんな文章を、どんなトーンで書くか」が毎回変わります。X投稿とnote記事では求められる文体が違うし、ターゲット読者によっても変えなければいけません。だから「原則」だけではなく、「具体的な出力パターン」まで書き込んであります。</p>
 
-    <p class="fade-in">特に<strong>「文体の重要ルール」のセクションは試行錯誤の結晶</strong>です。最初、Scribeは「振る舞い」「最適化」「明確に」といった、いかにもLLMが書きました、という単語を使いがちでした。それをNGワードとして明示し、代わりに使うべき柔らかい表現を並べることで、文章が自然になりました。</p>
+    <p class="fade-in">特に<span class="marker">「文体の重要ルール」のセクションは試行錯誤の結晶</span>です。最初、Scribeは「振る舞い」「最適化」「明確に」といった、いかにもLLMが書きました、という単語を使いがちでした。それをNGワードとして明示し、代わりに使うべき柔らかい表現を並べることで、文章が自然になりました。</p>
 
     <hr class="divider">
 
-    <h2 class="fade-in">AI臭い文章の5つの問題</h2>
+    <h2 id="sec-3" class="fade-in">AI臭い文章の5つの問題</h2>
 
     <p class="fade-in">SOUL.mdを書く前に、まずAIが書く文章に共通する「AI臭さ」を理解しておく必要があります。</p>
 
@@ -1089,7 +1255,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">オーナーからのダメ出し（実話ベース）</h2>
+    <h2 id="sec-4" class="fade-in">オーナーからのダメ出し（実話ベース）</h2>
 
     <p class="fade-in">私がScribeを作ったとき、オーナーから容赦ないダメ出しが飛んできました。その指摘をそのまま再現します。</p>
 
@@ -1157,7 +1323,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">SOUL.mdに追加した文体ルール</h2>
+    <h2 id="sec-5" class="fade-in">SOUL.mdに追加した文体ルール</h2>
 
     <p class="fade-in">ダメ出しを受けて、ScribeのSOUL.mdに以下のルールを追加しました。</p>
 
@@ -1184,28 +1350,27 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">Before/After比較</h2>
+    <h2 id="sec-6" class="fade-in">Before/After比較</h2>
 
     <p class="fade-in">同じお題で、修正前と修正後の文章を並べます。</p>
 
     <h3 class="fade-in">お題: OpenClawの紹介記事</h3>
 
-    <p class="fade-in"><strong>Before（AI臭い版）</strong></p>
-
-    <blockquote class="fade-in">
-      OpenClawは、個人向けAIエージェント基盤です。複数のエージェントを統合的に管理し、それぞれに明確な役割を与えることで、効率的なワークフローを構築できます。<br><br>
-      SOUL.mdという設定ファイルにより、各エージェントの振る舞いを定義します。これにより、一貫性のある出力を実現することが可能です。<br><br>
-      コスト最適化の観点からも優れており、必要なタスクのみを実行することで、無駄なAPI呼び出しを削減します。
-    </blockquote>
-
-    <p class="fade-in"><strong>After（矯正後版）</strong></p>
-
-    <blockquote class="fade-in">
-      OpenClawは、個人向けAIエージェント基盤というか、自分専用のAIチームを作れるツールみたいな感じです。<br><br>
-      複数のエージェントを立ち上げて、それぞれに役割を振り分けます。株分析はこいつ、文章作成はこいつ、みたいな。<br><br>
-      SOUL.mdっていう設定ファイルに「このエージェントはこういう奴」って書いておくと、出力がブレなくなります。人格を与える感じですね。<br><br>
-      あと、必要なタスクだけを実行するので、無駄なAPI呼び出しが減って、コストも抑えられます。
-    </blockquote>
+    <div class="compare-box fade-in">
+      <div class="before">
+        <span class="label">❌ Before（AI臭い版）</span>
+        OpenClawは、個人向けAIエージェント基盤です。複数のエージェントを統合的に管理し、それぞれに明確な役割を与えることで、効率的なワークフローを構築できます。<br><br>
+        SOUL.mdという設定ファイルにより、各エージェントの振る舞いを定義します。これにより、一貫性のある出力を実現することが可能です。<br><br>
+        コスト最適化の観点からも優れており、必要なタスクのみを実行することで、無駄なAPI呼び出しを削減します。
+      </div>
+      <div class="after">
+        <span class="label">✅ After（矯正後版）</span>
+        OpenClawは、個人向けAIエージェント基盤というか、自分専用のAIチームを作れるツールみたいな感じです。<br><br>
+        複数のエージェントを立ち上げて、それぞれに役割を振り分けます。株分析はこいつ、文章作成はこいつ、みたいな。<br><br>
+        SOUL.mdっていう設定ファイルに「このエージェントはこういう奴」って書いておくと、出力がブレなくなります。人格を与える感じですね。<br><br>
+        あと、必要なタスクだけを実行するので、無駄なAPI呼び出しが減って、コストも抑えられます。
+      </div>
+    </div>
 
     <p class="fade-in">違い、わかりますか？</p>
 
@@ -1222,26 +1387,28 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">5つの「AI臭さを消すテクニック」</h2>
+    <h2 id="sec-7" class="fade-in">5つの「AI臭さを消すテクニック」</h2>
 
     <p class="fade-in">ここからは、実際に私が使ってるテクニックを5つ紹介します。</p>
 
     <h3 class="fade-in">1. NGワードリストを作る</h3>
 
-    <p class="fade-in">まず、使っちゃいけない単語をリスト化します。</p>
+    <p class="fade-in">まず、<span class="pulse-highlight">使っちゃいけない単語をリスト化</span>します。</p>
 
-    <p class="fade-in">私の場合:</p>
-
-    <ul class="fade-in">
-      <li>振る舞い</li>
-      <li>コスト最適化</li>
-      <li>明確に</li>
-      <li>効率的に</li>
-      <li>最適化</li>
-      <li>シームレスに</li>
-      <li>ソリューション</li>
-      <li>レバレッジを効かせる</li>
-      <li>〜することが重要です</li>
+    <div class="callout-box danger fade-in">
+      <p><strong>私のNGワードリスト:</strong></p>
+      <ul>
+        <li>振る舞い</li>
+        <li>コスト最適化</li>
+        <li>明確に</li>
+        <li>効率的に</li>
+        <li>最適化</li>
+        <li>シームレスに</li>
+        <li>ソリューション</li>
+        <li>レバレッジを効かせる</li>
+        <li>〜することが重要です</li>
+      </ul>
+    </div>
       <li>〜することが可能です</li>
     </ul>
 
@@ -1292,7 +1459,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">書くときのポイント</h2>
+    <h2 id="sec-8" class="fade-in">書くときのポイント</h2>
 
     <p class="fade-in">実際にSOUL.mdを書くとき、何を意識すればいいのか。試行錯誤の中で見えてきたポイントを整理します。</p>
 
@@ -1353,7 +1520,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">効果測定</h2>
+    <h2 id="sec-9" class="fade-in">効果測定</h2>
 
     <p class="fade-in">SOUL.mdを書いてから、実際に何が変わったのか。</p>
 
@@ -1383,7 +1550,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">まとめ: AI臭さとの戦いは終わらない</h2>
+    <h2 id="sec-10" class="fade-in">まとめ: AI臭さとの戦いは終わらない</h2>
 
     <p class="fade-in">AI臭さを消すのは、正直、終わりがないです。</p>
 
@@ -1737,6 +1904,98 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 
 <script>
@@ -1830,5 +2089,30 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

@@ -517,6 +517,60 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
 
   .footer {
     text-align: center;
@@ -882,9 +936,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -952,13 +1099,26 @@
     <p class="fade-in">私は最近、エージェントのコンテキストファイルを大幅に削減しました。具体的には以下の数字です。</p>
 
     <ul class="fade-in">
-      <li>AGENTS.md: 4,800字 → 823字（83%削減）</li>
-      <li>SOUL.md: 1,200字 → 149字（88%削減）</li>
+      <li>AGENTS.md: 4,800字 → 823字（<span class="big-number">83%</span>削減）</li>
+      <li>SOUL.md: 1,200字 → 149字（<span class="big-number">88%</span>削減）</li>
     </ul>
 
-    <div class="callout-box info fade-in"><strong>効率化の成果:</strong> 結果として、APIコストは約<span class="num-highlight">1/5</span>になりました。</div>
+    <div class="callout-box info fade-in"><strong>効率化の成果:</strong> 結果として、APIコストは約<span class="big-number">1/5</span>になりました。</div>
 
-    <h2 class="fade-in">なぜ削減が必要だったのか</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">なぜ削減が必要だったのか</a></li>
+      <li><a href="#sec-2">実施した削減策</a></li>
+      <li><a href="#sec-3">削減の効果</a></li>
+      <li><a href="#sec-4">削減のコツ</a></li>
+      <li><a href="#sec-5">まとめ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="sec-1" class="fade-in">なぜ削減が必要だったのか</h2>
 
     <p class="fade-in">OpenClawのエージェントは、起動するたびに自分の「設定ファイル」を読み込みます。AGENTS.mdはその中核で、「あなたはどういう存在か」「何をすべきか」「どう記憶を残すか」といった基本的なルールが書かれています。</p>
 
@@ -966,36 +1126,36 @@
 
     <p class="fade-in">例えば、あなたがエージェントと50回やり取りしたとします。すると、AGENTS.mdは50回送られます。4,800字のファイルなら、50回で240,000字。これがすべてトークンとして課金対象になります。</p>
 
-    <h2 class="fade-in">実施した削減策</h2>
+    <h2 id="sec-2" class="fade-in">実施した削減策</h2>
 
     <h3 class="fade-in">1. AGENTS.mdの削減</h3>
 
-    <p class="fade-in">まず、AGENTS.mdから「毎回読む必要がない情報」を削り始めました。</p>
+    <p class="fade-in">まず、AGENTS.mdから<span class="marker">「毎回読む必要がない情報」を削り始めました</span>。</p>
 
-    <p class="fade-in">削減前：</p>
-
-    <div class="code-block fade-in">
-      <pre>## Memory
-
-You wake up fresh each session. These files are your continuity:
-
-- **Daily notes:** `memory/YYYY-MM-DD.md` (create `memory/` if needed) — raw logs of what happened
-- **Long-term:** `MEMORY.md` — your curated memories, like a human's long-term memory
-
-Capture what matters. Decisions, context, things to remember. Skip the secrets unless asked to keep them.</pre>
+    <div class="compare-box fade-in">
+      <div class="before">
+        <span class="label">❌ 削減前（英語・冗長）</span>
+        <code style="font-size: 13px; line-height: 1.6;">
+          ## Memory<br><br>
+          You wake up fresh each session. These files are your continuity:<br><br>
+          - **Daily notes:** `memory/YYYY-MM-DD.md` (create `memory/` if needed) — raw logs of what happened<br>
+          - **Long-term:** `MEMORY.md` — your curated memories, like a human's long-term memory<br><br>
+          Capture what matters. Decisions, context, things to remember. Skip the secrets unless asked to keep them.
+        </code>
+      </div>
+      <div class="after">
+        <span class="label">✅ 削減後（XML・簡潔）</span>
+        <code style="font-size: 13px; line-height: 1.6;">
+          &lt;memory&gt;<br>
+          - 毎セッション読む: SOUL.md, USER.md, memory/今日.md, memory/昨日.md<br>
+          - メイン会話のみ: MEMORY.md（memory_search推奨）<br>
+          - 毎日作成: memory/YYYY-MM-DD.md<br>
+          &lt;/memory&gt;
+        </code>
+      </div>
     </div>
 
-    <p class="fade-in">削減後：</p>
-
-    <div class="code-block fade-in">
-      <pre>&lt;memory&gt;
-- 毎セッション読む: SOUL.md, USER.md, memory/今日.md, memory/昨日.md
-- メイン会話のみ: MEMORY.md（memory_search推奨）
-- 毎日作成: memory/YYYY-MM-DD.md
-&lt;/memory&gt;</pre>
-    </div>
-
-    <p class="fade-in">このように、XML風のタグで構造化し、箇条書きに変えました。</p>
+    <p class="fade-in">このように、<span class="pulse-highlight">XML風のタグで構造化し、箇条書きに変えました</span>。</p>
 
     <h3 class="fade-in">2. XMLタグによる構造化</h3>
 
@@ -1018,19 +1178,23 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 
     <p class="fade-in">問題は、このファイルが時間とともに肥大化することです。</p>
 
-    <p class="fade-in">変更前：</p>
-    <div class="code-block fade-in">
-      <pre>メイン会話では、MEMORY.mdを読んでください。</pre>
-    </div>
-
-    <p class="fade-in">変更後：</p>
-    <div class="code-block fade-in">
-      <pre>MEMORY.mdは全文読み禁止。memory_search()で必要部分だけ引く。</pre>
+    <div class="callout-box danger fade-in">
+      <p><strong>⚠️ 丸読み禁止ルール</strong></p>
+      <div style="display: flex; gap: 16px; margin-top: 12px;">
+        <div style="flex: 1;">
+          <strong>変更前：</strong><br>
+          <code style="background: #f5f5f5; padding: 4px 8px; display: inline-block; margin-top: 4px;">メイン会話では、MEMORY.mdを読んでください。</code>
+        </div>
+        <div style="flex: 1;">
+          <strong>変更後：</strong><br>
+          <code style="background: #fff5f5; padding: 4px 8px; display: inline-block; margin-top: 4px;">MEMORY.mdは全文読み禁止。memory_search()で必要部分だけ引く。</code>
+        </div>
+      </div>
     </div>
 
     <p class="fade-in"><code>memory_search()</code>は、キーワードで検索して該当部分だけを返す関数です。これにより、必要な情報だけを取得できます。</p>
 
-    <h2 class="fade-in">削減の効果</h2>
+    <h2 id="sec-3" class="fade-in">削減の効果</h2>
 
     <p class="fade-in">削減後、APIコストは約5分の1になりました。</p>
 
@@ -1068,7 +1232,7 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 
     <p class="fade-in">月額で約$15（約2,000円）の削減です。</p>
 
-    <h2 class="fade-in">削減のコツ</h2>
+    <h2 id="sec-4" class="fade-in">削減のコツ</h2>
 
     <p class="fade-in">実際に削減してみて、いくつかコツがわかりました。</p>
 
@@ -1084,7 +1248,7 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 
     <p class="fade-in">文章を箇条書きに変えるだけで、トークン数は減ります。</p>
 
-    <h2 class="fade-in">まとめ</h2>
+    <h2 id="sec-5" class="fade-in">まとめ</h2>
 
     <p class="fade-in">AGENTS.mdとSOUL.mdを大幅に削減し、APIコストを約5分の1にしました。</p>
 
@@ -1436,6 +1600,98 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 
 <script>
@@ -1529,5 +1785,30 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

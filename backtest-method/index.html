@@ -852,9 +852,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -911,7 +1004,23 @@
 
     <div class="key-message fade-in">AIを単なる「質問に答えるツール」から「ルールを守って働く同僚」に変える。それがこの仕組みの本質です。</div>
 
-    <h2 class="fade-in">なぜ「ルールブック」が必要なのか</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">なぜ「ルールブック」が必要なのか</a></li>
+      <li><a href="#sec-2">CLAUDE.md — AIへのルールブック</a></li>
+      <li><a href="#sec-3">Skills — AIに専門スキルを教え込む</a></li>
+      <li><a href="#sec-4">Memory — AIの長期記憶</a></li>
+      <li><a href="#sec-5">Agent Teams — AI同士のチーム開発</a></li>
+      <li><a href="#sec-6">マルチAIレビュー</a></li>
+      <li><a href="#sec-7">この仕組みはトレード以外にも使える</a></li>
+      <li><a href="#sec-8">まとめ — AIを「ルールを守る同僚」にする</a></li>
+      </ol>
+    </div>
+
+    <h2 id="sec-1" class="fade-in">なぜ「ルールブック」が必要なのか</h2>
 
     <p class="fade-in">AIは賢いですが、あなたのプロジェクトの「常識」は知りません。毎回同じ説明を繰り返すのは面倒ですし、人間が忘れてしまうこともあります。そこで私は、AIに仕事のルールを教え込む3層構造を作りました。</p>
 
@@ -923,7 +1032,7 @@
 
     <p class="fade-in">この3つを組み合わせることで、AIは「前回の教訓を覚えていて、ルールに従って、専門的な作業もこなせる」存在になります。</p>
 
-    <h2 class="fade-in">CLAUDE.md — AIへのルールブック</h2>
+    <h2 id="sec-2" class="fade-in">CLAUDE.md — AIへのルールブック</h2>
 
     <p class="fade-in">CLAUDE.mdは、プロジェクトのルートディレクトリ（一番上のフォルダ）に置く設定ファイルです。Claude Code（Anthropic社が提供するAI開発ツール）は、起動するたびにこのファイルを読み込んで、プロジェクトのルールを理解します。</p>
 
@@ -975,7 +1084,7 @@
 
     <p class="fade-in">AIはこのリストを毎回確認してくれるので、私が忘れていても大丈夫です。人間のチェックリストと違い、AIは「面倒だから飛ばす」ことがありません。</p>
 
-    <h2 class="fade-in">Skills — AIに専門スキルを教え込む</h2>
+    <h2 id="sec-3" class="fade-in">Skills — AIに専門スキルを教え込む</h2>
 
     <p class="fade-in">CLAUDE.mdがプロジェクト全体のルールなら、Skillsは「特定の作業に特化したマニュアル」です。</p>
 
@@ -1006,7 +1115,7 @@
 
     <p class="fade-in">人間は疲れていると「まあ大丈夫だろう」と飛ばしてしまいますが、AIは毎回律儀に全項目を確認してくれます。この安心感は大きいです。</p>
 
-    <h2 class="fade-in">Memory — AIの長期記憶</h2>
+    <h2 id="sec-4" class="fade-in">Memory — AIの長期記憶</h2>
 
     <p class="fade-in">AIは会話をリセットすると、過去のやり取りを忘れてしまいます。これは不便です。毎回「前回こう決めたんだけど」と説明するのは面倒ですし、重要な判断が忘れ去られるリスクもあります。</p>
 
@@ -1034,7 +1143,7 @@
 
     <p class="fade-in">逆に、古くなった情報は「もうこのルールは使わないから削除して」と言えば消してくれます。MEMORY.mdは「育てるドキュメント」なのです。</p>
 
-    <h2 class="fade-in">Agent Teams — AI同士のチーム開発</h2>
+    <h2 id="sec-5" class="fade-in">Agent Teams — AI同士のチーム開発</h2>
 
     <p class="fade-in">複雑なタスクを1つのAIに全部やらせるのは無理があります。そこで私は、Claude Codeに複数のAIエージェントを起動させて、チームで作業させる仕組みを導入しました。</p>
 
@@ -1083,7 +1192,7 @@
 
     <p class="fade-in">これが全て自動で進みました。私はコーヒーを飲んでいるだけで、1時間後には3つの戦略とレポートが完成していました。</p>
 
-    <h2 class="fade-in">マルチAIレビュー</h2>
+    <h2 id="sec-6" class="fade-in">マルチAIレビュー</h2>
 
     <p class="fade-in">AIが書いたコードは、本当に正しいのでしょうか？</p>
 
@@ -1113,7 +1222,7 @@
 
     <p class="fade-in">multi-ai-review.mdには、「どのAIにどんな質問をすると効果的か」といったノウハウも書いてあります。</p>
 
-    <h2 class="fade-in">この仕組みはトレード以外にも使える</h2>
+    <h2 id="sec-7" class="fade-in">この仕組みはトレード以外にも使える</h2>
 
     <p class="fade-in">ここまで、私の投資プロジェクトを例に説明してきましたが、この仕組みは投資に限りません。</p>
 
@@ -1207,7 +1316,7 @@
 
     <p class="fade-in">どの分野でも、「AIに何を守らせたいか」を明文化すれば、同じ仕組みが使えます。</p>
 
-    <h2 class="fade-in">まとめ — AIを「ルールを守る同僚」にする</h2>
+    <h2 id="sec-8" class="fade-in">まとめ — AIを「ルールを守る同僚」にする</h2>
 
     <p class="fade-in">AIは賢いですが、あなたのプロジェクトの常識は知りません。でも、ルールを教えれば、ちゃんと守ってくれます。</p>
 
@@ -1411,5 +1520,30 @@
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

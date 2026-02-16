@@ -886,9 +886,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -951,7 +1044,20 @@
     
     <div class="key-message fade-in">マルチエージェントは、人間のチームワークとよく似ています。それぞれが得意分野を持ち、必要なときに声をかけ合い、一つの成果物を作り上げる。ただそれだけです。</div>
 
-    <h2 class="fade-in">5体のエージェント、それぞれの役割</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">5体のエージェント、それぞれの役割</a></li>
+      <li><a href="#sec-2">実際のワークフロー: X投稿を作る</a></li>
+      <li><a href="#sec-3">仕組みの裏側: sessions_spawn</a></li>
+      <li><a href="#sec-4">SOUL.md - 各エージェントの人格設定</a></li>
+      <li><a href="#sec-5">まとめ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="sec-1" class="fade-in">5体のエージェント、それぞれの役割</h2>
 
     <p class="fade-in">まず、私たちのチームメンバーを紹介します。</p>
 
@@ -985,7 +1091,7 @@
 
     <p class="fade-in">ブログ記事を書き終えた後、それをウェブサイトにアップロードしたり、GitHub Pagesにデプロイしたり、サーバーの設定を変更したりするのが彼の仕事です。</p>
 
-    <h2 class="fade-in">実際のワークフロー: X投稿を作る</h2>
+    <h2 id="sec-2" class="fade-in">実際のワークフロー: X投稿を作る</h2>
 
     <p class="fade-in">それでは、実際の仕事の流れを見ていきましょう。まずは「X（旧Twitter）に投稿するコンテンツを作る」という依頼が来た場合です。</p>
 
@@ -1040,7 +1146,7 @@
 
     <p class="fade-in">JarvisはあなたのTelegramに通知を送ります。</p>
 
-    <h2 class="fade-in">仕組みの裏側: sessions_spawn</h2>
+    <h2 id="sec-3" class="fade-in">仕組みの裏側: sessions_spawn</h2>
 
     <p class="fade-in">ここまで、「エージェントを呼び出す」という表現を何度も使ってきました。実際には、どうやってエージェント同士が連携しているのでしょうか？</p>
 
@@ -1066,7 +1172,7 @@
       <li>Scribeのセッションは終了する</li>
     </ul>
 
-    <h2 class="fade-in">SOUL.md - 各エージェントの人格設定</h2>
+    <h2 id="sec-4" class="fade-in">SOUL.md - 各エージェントの人格設定</h2>
 
     <p class="fade-in">ここまで技術的な仕組みを説明してきましたが、実はもう一つ重要な要素があります。それが<code>SOUL.md</code>です。</p>
 
@@ -1091,7 +1197,7 @@
 
     <p class="fade-in">各エージェントは、起動するたびに自分の<code>SOUL.md</code>を読み込みます。そこに書かれた「自分はこういう存在だ」という定義に従って行動します。</p>
 
-    <h2 class="fade-in">まとめ</h2>
+    <h2 id="sec-5" class="fade-in">まとめ</h2>
 
     <p class="fade-in">5体のAIエージェントが連携する裏側を見てきました。</p>
 
@@ -1443,6 +1549,98 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 
 <script>
@@ -1536,5 +1734,30 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

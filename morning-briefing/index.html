@@ -508,6 +508,61 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
+
   .footer {
     text-align: center;
     padding: 48px 0;
@@ -872,9 +927,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -936,34 +1084,72 @@
     
     <div class="key-message fade-in">朝の情報収集が劇的に楽になりました。天気アプリ、Yahoo!ファイナンス、ニュースサイト巡回。それが今では、一つのメッセージを読むだけで済みます。</div>
 
+    <div class="compare-box fade-in">
+      <div class="before">
+        <span class="label">❌ 自動化前（毎朝の手順）</span>
+        1. 天気アプリを開いて今日の天気を確認<br>
+        2. 降水確率を見て傘の判定<br>
+        3. Yahoo!ファイナンスで株価をチェック<br>
+        4. ニュースサイトを巡回<br>
+        <strong>所要時間：約<span class="num-highlight">10分</span></strong>
+      </div>
+      <div class="after">
+        <span class="label">✅ 自動化後</span>
+        朝7時にTelegramを開く<br>
+        ↓<br>
+        天気・傘判定・株価・ニュースが<br>
+        <span class="pulse-highlight">1つのメッセージにまとまっている</span><br>
+        <strong>所要時間：<span class="num-highlight">30秒</span></strong>
+      </div>
+    </div>
+
     <p class="fade-in">この記事では、OpenClawのcron機能を使って朝のブリーフィングを自動化した方法を紹介します。技術的な詳細から実際の運用まで、実際にどう作ったのかを書いていきます。</p>
 
-    <h2 class="fade-in">何が届くのか</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">何が届くのか</a></li>
+      <li><a href="#sec-2">OpenClawのcron機能とは</a></li>
+      <li><a href="#sec-3">天気情報の取得</a></li>
+      <li><a href="#sec-4">まとめ</a></li>
+      </ol>
+    </div>
 
-    <p class="fade-in">毎朝7時、Telegramに以下の内容が届きます。</p>
+    <h2 id="sec-1" class="fade-in">何が届くのか</h2>
 
-    <h3 class="fade-in">天気情報</h3>
+    <p class="fade-in">毎朝<span class="num-highlight">7時</span>、Telegramに以下の内容が届きます。</p>
 
-    <ul class="fade-in">
-      <li>今日と明日の天気概況</li>
-      <li>最高気温と最低気温</li>
-      <li>降水確率（時間帯別）</li>
-      <li>風の強さや注意報の有無</li>
-    </ul>
+    <div class="callout-box info fade-in">
+      <h3>📌 朝ブリーフィングの内容</h3>
+      
+      <strong>🌤️ 天気情報</strong>
+      <ul>
+        <li>今日と明日の天気概況</li>
+        <li>最高気温と最低気温</li>
+        <li>降水確率（時間帯別）</li>
+        <li>風の強さや注意報の有無</li>
+      </ul>
 
-    <h3 class="fade-in">傘判定</h3>
+      <strong>☔ 傘判定</strong>
+      <p>下校時間（14-16時）の降水確率から自動判定：</p>
+      <ul>
+        <li>降水確率50%以上: 「傘を持たせてください」</li>
+        <li>降水確率30-40%: 「傘があると安心です」</li>
+        <li>降水確率20%以下: 「傘は不要です」</li>
+      </ul>
 
-    <p class="fade-in">子供が小学生なので、下校時間に傘が必要かどうかが重要です。下校時間は14時から16時の間なので、その時間帯の降水確率を見て判定します。</p>
-
-    <ul class="fade-in">
-      <li>降水確率50%以上: 「傘を持たせてください」</li>
-      <li>降水確率30-40%: 「傘があると安心です」</li>
-      <li>降水確率20%以下: 「傘は不要です」</li>
-    </ul>
+      <strong>📈 マーケット情報</strong>
+      <ul>
+        <li>前日の市場概況</li>
+        <li>注目銘柄トップ3</li>
+      </ul>
+    </div>
 
     <p class="fade-in">この判定があるだけで、朝の準備がスムーズになりました。ランドセルに傘を入れるかどうか、すぐに決められます。</p>
 
-    <h2 class="fade-in">OpenClawのcron機能とは</h2>
+    <h2 id="sec-2" class="fade-in">OpenClawのcron機能とは</h2>
 
     <p class="fade-in">OpenClawには、AIエージェントに定期的なタスクを実行させるcron機能があります。Linuxのcronと似ていますが、AIエージェントが実行主体になる点が大きく違います。</p>
 
@@ -995,21 +1181,19 @@
 
     <p class="fade-in">この設定により、毎朝7時（日本時間）に、Jarvisエージェントが起動して、朝のブリーフィングを作成します。</p>
 
-    <h2 class="fade-in">天気情報の取得</h2>
+    <h2 id="sec-3" class="fade-in">天気情報の取得</h2>
 
     <p class="fade-in">天気情報は、気象庁が提供している予報APIから取得します。このAPIは無料で使えて、信頼性も高いです。</p>
 
-    <h3 class="fade-in">気象庁APIについて</h3>
-
-    <p class="fade-in">気象庁は、各地域の天気予報データをJSON形式で公開しています。富山県のデータは以下のURLで取得できます。</p>
-
-    <div class="code-block fade-in">
-      <pre>https://www.jma.go.jp/bosai/forecast/data/forecast/160000.json</pre>
+    <div class="callout-box fade-in">
+      <h3>気象庁APIについて</h3>
+      <p>気象庁は、各地域の天気予報データをJSON形式で公開しています。<span class="marker">無料で使えて、信頼性も高い</span>です。</p>
+      <p><strong>富山県のデータ取得URL：</strong></p>
+      <code style="background: #f5f5f5; padding: 4px 8px; border-radius: 4px; display: block; margin: 8px 0;">https://www.jma.go.jp/bosai/forecast/data/forecast/160000.json</code>
+      <p><code>160000</code>は富山県を示す地域コードです。このAPIにアクセスすると、今日と明日の天気予報、週間予報、気温、降水確率などが含まれたJSONデータが返ってきます。</p>
     </div>
 
-    <p class="fade-in"><code>160000</code>は富山県を示す地域コードです。このAPIにアクセスすると、今日と明日の天気予報、週間予報、気温、降水確率などが含まれたJSONデータが返ってきます。</p>
-
-    <h2 class="fade-in">まとめ</h2>
+    <h2 id="sec-4" class="fade-in">まとめ</h2>
 
     <p class="fade-in">OpenClawのcron機能を使って、朝のブリーフィングを自動化しました。毎朝7時に、天気予報、傘判定、マーケット情報がTelegramに届きます。</p>
 
@@ -1353,6 +1537,98 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 
 <script>
@@ -1446,5 +1722,30 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

@@ -489,6 +489,60 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
 
   .footer {
     text-align: center;
@@ -854,9 +908,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -914,7 +1061,20 @@
 
     <p class="fade-in">この記事では、cronとheartbeatの違いと使い分け方を、実例を交えながら解説します。</p>
 
-    <h2 class="fade-in">cronとheartbeat、何が違う？</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">cronとheartbeat、何が違う？</a></li>
+      <li><a href="#sec-2">どう使い分ける？ 判断の基準</a></li>
+      <li><a href="#sec-3">cronの設定方法</a></li>
+      <li><a href="#sec-4">heartbeatの設定方法</a></li>
+      <li><a href="#sec-5">まとめ: cronとheartbeatの使い分けチャート</a></li>
+      </ol>
+    </div>
+
+    <h2 id="sec-1" class="fade-in">cronとheartbeat、何が違う？</h2>
 
     <h3 class="fade-in">cron job: 正確な時間に、決めたことを実行</h3>
 
@@ -959,7 +1119,7 @@
 
     <p class="fade-in">こうした「定期的に状況を見て、何かあれば対応する」という、<strong>ポーリング型のタスク</strong>に向いています。</p>
 
-    <h2 class="fade-in">どう使い分ける？ 判断の基準</h2>
+    <h2 id="sec-2" class="fade-in">どう使い分ける？ 判断の基準</h2>
 
     <div class="key-message fade-in">「いつ」が大事ならcron、「何か」を確認したいならheartbeat。判断基準はシンプルです。</div>
 
@@ -989,7 +1149,7 @@
 
     <p class="fade-in">これらは「定期的に見る」ことが目的で、多少タイミングがズレても問題ないので、heartbeatが適しています。</p>
 
-    <h2 class="fade-in">cronの設定方法</h2>
+    <h2 id="sec-3" class="fade-in">cronの設定方法</h2>
 
     <h3 class="fade-in">スケジュールの指定方法</h3>
 
@@ -1039,7 +1199,7 @@
       <li><code>0 0 1 * *</code> → 毎月1日の0時</li>
     </ul>
 
-    <h2 class="fade-in">heartbeatの設定方法</h2>
+    <h2 id="sec-4" class="fade-in">heartbeatの設定方法</h2>
 
     <p class="fade-in">heartbeatは、設定ファイルで間隔を指定しておき、エージェントに「何をチェックするか」をHEARTBEAT.mdに書いておく形で使います。</p>
 
@@ -1093,7 +1253,13 @@
 - 深夜（23:00-08:00）は緊急でない限り静かにする</pre>
     </div>
 
-    <h2 class="fade-in">まとめ: cronとheartbeatの使い分けチャート</h2>
+    <div class="callout-box danger fade-in">
+      <strong>⚠️ 深夜静音ルール</strong>
+      <p><span class="pulse-highlight">深夜（23:00-08:00）は緊急でない限り静かにする</span></p>
+      <p>heartbeatは定期的にチェックしますが、夜中に通知が来るのは困ります。静音時間帯を設定することで、重要な連絡以外はスキップされます。</p>
+    </div>
+
+    <h2 id="sec-5" class="fade-in">まとめ: cronとheartbeatの使い分けチャート</h2>
 
     <p class="fade-in">最後に、判断チャートをまとめておきます。</p>
 
@@ -1446,6 +1612,98 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 
 <script>
@@ -1539,5 +1797,30 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

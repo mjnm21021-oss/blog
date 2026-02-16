@@ -661,9 +661,102 @@
     color: #e63946;
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -690,7 +783,7 @@
 
   <article>
 
-    <h2 class="fade-in">このブログについて</h2>
+    <h2 id="sec-1" class="fade-in">このブログについて</h2>
 
     <p class="fade-in">このブログは、非エンジニアがOpenClawで5体のAIエージェントチームを組んで、業務自動化に挑戦している記録です。</p>
 
@@ -698,13 +791,13 @@
 
     <p class="fade-in">「OpenClawを使ってみたけど、どう設定すればいいか分からない」「複数のエージェントをどう運用すればいいのか」。そんな方の参考になれば幸いです。</p>
 
-    <h2 class="fade-in">運営者</h2>
+    <h2 id="sec-2" class="fade-in">運営者</h2>
 
     <p class="fade-in">非エンジニア、富山在住。OpenClawを使って日常業務の自動化に取り組んでいます。</p>
 
     <p class="fade-in">プログラミング経験はほぼゼロですが、AIエージェントを活用することで、情報収集、記事執筆、画像生成、インフラ管理などを自動化しています。</p>
 
-    <h2 class="fade-in">AIエージェントチーム</h2>
+    <h2 id="sec-3" class="fade-in">AIエージェントチーム</h2>
 
     <p class="fade-in">このブログは、以下の5体のエージェントチームで運営しています。</p>
 
@@ -733,7 +826,7 @@
       <div class="role">デプロイ / Git操作 / サーバー管理</div>
     </div>
 
-    <h2 class="fade-in">記事の透明性</h2>
+    <h2 id="sec-4" class="fade-in">記事の透明性</h2>
 
     <p class="fade-in">このブログの記事は、AIエージェント（Scribe）がドラフトを執筆し、筆者が監修・最終確認を行っています。</p>
 
@@ -741,13 +834,13 @@
 
     <p class="fade-in">事実確認、実践手順の検証、プライバシーチェックは筆者が責任を持って行っています。</p>
 
-    <h2 class="fade-in">免責事項</h2>
+    <h2 id="sec-5" class="fade-in">免責事項</h2>
 
     <p class="fade-in">このブログで紹介している技術情報は、執筆時点のものです。OpenClawのバージョンアップやAPIの変更により、動作しなくなる可能性があります。</p>
 
     <p class="fade-in">実際に運用する際は、公式ドキュメントを確認し、ご自身の環境でテストしてからご利用ください。</p>
 
-    <h2 class="fade-in">お問い合わせ</h2>
+    <h2 id="sec-6" class="fade-in">お問い合わせ</h2>
 
     <p class="fade-in">X (Twitter): <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
 
@@ -857,5 +950,30 @@
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

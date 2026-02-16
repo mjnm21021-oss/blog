@@ -930,9 +930,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -987,7 +1080,27 @@
       </dl>
     </div>
 
-    <h2 class="fade-in">はじめに</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">はじめに</a></li>
+      <li><a href="#sec-2">どんなシステムを作ったのか</a></li>
+      <li><a href="#sec-3">なぜ作ろうと思ったのか</a></li>
+      <li><a href="#sec-4">バックテスト結果（あくまで過去データです）</a></li>
+      <li><a href="#sec-5">ペーパートレードと実弾投入の判断基準</a></li>
+      <li><a href="#sec-6">AIとどうやって開発したのか</a></li>
+      <li><a href="#sec-7">システムの毎朝の動き</a></li>
+      <li><a href="#sec-8">技術的な話（少しだけ）</a></li>
+      <li><a href="#sec-9">なぜClaude Codeを選んだのか</a></li>
+      <li><a href="#sec-10">開発期間と費用</a></li>
+      <li><a href="#sec-11">苦労したこと</a></li>
+      <li><a href="#sec-12">AIで何ができるのか</a></li>
+      <li><a href="#sec-13">おわりに</a></li>
+      </ol>
+    </div>
+<h2 id="sec-1" class="fade-in">はじめに</h2>
 
     <p class="fade-in">私はエンジニアではありません。Pythonのコードを1行も書けません。それでも今、私のPCの中では毎朝自動的に株のトレードシステムが動いています。</p>
 
@@ -999,7 +1112,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">どんなシステムを作ったのか</h2>
+    <h2 id="sec-2" class="fade-in">どんなシステムを作ったのか</h2>
 
     <p class="fade-in">作ったのは日本株のトレードシステムです。正式には「EOD型自動トレードシステム」と呼んでいます。</p>
 
@@ -1031,7 +1144,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">なぜ作ろうと思ったのか</h2>
+    <h2 id="sec-3" class="fade-in">なぜ作ろうと思ったのか</h2>
 
     <p class="fade-in">投資で勝ちたいから——ではありません。</p>
 
@@ -1045,7 +1158,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">バックテスト結果（あくまで過去データです）</h2>
+    <h2 id="sec-4" class="fade-in">バックテスト結果（あくまで過去データです）</h2>
 
     <p class="fade-in">システムが完成したので、過去のデータで動かしてみました。これをバックテストと言います。</p>
 
@@ -1077,7 +1190,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">ペーパートレードと実弾投入の判断基準</h2>
+    <h2 id="sec-5" class="fade-in">ペーパートレードと実弾投入の判断基準</h2>
 
     <p class="fade-in">現在、システムは毎朝自動で動いています。ただし実際のお金は動かしていません。</p>
 
@@ -1100,7 +1213,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">AIとどうやって開発したのか</h2>
+    <h2 id="sec-6" class="fade-in">AIとどうやって開発したのか</h2>
 
     <div class="callout-box info fade-in"><strong>ここが一番のポイントです。</strong><br>私はPythonを書けません。Gitの使い方も知りませんでした。それでもシステムができたのは、AIとの役割分担が機能したからです。</div>
 
@@ -1160,7 +1273,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">システムの毎朝の動き</h2>
+    <h2 id="sec-7" class="fade-in">システムの毎朝の動き</h2>
 
     <p class="fade-in">現在、システムは毎朝自動で以下の処理を実行しています：</p>
 
@@ -1178,7 +1291,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">技術的な話（少しだけ）</h2>
+    <h2 id="sec-8" class="fade-in">技術的な話（少しだけ）</h2>
 
     <p class="fade-in">システムは以下の構成になっています：</p>
 
@@ -1204,7 +1317,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">なぜClaude Codeを選んだのか</h2>
+    <h2 id="sec-9" class="fade-in">なぜClaude Codeを選んだのか</h2>
 
     <p class="fade-in">AIツールはいろいろありますが、今回はClaude Codeを選びました。理由は以下の通りです：</p>
 
@@ -1219,7 +1332,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">開発期間と費用</h2>
+    <h2 id="sec-10" class="fade-in">開発期間と費用</h2>
 
     <p class="fade-in">開発期間は7日間です。毎日2〜3時間ほど、AIと対話しながら進めました。</p>
 
@@ -1235,7 +1348,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">苦労したこと</h2>
+    <h2 id="sec-11" class="fade-in">苦労したこと</h2>
 
     <p class="fade-in">すべてが順調だったわけではありません。以下のような問題がありました：</p>
 
@@ -1250,7 +1363,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">AIで何ができるのか</h2>
+    <h2 id="sec-12" class="fade-in">AIで何ができるのか</h2>
 
     <div class="key-message fade-in">AIは指示があれば大量のコードを書ける。<br>ただし「何を作るか」を決められるのは、人間だけ。</div>
 
@@ -1262,7 +1375,7 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 
     <hr class="divider">
 
-    <h2 class="fade-in">おわりに</h2>
+    <h2 id="sec-13" class="fade-in">おわりに</h2>
 
     <p class="fade-in">私はエンジニアではありません。でも、AIと協働することで、28,000行のトレードシステムを作ることができました。</p>
 
@@ -1472,6 +1585,98 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
     padding: 8px;
   }
   .image-block img { cursor: zoom-in; }
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 <div id="lightbox">
   <img id="lightbox-img" src="" alt="">
@@ -1498,5 +1703,30 @@ AI: 「HTML1枚で完結するダッシュボードを作ります」
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>

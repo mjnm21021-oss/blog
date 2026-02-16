@@ -493,6 +493,61 @@
     color: var(--color-accent);
   }
 
+  /* パルスアニメーション — 最重要ポイント */
+  .pulse-highlight {
+    animation: pulse-glow 2s ease-in-out infinite;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { background: rgba(230,57,70,0.08); }
+    50% { background: rgba(230,57,70,0.18); }
+  }
+
+  /* カウントアップ風の数字ブロック */
+  .big-number {
+    display: inline-block;
+    font-size: 2.5em;
+    font-weight: 900;
+    color: #e63946;
+    line-height: 1.2;
+  }
+
+  /* ビフォーアフター比較 */
+  .compare-box {
+    display: flex;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .compare-box .before, .compare-box .after {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .compare-box .before {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  .compare-box .after {
+    background: #fff5f5;
+    border: 1px solid #e63946;
+  }
+  .compare-box .label {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .compare-box .before .label { color: #999; }
+  .compare-box .after .label { color: #e63946; }
+
+  @media (max-width: 768px) {
+    .compare-box { flex-direction: column; }
+    .big-number { font-size: 2em; }
+  }
+
   .footer {
     text-align: center;
     padding: 48px 0;
@@ -857,9 +912,102 @@
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 </head>
 <body>
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="header">
   <div class="header-inner">
@@ -916,13 +1064,29 @@
 
     <div class="key-message fade-in">ローカルで動かせば全部解決します。電気代以外は無料。何枚でも生成し放題。</div>
 
-    <p class="fade-in">電気代以外は無料。何枚でも生成し放題。フィルターなし。モデルも好きに入れ替えられます。しかもComfyUIならノードベースでワークフローを組めるので、一度セットアップすれば完全自動化できます。Telegramからメッセージを送るだけで画像が返ってくる、みたいなことが普通にできます。</p>
+    <p class="fade-in">電気代以外は無料。何枚でも生成し放題。フィルターなし。モデルも好きに入れ替えられます。しかもComfyUIならノードベースでワークフローを組めるので、<span class="marker">一度セットアップすれば完全自動化</span>できます。</p>
+    
+    <div class="quote-block fade-in">Telegramからメッセージを送るだけで画像が返ってくる、みたいなことが普通にできます。</div>
 
     <p class="fade-in">私はここ半年くらいComfyUIをローカルで動かしています。最初はつまずきましたが、今は完全に安定稼働しています。Flux2モデルの導入からAPI経由の自動化まで、全部書いていきます。</p>
 
     <hr class="divider">
 
-    <h2 class="fade-in">必要なスペック</h2>
+    
+    <!-- 目次 -->
+    <div class="toc">
+      <div class="toc-title">目次</div>
+      <ol>
+      <li><a href="#sec-1">必要なスペック</a></li>
+      <li><a href="#sec-2">ComfyUIのインストール</a></li>
+      <li><a href="#sec-3">Flux2モデルの導入</a></li>
+      <li><a href="#sec-4">API経由で外部から叩く</a></li>
+      <li><a href="#sec-5">実際の運用例</a></li>
+      <li><a href="#sec-6">まとめ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="sec-1" class="fade-in">必要なスペック</h2>
 
     <p class="fade-in">まず現実的な話をします。</p>
 
@@ -950,7 +1114,7 @@
 
     <hr class="divider">
 
-    <h2 class="fade-in">ComfyUIのインストール</h2>
+    <h2 id="sec-2" class="fade-in">ComfyUIのインストール</h2>
 
     <p class="fade-in">前提条件：</p>
 
@@ -984,7 +1148,7 @@ pip install -r requirements.txt</pre>
 
     <hr class="divider">
 
-    <h2 class="fade-in">Flux2モデルの導入</h2>
+    <h2 id="sec-3" class="fade-in">Flux2モデルの導入</h2>
 
     <p class="fade-in">Flux2はBlack Forest Labsが出しているモデルです。プロンプトの理解力が段違いに高いです。SDXLから乗り換えたら戻れなくなりました。</p>
 
@@ -1002,20 +1166,21 @@ pip install -r requirements.txt</pre>
 
     <hr class="divider">
 
-    <h2 class="fade-in">API経由で外部から叩く</h2>
+    <h2 id="sec-4" class="fade-in">API経由で外部から叩く</h2>
 
     <p class="fade-in">ここが本題です。ComfyUIにはREST APIがあります。</p>
 
     <p class="fade-in"><code>python main.py</code> で起動すると、自動的にAPIも立ち上がります。ポートは8188です。</p>
 
-    <h3 class="fade-in">基本的な流れ</h3>
-
-    <ul class="fade-in">
-      <li>ワークフローのJSONを用意</li>
-      <li><code>/prompt</code> エンドポイントにPOST</li>
-      <li>WebSocketで進捗を受け取る</li>
-      <li>完了したら <code>/view</code> で画像を取得</li>
-    </ul>
+    <div class="callout-box info fade-in">
+      <h3>基本的な流れ</h3>
+      <ul>
+        <li>ワークフローのJSONを用意</li>
+        <li><code>/prompt</code> エンドポイントにPOST</li>
+        <li>WebSocketで進捗を受け取る</li>
+        <li>完了したら <code>/view</code> で画像を取得</li>
+      </ul>
+    </div>
 
     <div class="code-block fade-in">
       <pre>import json
@@ -1043,20 +1208,21 @@ response = urllib.request.urlopen(req)</pre>
 
     <p class="fade-in">私は実際にTelegramボットを作って運用しています。仕組みはシンプルです。</p>
 
-    <ul class="fade-in">
-      <li>Telegramでメッセージ送信（プロンプト）</li>
-      <li>ボットがComfyUI APIにワークフローをPOST</li>
-      <li>WebSocketで完了を検知</li>
-      <li>生成された画像をTelegramに返す</li>
-    </ul>
-
-    <p class="fade-in">python-telegram-botライブラリとComfyUI APIの橋渡しを書くだけです。100行くらいで収まります。</p>
+    <div class="callout-box info fade-in">
+      <ul>
+        <li>Telegramでメッセージ送信（プロンプト）</li>
+        <li>ボットがComfyUI APIにワークフローをPOST</li>
+        <li>WebSocketで完了を検知</li>
+        <li>生成された画像をTelegramに返す</li>
+      </ul>
+      <p>python-telegram-botライブラリとComfyUI APIの橋渡しを書くだけです。<span class="num-highlight">100行</span>くらいで収まります。</p>
+    </div>
 
     <p class="fade-in">外出先からスマホでプロンプトを送って、自宅PCで生成して、結果がスマホに返ってくる。これがローカル最大の旨味です。クラウド不要になります。</p>
 
     <hr class="divider">
 
-    <h2 class="fade-in">実際の運用例</h2>
+    <h2 id="sec-5" class="fade-in">実際の運用例</h2>
 
     <p class="fade-in">私の環境：</p>
 
@@ -1072,7 +1238,7 @@ response = urllib.request.urlopen(req)</pre>
 
     <hr class="divider">
 
-    <h2 class="fade-in">まとめ</h2>
+    <h2 id="sec-6" class="fade-in">まとめ</h2>
 
     <p class="fade-in">ComfyUIローカル環境の利点：</p>
 
@@ -1423,6 +1589,98 @@ response = urllib.request.urlopen(req)</pre>
     color: var(--color-accent);
   }
 
+
+  /* 目次 (TOC) */
+  .toc {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0 36px;
+  }
+  .toc-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toc-title::before { content: '📑'; }
+  .toc-title::after { content: '▼'; font-size: 11px; color: #999; transition: transform 0.3s; }
+  .toc.collapsed .toc-title::after { transform: rotate(-90deg); }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .toc li::before {
+    content: counter(toc-counter) '. ';
+    color: #e63946;
+    font-weight: 700;
+  }
+  .toc a { color: #1a1a1a; text-decoration: none; }
+  .toc a:hover { color: #e63946; }
+  .toc.collapsed ol { display: none; }
+
+
+  /* 読了プログレスバー */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+
+  /* h2セクション番号 */
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+
+  /* トップに戻るボタン */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
 </style>
 
 <script>
@@ -1516,5 +1774,30 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+
+<script>
+// TOC 折りたたみ
+document.querySelectorAll('.toc-title').forEach(t => {
+  t.addEventListener('click', () => t.parentElement.classList.toggle('collapsed'));
+});
+
+// 読了プログレスバー
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// トップに戻るボタン
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<button class="back-to-top" id="backToTop">↑</button>
 </body>
 </html>
