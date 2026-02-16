@@ -96,47 +96,95 @@
   }
   .article-card-thumb {
     position: relative;
-    width: 160px;
+    width: 240px;
     flex-shrink: 0;
     background: #fafafa;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    padding: 20px;
   }
   .article-card-thumb::before {
     content: '';
     position: absolute;
     top: 0; left: 0;
-    width: 4px; height: 100%;
+    width: 5px; height: 100%;
     background: var(--color-accent);
   }
   /* Day1のサムネ */
-  .thumb-day1::after {
-    content: '5';
-    font-size: 100px;
-    font-weight: 900;
-    color: #e0e0e0;
-    line-height: 1;
-  }
   .thumb-day1 {
-    background-image: radial-gradient(circle, #e8e8e8 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image: radial-gradient(circle, #e8e8e8 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
   }
-  /* SOUL.mdのサムネ */
-  .thumb-soul::after {
-    content: 'SOUL';
-    font-size: 32px;
+  .thumb-day1 .thumb-num {
+    font-size: 120px;
     font-weight: 900;
     color: #1a1a1a;
     line-height: 1;
-    letter-spacing: 0.05em;
+    position: relative;
   }
+  .thumb-day1 .thumb-num::before {
+    content: '5';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: #f0f0f0;
+    z-index: -1;
+  }
+  .thumb-day1 .thumb-label {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+  }
+  .thumb-day1 .thumb-sub {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    margin-top: 4px;
+  }
+  /* SOUL.mdのサムネ */
   .thumb-soul {
     background-image: 
       linear-gradient(0deg, #f0f0f0 1px, transparent 1px),
       linear-gradient(90deg, #f0f0f0 1px, transparent 1px);
-    background-size: 24px 24px;
+    background-size: 28px 28px;
+  }
+  .thumb-soul .thumb-title {
+    font-size: 48px;
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .thumb-soul .thumb-title::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+  .thumb-soul .thumb-label {
+    font-size: 12px;
+    font-weight: 900;
+    color: #666;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .thumb-soul .thumb-sub {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+    margin-top: 6px;
   }
   .article-card-content {
     flex: 1;
@@ -204,7 +252,11 @@
   <div class="articles">
 
     <a href="day1/" class="article-card fade-in">
-      <div class="article-card-thumb thumb-day1"></div>
+      <div class="article-card-thumb thumb-day1">
+        <div class="thumb-num">5</div>
+        <div class="thumb-label">AGENTS TEAM</div>
+        <div class="thumb-sub">Day 1</div>
+      </div>
       <div class="article-card-content">
         <span class="tag">OpenClaw実践</span>
         <h2>1日で5体のエージェントチームを作った話 — 設定ファイルから失敗例まで全部書く</h2>
@@ -216,7 +268,11 @@
     </a>
 
     <a href="soul-md/" class="article-card fade-in">
-      <div class="article-card-thumb thumb-soul"></div>
+      <div class="article-card-thumb thumb-soul">
+        <div class="thumb-title">SOUL</div>
+        <div class="thumb-label">人格定義<br>AI臭さ対策</div>
+        <div class="thumb-sub">12,000字</div>
+      </div>
       <div class="article-card-content">
         <span class="tag">OpenClaw実践</span>
         <h2>SOUL.mdの書き方 — OpenClawエージェントに「らしさ」を与える実践ガイド</h2>
