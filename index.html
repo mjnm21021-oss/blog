@@ -735,6 +735,7 @@
   </ul>
   <h2>記事一覧</h2>
   <ul>
+    <li><a href="./news-ai-cartel/">AIカルテル自販機実験</a></li>
     <li><a href="./news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
     <li><a href="./day1/">Day1: チーム構築</a></li>
     <li><a href="./soul-md-merged/">SOUL.md: AI臭さ対策</a></li>
@@ -771,6 +772,25 @@
   </div>
 
   <div class="articles">
+
+    <a href="news-ai-cartel/" class="article-card fade-in">
+      <div class="article-card-thumb" style="background: linear-gradient(135deg, #ffe5e5 0%, #fafafa 100%);">
+        <div style="font-size: 50px; font-weight: 900; color: #333; line-height: 0.9; display: flex; flex-direction: column; align-items: center;">
+          <span style="font-size: 0.4em; color: #999;">$500</span>
+          <span style="font-size: 0.25em; margin: 2px 0; color: #e63946;">↓</span>
+          <span style="color: #e63946;">$8K</span>
+        </div>
+        <div style="font-size: 11px; font-weight: 900; color: #e63946; letter-spacing: 0.1em; margin-top: 12px;">AI CARTEL</div>
+      </div>
+      <div class="article-card-content">
+        <span class="tag">海外AIニュース</span>
+        <h2>AIに「利益を最大化して」と任せたら、勝手にカルテルを組んだ話</h2>
+        <div class="desc">
+          AIに「利益を最大化して」と丸投げしたら、競合AIと価格カルテルを結成。$500が$8,000超に
+        </div>
+        <div class="meta">2026年2月16日 • 約3分</div>
+      </div>
+    </a>
 
     <a href="news-shumer/" class="article-card fade-in">
       <div class="article-card-thumb" style="background: linear-gradient(135deg, #fff5f5 0%, #fafafa 100%);">
@@ -964,11 +984,11 @@
     <div class="home-section">
       <h3 class="home-section-title">🆕 最新記事</h3>
       <ul class="home-section-list">
-        <li><a href="backtest-overview/">トレードシステム概要編</a><span class="new-badge">NEW</span></li>
-        <li><a href="backtest-failures/">トレードシステム失敗編</a><span class="new-badge">NEW</span></li>
-        <li><a href="backtest-method/">トレードシステム仕組み編</a><span class="new-badge">NEW</span></li>
-        <li><a href="multi-agent-flow/">マルチエージェント連携フロー</a></li>
-        <li><a href="cron-heartbeat/">cronとheartbeat使い分け</a></li>
+        <li><a href="news-ai-cartel/">AIカルテル自販機実験</a><span class="new-badge">NEW</span></li>
+        <li><a href="news-shumer/">Xで8100万回読まれたAI起業家の話</a><span class="new-badge">NEW</span></li>
+        <li><a href="backtest-overview/">トレードシステム概要編</a></li>
+        <li><a href="backtest-failures/">トレードシステム失敗編</a></li>
+        <li><a href="backtest-method/">トレードシステム仕組み編</a></li>
       </ul>
     </div>
   </div>
@@ -995,6 +1015,18 @@
 
   // Search functionality
   const articlesData = [
+    {
+      title: 'AIに「利益を最大化して」と任せたら、勝手にカルテルを組んだ話',
+      desc: 'AIに「利益を最大化して」と丸投げしたら、競合AIと価格カルテルを結成。$500が$8,000超に',
+      tag: '海外AIニュース',
+      url: 'news-ai-cartel/'
+    },
+    {
+      title: '「もう自分の仕事、いらなくなった」— Xで8100万回読まれたAI起業家の話',
+      desc: 'Xで8100万ビュー。AI起業家が「もう技術者はいらない」と書いたエッセイの解説',
+      tag: '海外AIニュース',
+      url: 'news-shumer/'
+    },
     {
       title: '非エンジニアがAIに28,000行のトレードシステムを作らせた話【概要編】',
       desc: '7日間で生まれた自動トレードシステムの全体像。Claude Codeとの役割分担、バックテスト結果、毎朝の自動運用の仕組み。プログラミング経験不要で作ったEOD型トレードシステムの記録。',
