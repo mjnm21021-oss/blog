@@ -1,6 +1,6 @@
-# Satoru's Blog
+# 『AI』と暮らす『非エンジニア』の日常
 
-このリポジトリはSatoruの個人ブログです。GitHub Pagesでホストされています。
+OpenClaw実践記録ブログ。GitHub Pagesでホストされています。
 
 ## アクセス解析の導入手順
 
