@@ -1014,8 +1014,8 @@
 
   <!-- タブナビゲーション -->
   <div class="tabs-nav">
-    <button class="tab-btn active" data-tab="blog">ブログ</button>
-    <button class="tab-btn" data-tab="news">海外AI</button>
+    <button class="tab-btn" data-tab="blog">ブログ</button>
+    <button class="tab-btn active" data-tab="news">海外AI</button>
   </div>
 
   <div class="articles">
@@ -1586,7 +1586,7 @@
     var tabBtns = document.querySelectorAll('.tab-btn');
     var cards = document.querySelectorAll('.article-card');
     var loadMoreBtn = document.getElementById('loadMore');
-    var currentTab = 'blog';
+    var currentTab = 'news';
 
     function showTab(tab) {
       currentTab = tab;
@@ -1633,7 +1633,7 @@
     });
 
     // 初期表示
-    showTab('blog');
+    showTab('news');
   })();
 
   // Search functionality
