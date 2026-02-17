@@ -621,6 +621,21 @@
     color: var(--color-accent);
   }
 
+  /* スマホ: タグクラウドをhero直後に */
+  @media (max-width: 768px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+    .search-container { order: 2; }
+    .tabs-nav { order: 3; }
+    .articles { order: 4; }
+    .load-more-btn { order: 5; }
+    .tag-cloud-section { order: 1; margin-top: 0; margin-bottom: 24px; }
+    .home-sections { order: 6; }
+    footer.footer { order: 7; }
+  }
+
   /* スマホ対応 */
   @media (max-width: 768px) {
     .articles {
