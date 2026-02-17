@@ -1603,23 +1603,26 @@
         }
       });
 
-      // 「もっと読む」はブログタブのみ、6件超で表示
+      // 6件超で「もっと読む」表示（両タブ共通）
       if (loadMoreBtn) {
         var visibleCount = 0;
         cards.forEach(function(card) {
           if (card.dataset.category === tab) visibleCount++;
         });
-        if (tab === 'blog' && visibleCount > 6) {
-          var blogIndex = 0;
+        if (visibleCount > 6) {
+          var idx = 0;
           cards.forEach(function(card) {
-            if (card.dataset.category === 'blog') {
-              blogIndex++;
-              if (blogIndex > 6) {
+            if (card.dataset.category === tab) {
+              idx++;
+              if (idx > 6) {
                 card.classList.add('card-hidden');
+                card.style.display = 'none';
               }
             }
           });
           loadMoreBtn.style.display = 'block';
+          loadMoreBtn.textContent = 'もっと読む';
+          loadMoreBtn.dataset.expanded = 'false';
         } else {
           loadMoreBtn.style.display = 'none';
         }
@@ -1784,6 +1787,7 @@ btn.addEventListener('click', function() {
   if (btn) btn.addEventListener('click', function() {
     document.querySelectorAll('.card-hidden').forEach(function(el) {
       el.classList.remove('card-hidden');
+      el.style.display = '';
       el.classList.add('fade-in-visible');
     });
     btn.style.display = 'none';
