@@ -699,6 +699,36 @@
   .nav-menu a:hover {
     color: var(--color-accent);
   }
+
+/* Scroll animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hero animation */
+.article-hero h1, .hero h1 {
+    animation: heroFadeIn 0.8s ease forwards;
+}
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhanced hover for boxes */
+.callout-box, .quote-block, .key-message {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.callout-box:hover, .quote-block:hover, .key-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
 </style>
 </head>
 <body>
@@ -957,5 +987,23 @@ btn.addEventListener('click', function() {
 </script>
 
 <script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+// Scroll fadeIn
+(function(){
+    var targets = document.querySelectorAll('h2, pre, .callout-box, .quote-block, .key-message');
+    targets.forEach(function(el){ el.classList.add('fade-in-up'); });
+    var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.1});
+    targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
 </body>
 </html>
