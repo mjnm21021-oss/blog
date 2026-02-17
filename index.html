@@ -832,6 +832,79 @@
   .back-to-top.visible { opacity: 1; }
   .back-to-top:hover { background: #c5303c; }
 
+  /* =============================
+     流れるタグクラウド（マーキー）
+     ============================= */
+  .tag-cloud-section {
+    margin: 48px 0 0;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-border);
+    margin-bottom: 0;
+  }
+  .marquee-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .marquee {
+    --gap: 2rem;
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    gap: var(--gap);
+    padding: 4px 0;
+  }
+  .marquee__content {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-around;
+    min-width: 100%;
+    gap: var(--gap);
+    animation: marquee 35s linear infinite;
+  }
+  .marquee--reverse .marquee__content {
+    animation-direction: reverse;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-100% - var(--gap))); }
+  }
+  .marquee:hover .marquee__content {
+    animation-play-state: paused;
+  }
+  .marquee .tag {
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform 0.2s, opacity 0.2s;
+    display: inline-block;
+    line-height: 1.3;
+  }
+  .marquee .tag:hover {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+  .marquee .tag-lg {
+    font-size: 24px;
+    font-weight: 900;
+    color: #e63946;
+  }
+  .marquee .tag-md {
+    font-size: 18px;
+    font-weight: 700;
+    color: #555;
+  }
+  .marquee .tag-sm {
+    font-size: 14px;
+    font-weight: 400;
+    color: #999;
+  }
+  @media (max-width: 768px) {
+    .marquee .tag-lg { font-size: 19px; }
+    .marquee .tag-md { font-size: 14px; }
+    .marquee .tag-sm { font-size: 11px; }
+  }
+
 </style>
 </head>
 <body>
@@ -1317,16 +1390,56 @@
     <button class="load-more-btn" id="loadMore">もっと読む</button>
   </div>
 
-  <!-- Popular & Latest -->
-  <div class="home-sections">
-    <div class="home-section">
-      <h3 class="home-section-title">🔥 人気記事</h3>
-      <ul class="home-section-list">
-        <li><a href="soul-md-merged/">SOUL.mdの書き方 — AI臭さを消す実践ガイド</a></li>
-        <li><a href="token-efficiency/">AGENTS.mdを83%削減した話</a></li>
-        <li><a href="backtest-overview/">非エンジニアがAIに28,000行のトレードシステムを作らせた話</a></li>
-      </ul>
+  <!-- Tag Cloud: Popular Articles -->
+  <section class="tag-cloud-section">
+    <h3 class="home-section-title">🔥 人気記事</h3>
+    <div class="marquee-wrap">
+
+      <!-- Row 1: Left → Right -->
+      <div class="marquee">
+        <div class="marquee__content">
+          <a href="news-ai-sidehustle/" class="tag tag-lg">AI副業3モデル</a>
+          <a href="news-klarna/" class="tag tag-lg">Klarna700人解雇</a>
+          <a href="news-tiktok-clipping/" class="tag tag-md">TikTok月72万</a>
+          <a href="news-higgsfield/" class="tag tag-md">Higgsfield Earn</a>
+          <a href="news-anthropic-academy/" class="tag tag-sm">Anthropic Academy</a>
+          <a href="news-ai-website-business/" class="tag tag-sm">AIウェブサイト販売</a>
+        </div>
+        <div class="marquee__content" aria-hidden="true">
+          <a href="news-ai-sidehustle/" class="tag tag-lg">AI副業3モデル</a>
+          <a href="news-klarna/" class="tag tag-lg">Klarna700人解雇</a>
+          <a href="news-tiktok-clipping/" class="tag tag-md">TikTok月72万</a>
+          <a href="news-higgsfield/" class="tag tag-md">Higgsfield Earn</a>
+          <a href="news-anthropic-academy/" class="tag tag-sm">Anthropic Academy</a>
+          <a href="news-ai-website-business/" class="tag tag-sm">AIウェブサイト販売</a>
+        </div>
+      </div>
+
+      <!-- Row 2: Right → Left (reverse) -->
+      <div class="marquee marquee--reverse">
+        <div class="marquee__content">
+          <a href="backtest-overview/" class="tag tag-lg">28,000行トレードシステム</a>
+          <a href="soul-md-merged/" class="tag tag-lg">SOUL.mdの書き方</a>
+          <a href="news-solo-founder/" class="tag tag-md">ソロ起業家15体AI</a>
+          <a href="token-efficiency/" class="tag tag-md">AGENTS.md 83%削減</a>
+          <a href="news-vending-machine/" class="tag tag-sm">AI自販機実験</a>
+          <a href="news-ai-finance/" class="tag tag-sm">AI金融100万円</a>
+        </div>
+        <div class="marquee__content" aria-hidden="true">
+          <a href="backtest-overview/" class="tag tag-lg">28,000行トレードシステム</a>
+          <a href="soul-md-merged/" class="tag tag-lg">SOUL.mdの書き方</a>
+          <a href="news-solo-founder/" class="tag tag-md">ソロ起業家15体AI</a>
+          <a href="token-efficiency/" class="tag tag-md">AGENTS.md 83%削減</a>
+          <a href="news-vending-machine/" class="tag tag-sm">AI自販機実験</a>
+          <a href="news-ai-finance/" class="tag tag-sm">AI金融100万円</a>
+        </div>
+      </div>
+
     </div>
+  </section>
+
+  <!-- Latest Articles -->
+  <div class="home-sections" style="grid-template-columns: 1fr; border-top: 1px solid var(--color-border); padding-top: 32px; margin-top: 32px;">
     <div class="home-section">
       <h3 class="home-section-title">🆕 最新記事</h3>
       <ul class="home-section-list">
