@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - ページが見つかりません | 『AI』と暮らす『非エンジニア』の日常</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="404 - ページが見つかりません">
+<meta property="og:description" content="お探しのページは見つかりませんでした。">
+<meta property="og:url" content="https://daisuki-koshian.github.io/blog/404.html">
+<meta property="og:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<meta property="og:site_name" content="AIと暮らす">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@daisuki_koshian">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-accent: #e63946;
+    --font-main: 'Noto Sans JP', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 900;
+  }
+  .header-nav {
+    display: flex;
+    gap: 24px;
+  }
+  .header-nav a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+  .header-nav a:hover {
+    color: var(--color-accent);
+  }
+
+  .main-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+  }
+
+  .error-content {
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .error-404 {
+    font-size: 120px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .error-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 16px;
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .error-desc {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 40px;
+    line-height: 1.8;
+    animation: fadeIn 1s ease-out;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 48px;
+    background: var(--color-accent);
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
+    animation: fadeIn 1.2s ease-out;
+  }
+
+  .cta-btn:hover {
+    background: #c5303c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.3);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .footer {
+    background: #fff;
+    border-top: 1px solid #eee;
+    padding: 32px 24px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .footer .brand {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .footer a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .error-404 {
+      font-size: 80px;
+    }
+    .error-title {
+      font-size: 22px;
+    }
+    .header-nav {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="/blog/" class="logo">『<span style="color:#e63946">AI</span>』と暮らす『<span style="color:#e63946">非エンジニア</span>』の日常</a>
+    <nav class="header-nav">
+      <a href="/blog/">Home</a>
+      <a href="/blog/about/">About</a>
+      <a href="https://x.com/daisuki_koshian" target="_blank" rel="noopener" title="X (Twitter)">𝕏</a>
+    </nav>
+  </div>
+</div>
+
+<div class="main-container">
+  <div class="error-content">
+    <div class="error-404">404</div>
+    <h1 class="error-title">ページが見つかりませんでした</h1>
+    <p class="error-desc">
+      お探しのページは存在しないか、移動した可能性があります。<br>
+      トップページから記事を探してみてください。
+    </p>
+    <a href="/blog/" class="cta-btn">トップページに戻る</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+  <small><a href="/blog/">記事一覧に戻る</a></small>
+</footer>
+
+<script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>

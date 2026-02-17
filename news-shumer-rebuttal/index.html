@@ -720,6 +720,60 @@
   <div class="breadcrumb-bar"><a href="../">ホーム</a> / Fortuneが反論した</div>
 </div>
 
+
+<!-- パンくずリスト -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="../">Home</a> &gt; <span>海外AI</span> &gt; <span class="current">AI起業家への反論記事</span>
+</nav>
+
+<style>
+.breadcrumb {
+  font-size: 12px;
+  color: #999;
+  padding: 8px 24px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.breadcrumb a {
+  color: #e63946;
+  text-decoration: none;
+}
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+.breadcrumb .current {
+  color: #333;
+}
+</style>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://daisuki-koshian.github.io/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "海外AI",
+      "item": "https://daisuki-koshian.github.io/blog/#"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "AI起業家への反論記事",
+      "item": "https://daisuki-koshian.github.io/blog/news-shumer-rebuttal/"
+    }
+  ]
+}
+</script>
+
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-label">海外AIニュース — Fortune / Mashable</div>
@@ -729,6 +783,10 @@
     <hr class="hero-sep">
     <div class="hero-sub">あの8100万ビューのエッセイ、「前提が間違ってる」とFortuneが反論した</div>
   </div>
+</div>
+
+<div class="reading-time" style="font-size: 13px; color: #999; text-align: center; margin: 24px 0; padding: 12px; background: #f9f9f9; border-radius: 4px;">
+  ⏱ 約3分で読めます
 </div>
 
 <div class="content-wrapper">
@@ -812,15 +870,77 @@
       <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
     </div>
 
-    <div class="next-read">
-      <h3>次に読む</h3>
-      <div class="next-read-cards">
-        <a href="../news-shumer/" class="next-read-card">
-          <div class="icon">🔥</div>
-          <div class="content">
-            <div class="title">8100万回読まれたAI起業家の話</div>
-            <div class="desc">Matt Shumerの「Something Big Is Happening」全文</div>
-          </div>
+<!-- SNSシェアボタン -->
+<div class="share-buttons">
+  <p class="share-title">この記事をシェア</p>
+  <div class="share-buttons-inner">
+    <a href="https://twitter.com/intent/tweet?url=https%3A//daisuki-koshian.github.io/blog/news-shumer-rebuttal/&text=AI%E8%B5%B7%E6%A5%AD%E5%AE%B6%E3%81%B8%E3%81%AE%E5%8F%8D%E8%AB%96%E8%A8%98%E4%BA%8B&via=daisuki_koshian" 
+       target="_blank" rel="noopener" class="share-btn share-btn-x">
+      <span class="share-icon">𝕏</span> Xでシェア
+    </a>
+    <a href="https://b.hatena.ne.jp/entry/https%3A//daisuki-koshian.github.io/blog/news-shumer-rebuttal/" 
+       target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+      <span class="share-icon">B!</span> はてブ
+    </a>
+  </div>
+</div>
+
+<style>
+.share-buttons {
+  margin: 40px 0;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 8px;
+  text-align: center;
+}
+.share-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 16px;
+}
+.share-buttons-inner {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.share-btn-x:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+.share-btn-hatena:hover {
+  background: #00A4DE;
+  color: #fff;
+  border-color: #00A4DE;
+}
+.share-icon {
+  font-size: 18px;
+}
+</style>
+
+
+    
         </a>
         <a href="../news-nvidia-dms/" class="next-read-card">
           <div class="icon">💰</div>
@@ -831,6 +951,83 @@
         </a>
       </div>
     </div>
+
+
+<!-- 関連記事 -->
+<div class="related-articles">
+  <h3 class="related-title">関連記事</h3>
+  <div class="related-cards">
+
+        <a href="../news-shumer/" class="related-card">
+          <div class="related-card-title">Xで8100万回読まれたAI起業家の話</div>
+          <div class="related-card-desc">HyperWrite CEOが「もう自分の仕事、いらなくなった」と書いたエッセイ</div>
+        </a>
+
+        <a href="../news-ai-cartel/" class="related-card">
+          <div class="related-card-title">AIカルテル自販機実験</div>
+          <div class="related-card-desc">AIに「利益最大化」を任せたら勝手にカルテルを組んだ話</div>
+        </a>
+
+        <a href="../news-nvidia-dms/" class="related-card">
+          <div class="related-card-title">NVIDIA DMSの衝撃</div>
+          <div class="related-card-desc">AIの推論速度が30倍高速化された技術の話</div>
+        </a>
+
+  </div>
+</div>
+
+<style>
+.related-articles {
+  margin: 48px 0;
+  padding: 32px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+.related-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.related-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+.related-card {
+  display: block;
+  padding: 16px;
+  background: #fff;
+  border-left: 3px solid #e63946;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.related-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.related-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.related-card-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .related-cards {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 
   </article>
   </div>

@@ -1060,6 +1060,60 @@
   <div class="breadcrumb-bar"><a href="../">ホーム</a> / トレードシステム仕組み編</div>
 </div>
 
+
+<!-- パンくずリスト -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="../">Home</a> &gt; <span>バックテスト</span> &gt; <span class="current">トレードシステム仕組み編</span>
+</nav>
+
+<style>
+.breadcrumb {
+  font-size: 12px;
+  color: #999;
+  padding: 8px 24px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.breadcrumb a {
+  color: #e63946;
+  text-decoration: none;
+}
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+.breadcrumb .current {
+  color: #333;
+}
+</style>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://daisuki-koshian.github.io/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "バックテスト",
+      "item": "https://daisuki-koshian.github.io/blog/#"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "トレードシステム仕組み編",
+      "item": "https://daisuki-koshian.github.io/blog/backtest-method/"
+    }
+  ]
+}
+</script>
+
 <div class="hero">
   <div class="hero-dots"></div>
   <div class="hero-bg-text">RULES</div>
@@ -1070,6 +1124,10 @@
     <hr class="hero-sep">
     <div class="hero-sub">Skills + Memory + Agent Teams</div>
   </div>
+</div>
+
+<div class="reading-time" style="font-size: 13px; color: #999; text-align: center; margin: 24px 0; padding: 12px; background: #f9f9f9; border-radius: 4px;">
+  ⏱ 約6分で読めます
 </div>
 
 <div class="content-wrapper">
@@ -1458,15 +1516,77 @@
       <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
     </div>
 
-    <div class="next-read">
-      <h3>シリーズ 次に読む</h3>
-      <div class="next-read-cards">
-        <a href="../backtest-overview/" class="next-read-card">
-          <div class="icon">📊</div>
-          <div class="content">
-            <div class="title">【概要編】非エンジニアがAIに28,000行のトレードシステムを作らせた話</div>
-            <div class="desc">7日間で生まれた自動トレードシステムの全体像</div>
-          </div>
+<!-- SNSシェアボタン -->
+<div class="share-buttons">
+  <p class="share-title">この記事をシェア</p>
+  <div class="share-buttons-inner">
+    <a href="https://twitter.com/intent/tweet?url=https%3A//daisuki-koshian.github.io/blog/backtest-method/&text=%E3%83%88%E3%83%AC%E3%83%BC%E3%83%89%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E4%BB%95%E7%B5%84%E3%81%BF%E7%B7%A8&via=daisuki_koshian" 
+       target="_blank" rel="noopener" class="share-btn share-btn-x">
+      <span class="share-icon">𝕏</span> Xでシェア
+    </a>
+    <a href="https://b.hatena.ne.jp/entry/https%3A//daisuki-koshian.github.io/blog/backtest-method/" 
+       target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+      <span class="share-icon">B!</span> はてブ
+    </a>
+  </div>
+</div>
+
+<style>
+.share-buttons {
+  margin: 40px 0;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 8px;
+  text-align: center;
+}
+.share-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 16px;
+}
+.share-buttons-inner {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.share-btn-x:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+.share-btn-hatena:hover {
+  background: #00A4DE;
+  color: #fff;
+  border-color: #00A4DE;
+}
+.share-icon {
+  font-size: 18px;
+}
+</style>
+
+
+    
         </a>
         <a href="../backtest-failures/" class="next-read-card">
           <div class="icon">⚠️</div>
@@ -1484,6 +1604,78 @@
         </a>
       </div>
     </div>
+
+
+<!-- 関連記事 -->
+<div class="related-articles">
+  <h3 class="related-title">関連記事</h3>
+  <div class="related-cards">
+
+        <a href="../backtest-overview/" class="related-card">
+          <div class="related-card-title">トレードシステム概要編</div>
+          <div class="related-card-desc">AIエージェントによる自動トレードシステムの全体像</div>
+        </a>
+
+        <a href="../backtest-failures/" class="related-card">
+          <div class="related-card-title">トレードシステム失敗編</div>
+          <div class="related-card-desc">バックテストで失敗から学んだ教訓</div>
+        </a>
+
+  </div>
+</div>
+
+<style>
+.related-articles {
+  margin: 48px 0;
+  padding: 32px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+.related-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.related-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+.related-card {
+  display: block;
+  padding: 16px;
+  background: #fff;
+  border-left: 3px solid #e63946;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.related-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.related-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.related-card-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .related-cards {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 
   </article>
   </div><!-- /main-content -->
