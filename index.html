@@ -626,20 +626,18 @@
     color: var(--color-accent);
   }
 
-  /* スマホ: タグクラウドをhero直後に */
-  @media (max-width: 768px) {
-    .container {
-      display: flex;
-      flex-direction: column;
-    }
-    .search-container { order: 2; }
-    .tabs-nav { order: 3; }
-    .articles { order: 4; }
-    .load-more-wrap { order: 5; }
-    .tag-cloud-section { order: 1; margin: 0; padding-top: 8px; border-top: none; margin-bottom: 8px; }
-    .home-sections { order: 6; }
-    footer.footer { order: 7; }
+  /* タグクラウドをhero直後に（PC/スマホ共通） */
+  .container {
+    display: flex;
+    flex-direction: column;
   }
+  .search-container { order: 2; }
+  .tabs-nav { order: 3; }
+  .articles { order: 4; }
+  .load-more-wrap { order: 5; }
+  .tag-cloud-section { order: 1; margin: 0; padding-top: 16px; border-top: none; margin-bottom: 16px; }
+  .home-sections { order: 6; }
+  footer.footer { order: 7; }
 
   /* スマホ対応 */
   @media (max-width: 768px) {
@@ -856,9 +854,9 @@
      流れるタグクラウド（マーキー）
      ============================= */
   .tag-cloud-section {
-    margin: 48px 0 0;
-    padding-top: 32px;
-    border-top: 1px solid var(--color-border);
+    margin: 0;
+    padding-top: 0;
+    border-top: none;
     margin-bottom: 0;
   }
   .marquee-wrap {
