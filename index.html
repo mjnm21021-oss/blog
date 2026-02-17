@@ -34,6 +34,7 @@
     line-height: 1.9;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   .hero {
@@ -936,13 +937,13 @@
       <a href="./about/">About</a>
       <a href="https://x.com/daisuki_koshian" target="_blank" rel="noopener" title="X (Twitter)">𝕏</a>
     </nav>
-    <button class="hamburger" id="hamburger">☰</button>
+    <button class="hamburger" id="hamburger" aria-label="メニューを開く">☰</button>
   </div>
 </div>
 
 <div class="nav-overlay" id="navOverlay"></div>
 <nav class="nav-menu" id="navMenu">
-  <button class="nav-close" id="navClose">✕</button>
+  <button class="nav-close" id="navClose" aria-label="メニューを閉じる">✕</button>
   <h2>メニュー</h2>
   <ul>
     <li><a href="./">🏠 ホーム</a></li>
@@ -1012,8 +1013,8 @@
 
   <!-- タブナビゲーション -->
   <div class="tabs-nav">
-    <button class="tab-btn" data-tab="blog">ブログ</button>
-    <button class="tab-btn active" data-tab="news">海外AI</button>
+    <button class="tab-btn" data-tab="blog" aria-label="ブログ記事タブ">ブログ</button>
+    <button class="tab-btn active" data-tab="news" aria-label="海外AIニュースタブ">海外AI</button>
   </div>
 
   <div class="articles">
@@ -1421,7 +1422,7 @@
   </div>
 
   <div class="load-more-wrap">
-    <button class="load-more-btn" id="loadMore">もっと読む</button>
+    <button class="load-more-btn" id="loadMore" aria-label="記事をもっと読む">もっと読む</button>
   </div>
 
   <!-- Tag Cloud: Popular Articles -->
@@ -1794,7 +1795,7 @@ btn.addEventListener('click', function() {
 });
 </script>
 
-<button class="back-to-top" id="backToTop">↑</button>
+<button class="back-to-top" id="backToTop" aria-label="トップに戻る">↑</button>
 <script>
 (function() {
   var btn = document.getElementById('loadMore');

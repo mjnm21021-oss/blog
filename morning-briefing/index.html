@@ -35,6 +35,7 @@
     line-height: 1.9;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   .header {
@@ -1074,7 +1075,7 @@
       <a href="../about/">About</a>
       <a href="https://x.com/daisuki_koshian" target="_blank" rel="noopener" title="X (Twitter)">𝕏</a>
     </nav>
-    <button class="hamburger" id="hamburger">☰</button>
+    <button class="hamburger" id="hamburger" aria-label="メニューを開く">☰</button>
   </div>
 </div>
 
@@ -1912,7 +1913,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div class="nav-overlay" id="navOverlay"></div>
 <nav class="nav-menu" id="navMenu">
-  <button class="nav-close" id="navClose">✕</button>
+  <button class="nav-close" id="navClose" aria-label="メニューを閉じる">✕</button>
   <h2>メニュー</h2>
   <ul>
     <li><a href="../">🏠 ホーム</a></li>
@@ -1984,7 +1985,7 @@ btn.addEventListener('click', function() {
 });
 </script>
 
-<button class="back-to-top" id="backToTop">↑</button>
+<button class="back-to-top" id="backToTop" aria-label="トップに戻る">↑</button>
 
 <script>
 // Scroll fadeIn

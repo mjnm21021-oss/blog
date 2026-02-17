@@ -35,6 +35,7 @@
     line-height: 1.9;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   .header {
@@ -645,7 +646,7 @@
 
 <div class="nav-overlay" id="navOverlay"></div>
 <div class="nav-menu" id="navMenu">
-  <button class="nav-close" id="navClose">&times;</button>
+  <button class="nav-close" id="navClose" aria-label="メニューを閉じる">&times;</button>
   <ul class="nav-links">
     <li><a href="../">ホーム</a></li>
     <li><a href="../about/">私について</a></li>
@@ -973,7 +974,7 @@ ElevenLabsで音声を生成し、CapCutのAI編集機能で動画を自動化�
 
 </div>
 
-<button class="back-to-top" id="backToTop">↑</button>
+<button class="back-to-top" id="backToTop" aria-label="トップに戻る">↑</button>
 
 <script>
 const observer = new IntersectionObserver((entries) => {
