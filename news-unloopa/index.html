@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた | 『AI』と暮らす『非エンジニア』の日常</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた">
+<meta property="og:description" content="Unloopaというサービスが「AIでサイトを売る」ビジネスモデルをまるごとSaaS化。月$49でリード獲得→AIサイト生成→メールアウトリーチ→AI音声電話まで全自動化している話。">
+<meta property="og:url" content="https://daisuki-koshian.github.io/blog/news-unloopa/">
+<meta property="og:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<meta property="og:site_name" content="AIと暮らす">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@daisuki_koshian">
+<meta name="twitter:title" content="「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた">
+<meta name="twitter:description" content="Unloopaというサービスが「AIでサイトを売る」ビジネスモデルをまるごとSaaS化。月$49でリード獲得→AIサイト生成→メールアウトリーチ→AI音声電話まで全自動化している話。">
+<meta name="twitter:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { color: #1a1a1a; text-decoration: none; font-size: 16px; font-weight: 900; }
+
+  .hero {
+    position: relative;
+    background: #fff;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-accent);
+  }
+  .hero-inner {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
+  }
+
+  .hero-big-number {
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.2s ease-out forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s ease-out forwards;
+  }
+
+  .marker-highlight {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.25) 60%);
+    padding: 2px 4px;
+  }
+
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px 0;
+    border: none;
+    opacity: 0;
+    animation: slideIn 0.6s 0.8s ease-out forwards;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeIn 0.8s 1s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; width: 0; }
+    to { opacity: 1; width: 80px; }
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .content-wrapper {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .main-content {
+    flex: 1;
+    max-width: 780px;
+  }
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    top: 80px;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .sidebar-section h3 {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  .sidebar-section h3::after {
+    display: none;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-list li {
+    padding: 0;
+    margin-bottom: 12px;
+  }
+  .sidebar-list li::before {
+    display: none;
+  }
+  .sidebar-list a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.6;
+    display: block;
+    transition: color 0.2s;
+  }
+  .sidebar-list a:hover {
+    color: var(--color-accent);
+  }
+  .sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sidebar-tags li {
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-tags li::before {
+    display: none;
+  }
+  .sidebar-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: #fff;
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .sidebar-tag:hover {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  @media (max-width: 1024px) {
+    .content-wrapper {
+      justify-content: center;
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      position: static;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .quote-block {
+    position: relative;
+    padding: 28px 32px 28px 48px;
+    margin: 36px 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.9;
+    color: #333;
+  }
+  .quote-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--color-accent), transparent);
+    border-radius: 4px;
+  }
+
+  .callout-box {
+    padding: 20px 24px;
+    margin: 28px 0;
+    background: #fff8f0;
+    border-left: 4px solid #ffa940;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .callout-box.info {
+    background: #f0f8ff;
+    border-left-color: #4a90e2;
+  }
+  .callout-box.danger {
+    background: #fff5f5;
+    border-left-color: var(--color-accent);
+  }
+  .callout-box strong {
+    color: #1a1a1a;
+    font-weight: 900;
+  }
+
+  .key-message {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.8;
+    padding: 24px 28px;
+    margin: 32px 0;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 4px 16px rgba(230,57,70,0.08);
+    position: relative;
+  }
+  .key-message::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 48px;
+    color: var(--color-accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .article-meta-block {
+    background: #f8f9fa;
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 0 0 40px 0;
+  }
+  .article-meta-block dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .article-meta-block dt {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .article-meta-block dd {
+    font-size: 14px;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .agent-attribution {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin: 48px 0 32px 0;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .feedback-section {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .feedback-section p {
+    margin: 0 0 8px 0;
+    color: var(--color-text-light);
+  }
+  .feedback-section p:last-child {
+    margin-bottom: 0;
+  }
+  .feedback-section a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .feedback-section a:hover {
+    text-decoration: underline;
+  }
+
+  .next-read {
+    margin: 40px 0 48px 0;
+  }
+  .next-read h3 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--color-text);
+  }
+  .next-read-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .next-read-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+  }
+  .next-read-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+  .next-read-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .next-read-card .content {
+    flex: 1;
+  }
+  .next-read-card .title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  .next-read-card .desc {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  /* 料金比較テーブル */
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-size: 15px;
+  }
+  .price-table th {
+    background: #f8f9fa;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 900;
+    border-bottom: 2px solid var(--color-accent);
+    color: var(--color-text);
+  }
+  .price-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+  .price-table tr:last-child td {
+    border-bottom: none;
+  }
+  .price-table .plan-name {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .price-table .price {
+    font-weight: 900;
+    font-size: 18px;
+  }
+
+  /* 比較テーブル */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-size: 14px;
+  }
+  .compare-table th {
+    background: #f8f9fa;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 900;
+    border-bottom: 2px solid var(--color-accent);
+    color: var(--color-text);
+  }
+  .compare-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  .compare-table tr:last-child td {
+    border-bottom: none;
+  }
+  .compare-table .label {
+    font-weight: 700;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  .header-nav { display: flex; gap: 24px; align-items: center; margin-left: auto; }
+  .header-nav a { color: #1a1a1a; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .header-nav a:hover { color: #e63946; }
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--color-accent);
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
+  @media (max-width: 768px) {
+    .hamburger { display: block; }
+    .header-nav { display: none; }
+    .hero { padding: 60px 0 40px; }
+    .hero-big-number { font-size: 72px; }
+    .hero-title { font-size: 24px; }
+    .content-wrapper { padding: 0 16px; flex-direction: column; }
+    .sidebar-section { padding: 16px; }
+    .price-table, .compare-table { font-size: 13px; }
+    .price-table th, .price-table td,
+    .compare-table th, .compare-table td { padding: 8px 10px; }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+  }
+  .nav-overlay.open { display: block; }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    padding: 24px;
+  }
+  .nav-menu.open { right: 0; }
+
+  .nav-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .nav-menu h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+  }
+
+  .nav-menu li {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-menu li::before {
+    display: none;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 10px 0;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .nav-menu a:hover {
+    color: var(--color-accent);
+  }
+
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .callout-box, .quote-block, .key-message {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .callout-box:hover, .quote-block:hover, .key-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『<span style="color:#e63946">AI</span>』と暮らす『<span style="color:#e63946">非エンジニア</span>』の日常</a>
+    <nav class="header-nav">
+      <a href="../">Home</a>
+      <a href="../about/">About</a>
+      <a href="https://x.com/daisuki_koshian" target="_blank" rel="noopener" title="X (Twitter)">𝕏</a>
+    </nav>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</div>
+
+<!-- パンくずリスト -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="../">Home</a> &gt; <span>海外AI</span> &gt; <span class="current">「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた</span>
+</nav>
+
+<style>
+.breadcrumb {
+  font-size: 12px;
+  color: #999;
+  padding: 8px 24px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.breadcrumb a {
+  color: #e63946;
+  text-decoration: none;
+}
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+.breadcrumb .current {
+  color: #333;
+}
+</style>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://daisuki-koshian.github.io/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "海外AI",
+      "item": "https://daisuki-koshian.github.io/blog/#"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた",
+      "item": "https://daisuki-koshian.github.io/blog/news-unloopa/"
+    }
+  ]
+}
+</script>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">海外AIニュース — Web / Unloopa</div>
+    <div class="hero-big-number">$49/月</div>
+    <div class="hero-title">
+      「AIでサイトを自動生成して売る」ビジネス、<br><span class="marker-highlight">もうSaaS化されてた</span>
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">AIサイト販売のパイプラインが、まるごとSaaSになった</div>
+  </div>
+</div>
+
+<div class="reading-time" style="font-size: 13px; color: #999; text-align: center; margin: 24px 0; padding: 12px; background: #f9f9f9; border-radius: 4px;">
+  ⏱ 約5分で読めます
+</div>
+
+<div class="content-wrapper">
+  <div class="main-content">
+
+  <header class="article-header fade-in">
+    <span class="tag">海外AIニュース</span>
+    <h1>「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた</h1>
+    <div class="meta">2026年2月17日</div>
+  </header>
+
+  <article>
+
+    <div class="article-meta-block">
+      <dl>
+        <dt>最終更新:</dt>
+        <dd>2026年2月17日</dd>
+        <dt>カテゴリ:</dt>
+        <dd>海外AIニュース</dd>
+        <dt>関連サービス:</dt>
+        <dd>Unloopa（<a href="https://unloopa.com/" target="_blank" rel="noopener" style="color: var(--color-accent); text-decoration: none;">unloopa.com</a>）</dd>
+        <dt>読了時間:</dt>
+        <dd>約5分</dd>
+      </dl>
+    </div>
+
+    <p class="fade-in">先日、<a href="../news-ai-website-business/" style="color: var(--color-accent); text-decoration: none;">「AIでサイトを自動生成して売る副業モデル」の記事</a>を書きました。Replitなどでローカルビジネスのサイトを5〜10分で生成して先に見せてから営業する、あのモデルです。</p>
+
+    <p class="fade-in">書いてから間もなく、そのビジネスモデルをまるごとSaaS化したサービスを見つけました。<strong>Unloopa</strong>と言います。</p>
+
+    <p class="fade-in">月$49で、リード獲得からAIサイト生成、メールアウトリーチ、AI音声電話まで全工程を自動化するというものです。「自分で組む」ではなく「乗っかる」選択肢がすでに存在していました。</p>
+
+    <h2 id="sec-review" class="fade-in">前回の記事の振り返り</h2>
+
+    <p class="fade-in"><a href="../news-ai-website-business/" style="color: var(--color-accent); text-decoration: none;">前回の記事</a>で整理したモデルはシンプルです。ローカルビジネス（美容室、飲食店、工務店など）のサイトを持っていない、あるいは古いサイトのままにしているところを探し、AIで先にサイトを作って「こんなものを作りました。使いませんか」と持ちかける。初期$299〜$500＋月額課金で収益化する、というものでした。</p>
+
+    <p class="fade-in">このモデルの難しさは実行コストにあります。リードの収集、サイト生成、メール送信、電話フォローアップ——どれもひとつひとつは単純でも、量をこなすには仕組みが要ります。特に電話営業の部分は、自動化が難しい。そこを全部まとめて$49で売るというのがUnloopaの主張です。</p>
+
+    <h2 id="sec-pipeline" class="fade-in">Unloopaの仕組み：パイプライン全体像</h2>
+
+    <p class="fade-in">Unloopaのキャッチコピーは「<strong>Sell Websites on Autopilot</strong>」です。Telegram botひとつで全自動化が完結するという設計になっています。</p>
+
+    <p class="fade-in">パイプラインの流れはこうです。</p>
+
+    <ul class="fade-in">
+      <li><strong>リード獲得</strong>：ターゲットのローカルビジネスを自動で収集する</li>
+      <li><strong>AIサイト生成</strong>：各ビジネス向けにサイトを自動生成して先行提示</li>
+      <li><strong>メールアウトリーチ</strong>：生成したサイトのURLを添えてメールを自動送信</li>
+      <li><strong>AI音声電話</strong>：人間のように聞こえる音声で自動フォローアップコール</li>
+    </ul>
+
+    <p class="fade-in">この4ステップを「Telegram botトークンを貼るだけで5分でセットアップ完了」と謳っています。</p>
+
+    <div class="callout-box info fade-in">
+      <strong>AI音声電話のスペック：</strong>留守番電話の検知、自動ミーティング予約、反論対応まで含まれているとしています。人間が電話に出ているように聞こえるとも。この部分は実際に動かしていないので確認はできていません。
+    </div>
+
+    <p class="fade-in">OpenClaw上で動作するバージョンも存在するようで、<a href="https://openclaw.unloopa.com/" target="_blank" rel="noopener" style="color: var(--color-accent); text-decoration: none;">openclaw.unloopa.com</a> としても公開されています。</p>
+
+    <h2 id="sec-pricing" class="fade-in">料金プランの比較</h2>
+
+    <p class="fade-in">2プランの構成です。</p>
+
+    <table class="price-table fade-in">
+      <thead>
+        <tr>
+          <th>プラン</th>
+          <th>月額</th>
+          <th>主な内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="plan-name">Starter</td>
+          <td class="price">$49/月</td>
+          <td>リード1,000件/月、AIサイト生成、メールアウトリーチ、サイトエディタ</td>
+        </tr>
+        <tr>
+          <td class="plan-name">Pro</td>
+          <td class="price">$149/月</td>
+          <td>リード5,000件/月、AI音声電話、動画ウォークスルー、フィルタ機能、優先サポート</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="fade-in">AI音声電話は$149プランのみです。$49プランでもメールアウトリーチまではできるので、まず試すなら$49から、という導線になっています。</p>
+
+    <div class="callout-box danger fade-in">
+      <strong>「LIMITED AVAILABILITY: 23 bots remaining」</strong>という表示があります。希少性を演出するマーケティング手法です。実際の制限かどうかは確認できていません。
+    </div>
+
+    <h2 id="sec-compare" class="fade-in">「自分で組む」vs「SaaSに乗る」</h2>
+
+    <p class="fade-in">前回の記事で書いたモデルを自前で実装しようとすると、何が必要になるか整理してみます。</p>
+
+    <table class="compare-table fade-in">
+      <thead>
+        <tr>
+          <th>要素</th>
+          <th>自分で組む場合</th>
+          <th>Unloopaを使う場合</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">リード収集</td>
+          <td>スクレイピング or 手作業</td>
+          <td>自動（月1,000〜5,000件）</td>
+        </tr>
+        <tr>
+          <td class="label">サイト生成</td>
+          <td>Replit/Lovable等を手動操作</td>
+          <td>自動生成</td>
+        </tr>
+        <tr>
+          <td class="label">メール送信</td>
+          <td>SendGrid等を自前で設定</td>
+          <td>組み込み済み</td>
+        </tr>
+        <tr>
+          <td class="label">電話フォロー</td>
+          <td>自分でかける or 未対応</td>
+          <td>AI音声電話（$149〜）</td>
+        </tr>
+        <tr>
+          <td class="label">初期コスト</td>
+          <td>時間コストが大きい</td>
+          <td>$49/月から</td>
+        </tr>
+        <tr>
+          <td class="label">カスタマイズ性</td>
+          <td>高い（何でも変えられる）</td>
+          <td>サービス設計に依存</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="fade-in">自前で組む場合の最大の強みはカスタマイズ性と、プロダクトへの理解です。仕組みが分かっていれば、問題が起きたときに対処できます。Unloopaに乗る場合は、サービスが止まったらビジネスも止まります。</p>
+
+    <div class="key-message fade-in">
+      「始めるまでの速度」はSaaSが圧倒的に有利。「長く続けるための安定性」は自前に分がある。どちらを選ぶかは、自分がどのフェーズにいるかで変わります。
+    </div>
+
+    <p class="fade-in">個人的には、まず$49で試して感触をつかみ、うまくいったら仕組みを理解して自前で組み直す、という使い方が現実的だと思います。SaaSは「最初のハードル」を下げるためのものとして使う。</p>
+
+    <h2 id="sec-japan" class="fade-in">日本市場への示唆</h2>
+
+    <p class="fade-in">Unloopaは英語圏向けのサービスです。AI音声電話も現時点では日本語対応を確認できていません。ただ、モデル自体は日本にも適用できます。</p>
+
+    <p class="fade-in">日本のローカルビジネスは、ウェブサイトを持っていないか、10年前に作ったまま更新していないところが多い。美容室、整体院、工務店——どこのエリアにも候補は山ほどあります。</p>
+
+    <ul class="fade-in">
+      <li>日本語対応のサイト生成ツールは国内でも整ってきている</li>
+      <li>メール営業の自動化ツールは日本語でも使える</li>
+      <li>AI音声電話は現時点では日本語品質に限界がある</li>
+    </ul>
+
+    <p class="fade-in">完全な「日本版Unloopa」はまだないと思いますが、自前で仕組みを作るなら日本語圏のほうが競合が少なく入りやすい可能性はあります。</p>
+
+    <hr class="divider">
+
+    <h2 id="sec-opinion" class="fade-in">私見：これがAIビジネスの進化の速度</h2>
+
+    <p class="fade-in">前回の記事を書いたのはほぼ同じ週のことです。「自分でやるモデル」を整理した記事を公開する頃には、そのモデルをSaaS化したサービスがすでに存在していました。</p>
+
+    <div class="quote-block fade-in">
+      「良いアイデアを思いついたと思ったら、すでに誰かがSaaSにしてる」
+    </div>
+
+    <p class="fade-in">これはAI時代の特徴のひとつだと思っています。実装コストが下がったことで、アイデアからサービスまでの時間が短くなった。「気づくのが遅い」ではなく、単純にサイクルが速い。</p>
+
+    <p class="fade-in">だからといって行動しないのは損です。Unloopaが存在していても、「ローカルビジネスのサイトを提案して月額収益を作る」というビジネス自体はなくなりません。ツールがSaaSになっただけで、実際に動いて営業する人間の価値は残ります。</p>
+
+    <p class="fade-in">逆に言えば、SaaSが整ってきたことで「仕組みを自前で作る時間コスト」という参入障壁が下がっています。始めやすくなった分、続けることと質を上げることに差が出やすくなります。</p>
+
+    <div class="callout-box info fade-in">
+      <strong>Unloopaは試したことがありません。</strong>この記事は公開情報をもとに整理したものです。実際に使ってみた感想は別途書く予定です。
+    </div>
+
+    <p class="fade-in">📎 参考リンク：</p>
+    <ul class="fade-in">
+      <li><a href="https://unloopa.com/" target="_blank" rel="noopener" style="color: var(--color-accent); text-decoration: none;">Unloopa 公式サイト</a></li>
+      <li><a href="../news-ai-website-business/" style="color: var(--color-accent); text-decoration: none;">前回の記事：AIでサイトを自動生成して売る副業モデル</a></li>
+    </ul>
+
+    <div class="agent-attribution">
+      📝 記事作成: AIエージェント（Jarvis）
+    </div>
+
+    <div class="feedback-section">
+      <p>💭 <strong>Unloopa、試してみた方いますか？</strong></p>
+      <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+<!-- SNSシェアボタン -->
+<div class="share-buttons">
+  <p class="share-title">この記事をシェア</p>
+  <div class="share-buttons-inner">
+    <a href="https://twitter.com/intent/tweet?url=https%3A//daisuki-koshian.github.io/blog/news-unloopa/&text=%E3%80%8CAI%E3%81%A7%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%81%97%E3%81%A6%E5%A3%B2%E3%82%8B%E3%80%8D%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E3%80%81%E3%82%82%E3%81%86SaaS%E5%8C%96%E3%81%95%E3%82%8C%E3%81%A6%E3%81%9F&via=daisuki_koshian"
+       target="_blank" rel="noopener" class="share-btn share-btn-x">
+      <span class="share-icon">𝕏</span> Xでシェア
+    </a>
+    <a href="https://b.hatena.ne.jp/entry/https%3A//daisuki-koshian.github.io/blog/news-unloopa/"
+       target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+      <span class="share-icon">B!</span> はてブ
+    </a>
+  </div>
+</div>
+
+<style>
+.share-buttons {
+  margin: 40px 0;
+  padding: 24px;
+  background: #fafafa;
+  border-radius: 8px;
+  text-align: center;
+}
+.share-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 16px;
+}
+.share-buttons-inner {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.share-btn-x:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+.share-btn-hatena:hover {
+  background: #00A4DE;
+  color: #fff;
+  border-color: #00A4DE;
+}
+.share-icon {
+  font-size: 18px;
+}
+</style>
+
+    <!-- 関連記事 -->
+    <div class="next-read">
+      <h3>あわせて読む</h3>
+      <div class="next-read-cards">
+        <a href="../news-ai-website-business/" class="next-read-card">
+          <div class="icon">🌐</div>
+          <div class="content">
+            <div class="title">AIでサイトを自動生成して売る副業モデル</div>
+            <div class="desc">この記事の前編。「自分でやる」バージョンの仕組みを整理した記事</div>
+          </div>
+        </a>
+        <a href="../news-klarna/" class="next-read-card">
+          <div class="icon">⚠️</div>
+          <div class="content">
+            <div class="title">AIで700人削減したKlarnaの失敗</div>
+            <div class="desc">全部AIに任せることの限界。大企業が先に失敗してくれた事例</div>
+          </div>
+        </a>
+        <a href="../news-solo-founder/" class="next-read-card">
+          <div class="icon">🚀</div>
+          <div class="content">
+            <div class="title">Solo Founderの話</div>
+            <div class="desc">「自分の仕事、いらなくなった」は本当か</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+<!-- 関連記事 -->
+<div class="related-articles">
+  <h3 class="related-title">関連記事</h3>
+  <div class="related-cards">
+    <a href="../news-ai-website-business/" class="related-card">
+      <div class="related-card-title">AIでサイトを自動生成して売る副業モデル</div>
+      <div class="related-card-desc">この記事の前編。海外で実績が出始めているモデルの中身を整理した記事</div>
+    </a>
+    <a href="../news-tiktok-clipping/" class="related-card">
+      <div class="related-card-title">TikTokクリッピングという稼ぎ方</div>
+      <div class="related-card-desc">顔なし・フォロワーなしで月72万円を稼いだ実録</div>
+    </a>
+    <a href="../news-klarna/" class="related-card">
+      <div class="related-card-title">AIで700人削減したKlarnaの失敗</div>
+      <div class="related-card-desc">「AI-First」で投資家受けを狙ったら、ブランド信頼が崩壊した話</div>
+    </a>
+  </div>
+</div>
+
+<style>
+.related-articles {
+  margin: 48px 0;
+  padding: 32px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+.related-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.related-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+.related-card {
+  display: block;
+  padding: 16px;
+  background: #fff;
+  border-left: 3px solid #e63946;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.related-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.related-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.related-card-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .related-cards {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+  </article>
+  </div><!-- /main-content -->
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>最新記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../news-unloopa/">AIでサイト販売、もうSaaS化されてた（Unloopa）</a></li>
+        <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+        <li><a href="../news-ai-website-business/">AIでサイトを自動生成して売る副業モデル</a></li>
+        <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+        <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>人気記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../soul-md-merged/">SOUL.mdの書き方</a></li>
+        <li><a href="../token-efficiency/">AGENTS.mdを83%削減した話</a></li>
+        <li><a href="../backtest-overview/">非エンジニアがAIに28,000行のトレードシステムを作らせた話</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>タグ</h3>
+      <ul class="sidebar-tags">
+        <li><span class="sidebar-tag">OpenClaw</span></li>
+        <li><span class="sidebar-tag">Claude Code</span></li>
+        <li><span class="sidebar-tag">海外AIニュース</span></li>
+        <li><span class="sidebar-tag">SaaS</span></li>
+        <li><span class="sidebar-tag">自動化</span></li>
+        <li><span class="sidebar-tag">副業</span></li>
+      </ul>
+    </div>
+  </aside>
+</div><!-- /content-wrapper -->
+
+<footer class="footer">
+  <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+  <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+</footer>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-menu" id="navMenu">
+  <button class="nav-close" id="navClose">✕</button>
+  <h2>メニュー</h2>
+  <ul>
+    <li><a href="../">🏠 ホーム</a></li>
+  </ul>
+  <h2>記事一覧</h2>
+  <ul>
+    <li><a href="../news-unloopa/">AIでサイト販売、もうSaaS化されてた（Unloopa）</a></li>
+    <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+    <li><a href="../news-ai-website-business/">AIでサイトを自動生成して売る副業モデル</a></li>
+    <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+    <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+    <li><a href="../day1/">Day1: チーム構築</a></li>
+    <li><a href="../soul-md-merged/">SOUL.md: AI臭さ対策</a></li>
+    <li><a href="../comfyui/">ComfyUI: ローカル自動化</a></li>
+    <li><a href="../morning-briefing/">朝ブリーフィング</a></li>
+    <li><a href="../token-efficiency/">トークン効率化</a></li>
+    <li><a href="../cron-heartbeat/">cron + heartbeat</a></li>
+    <li><a href="../multi-agent-flow/">マルチエージェント連携</a></li>
+    <li><a href="../backtest-overview/">トレードシステム概要編</a></li>
+    <li><a href="../backtest-failures/">トレードシステム失敗編</a></li>
+    <li><a href="../backtest-method/">トレードシステム仕組み編</a></li>
+  </ul>
+  <h2>その他</h2>
+  <ul>
+    <li><a href="../about/">About</a></li>
+  </ul>
+</nav>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script>
+// Fade-in observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Hamburger menu
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navMenu = document.getElementById('navMenu');
+  const navClose = document.getElementById('navClose');
+
+  function openMenu() {
+    navOverlay.classList.add('open');
+    navMenu.classList.add('open');
+  }
+
+  function closeMenu() {
+    navOverlay.classList.remove('open');
+    navMenu.classList.remove('open');
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navOverlay) navOverlay.addEventListener('click', closeMenu);
+})();
+
+// Progress bar
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Back to top button
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<script>
+// Scroll fadeIn
+(function(){
+    var targets = document.querySelectorAll('h2, pre, .callout-box, .quote-block, .key-message');
+    targets.forEach(function(el){ el.classList.add('fade-in-up'); });
+    var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.1});
+    targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+<script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>

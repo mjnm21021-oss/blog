@@ -8,6 +8,14 @@
     <atom:link href="https://mjnm21021-oss.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた</title>
+      <link>https://daisuki-koshian.github.io/blog/news-unloopa/</link>
+      <description>Unloopaというサービスが「AIでサイトを売る」ビジネスモデルをまるごとSaaS化。月$49でリード獲得→AIサイト生成→メールアウトリーチ→AI音声電話まで全自動化している話。</description>
+      <pubDate>Mon, 17 Feb 2026 00:00:00 +0900</pubDate>
+      <guid>https://daisuki-koshian.github.io/blog/news-unloopa/</guid>
+    </item>
+
+    <item>
       <title>CLAUDE.md + Skills + Memory — AIに"社内ルール"を教え込む【仕組み編】</title>
       <link>https://mjnm21021-oss.github.io/blog/backtest-method/</link>
       <description>AIが「ルールを守って、過去から学んで、チームで働く同僚」になる仕組み</description>
