@@ -61,10 +61,68 @@
     font-size: 48px;
     font-weight: 900;
     margin-bottom: 16px;
+    min-height: 120px;
+  }
+  .hero-title .typewriter {
+    display: inline-block;
+  }
+  .hero-title .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: var(--color-accent);
+    margin-left: 4px;
+    animation: blink 0.7s infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
   }
   .hero-sub {
     font-size: 18px;
     color: var(--color-text-light);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  .hero-sub.visible {
+    opacity: 1;
+  }
+
+  /* Stats Counter Section */
+  .stats-counter {
+    background: #fff;
+    padding: 60px 24px;
+    text-align: center;
+  }
+  .stats-grid {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .stat-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .stat-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .stat-number {
+    font-size: 56px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .stat-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-light);
+    letter-spacing: 0.05em;
   }
 
   .container {
@@ -171,16 +229,40 @@
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     border-top: 3px solid var(--color-accent);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-top-width 0.3s ease;
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .article-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(230,57,70,0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
   .article-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    border-top-width: 5px;
+  }
+  .article-card:hover::before {
+    opacity: 1;
+  }
+  .article-card.fade-in-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
   }
   .article-card-thumb {
     position: relative;
@@ -537,16 +619,6 @@
     color: var(--color-accent);
   }
 
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
   /* スマホ対応 */
   @media (max-width: 768px) {
     .articles {
@@ -566,10 +638,23 @@
       font-size: 28px;
       margin-bottom: 12px;
       padding: 0 16px;
+      min-height: 80px;
     }
     .hero-sub {
       font-size: 14px;
       padding: 0 16px;
+    }
+    .stats-counter {
+      padding: 40px 16px;
+    }
+    .stats-grid {
+      gap: 32px;
+    }
+    .stat-number {
+      font-size: 40px;
+    }
+    .stat-label {
+      font-size: 12px;
     }
     .container {
       padding: 30px 16px;
@@ -796,8 +881,27 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-title">『<span style="color:#e63946">AI</span>』と暮らす<br>『<span style="color:#e63946">非エンジニア</span>』の日常</div>
-  <div class="hero-sub">OpenClaw実践記録 — やったこと全部書く</div>
+  <div class="hero-title">
+    <span class="typewriter" id="typewriterText"></span><span class="cursor" id="cursor"></span>
+  </div>
+  <div class="hero-sub" id="heroSub">非エンジニアが、AIエージェント5体と暮らしてみた記録</div>
+</div>
+
+<div class="stats-counter">
+  <div class="stats-grid">
+    <div class="stat-item" data-target="20">
+      <div class="stat-number" data-count="0">0</div>
+      <div class="stat-label">記事</div>
+    </div>
+    <div class="stat-item" data-target="5">
+      <div class="stat-number" data-count="0">0</div>
+      <div class="stat-label">AIエージェント</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">毎日</div>
+      <div class="stat-label">更新</div>
+    </div>
+  </div>
 </div>
 
 <div class="container">
@@ -1148,6 +1252,79 @@
 </div>
 
 <script>
+  // Typewriter animation
+  (function() {
+    var text = '『AIと暮らす』の日常';
+    var typewriterEl = document.getElementById('typewriterText');
+    var cursorEl = document.getElementById('cursor');
+    var heroSubEl = document.getElementById('heroSub');
+    var index = 0;
+
+    function typeWriter() {
+      if (index < text.length) {
+        typewriterEl.textContent += text.charAt(index);
+        index++;
+        setTimeout(typeWriter, 100);
+      } else {
+        setTimeout(function() {
+          cursorEl.style.display = 'none';
+          heroSubEl.classList.add('visible');
+        }, 500);
+      }
+    }
+
+    setTimeout(typeWriter, 300);
+  })();
+
+  // Stats counter animation
+  (function() {
+    var statsObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          var target = parseInt(entry.target.dataset.target);
+          if (target) {
+            var numberEl = entry.target.querySelector('.stat-number');
+            var current = 0;
+            var increment = target / 40;
+            var timer = setInterval(function() {
+              current += increment;
+              if (current >= target) {
+                numberEl.textContent = target + '+';
+                clearInterval(timer);
+              } else {
+                numberEl.textContent = Math.floor(current);
+              }
+            }, 30);
+          }
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.stat-item').forEach(function(el) {
+      statsObserver.observe(el);
+    });
+  })();
+
+  // Card fade-in animation with stagger
+  (function() {
+    var cards = document.querySelectorAll('.article-card');
+    var cardObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in-visible');
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(function(card, index) {
+      card.style.transitionDelay = (index * 0.1) + 's';
+      cardObserver.observe(card);
+    });
+  })();
+
   // タブ切り替え機能
   (function() {
     var tabBtns = document.querySelectorAll('.tab-btn');
@@ -1164,6 +1341,7 @@
         card.classList.remove('card-hidden');
         if (card.dataset.category === tab) {
           card.style.display = '';
+          card.classList.add('fade-in-visible');
         } else {
           card.style.display = 'none';
         }
@@ -1201,14 +1379,6 @@
     // 初期表示
     showTab('blog');
   })();
-
-  // Fade-in animation
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
   // Search functionality
   const articlesData = [
@@ -1302,8 +1472,10 @@
         var activeTab = document.querySelector('.tab-btn.active');
         var tab = activeTab ? activeTab.dataset.tab : 'blog';
         card.style.display = card.dataset.category === tab ? '' : 'none';
+        card.classList.add('fade-in-visible');
       } else if (searchableText.indexOf(query) !== -1) {
         card.style.display = '';
+        card.classList.add('fade-in-visible');
       } else {
         card.style.display = 'none';
       }
@@ -1356,6 +1528,7 @@ btn.addEventListener('click', function() {
   if (btn) btn.addEventListener('click', function() {
     document.querySelectorAll('.card-hidden').forEach(function(el) {
       el.classList.remove('card-hidden');
+      el.classList.add('fade-in-visible');
     });
     btn.style.display = 'none';
   });
