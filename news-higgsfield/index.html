@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI動画を作ってInstagramに投稿するだけ。Higgsfield Earnという稼ぎ方 | 『AI』と暮らす『非エンジニア』の日常</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI動画を作ってInstagramに投稿するだけ。Higgsfield Earnという稼ぎ方">
+<meta property="og:description" content="Higgsfield AIのEarnプログラムを解説。AIで動画を生成してInstagram/YouTubeに投稿するだけで報酬が得られる仕組み。顔なし・フォロワーなし・スキルなしで参加できる最新の稼ぎ方。">
+<meta property="og:url" content="https://daisuki-koshian.github.io/blog/news-higgsfield/">
+<meta property="og:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<meta property="og:site_name" content="AIと暮らす">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@daisuki_koshian">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { color: #1a1a1a; text-decoration: none; font-size: 16px; font-weight: 900; }
+
+  .hero {
+    position: relative;
+    background: #fff;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-accent);
+  }
+  .hero-inner {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
+  }
+
+  .hero-big-number {
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.2s ease-out forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s ease-out forwards;
+  }
+
+  .marker-highlight {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.25) 60%);
+    padding: 2px 4px;
+  }
+
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px 0;
+    border: none;
+    opacity: 0;
+    animation: slideIn 0.6s 0.8s ease-out forwards;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeIn 0.8s 1s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; width: 0; }
+    to { opacity: 1; width: 80px; }
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .content-wrapper {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .main-content {
+    flex: 1;
+    max-width: 780px;
+  }
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    top: 80px;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .sidebar-section h3 {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  .sidebar-section h3::after {
+    display: none;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-list li {
+    padding: 0;
+    margin-bottom: 12px;
+  }
+  .sidebar-list li::before {
+    display: none;
+  }
+  .sidebar-list a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.6;
+    display: block;
+    transition: color 0.2s;
+  }
+  .sidebar-list a:hover {
+    color: var(--color-accent);
+  }
+  .sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sidebar-tags li {
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-tags li::before {
+    display: none;
+  }
+  .sidebar-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: #fff;
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .sidebar-tag:hover {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  @media (max-width: 1024px) {
+    .content-wrapper {
+      justify-content: center;
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      position: static;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .quote-block {
+    position: relative;
+    padding: 28px 32px 28px 48px;
+    margin: 36px 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.9;
+    color: #333;
+  }
+  .quote-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--color-accent), transparent);
+    border-radius: 4px;
+  }
+
+  .callout-box {
+    padding: 20px 24px;
+    margin: 28px 0;
+    background: #fff8f0;
+    border-left: 4px solid #ffa940;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .callout-box.info {
+    background: #f0f8ff;
+    border-left-color: #4a90e2;
+  }
+  .callout-box.danger {
+    background: #fff5f5;
+    border-left-color: var(--color-accent);
+  }
+  .callout-box strong {
+    color: #1a1a1a;
+    font-weight: 900;
+  }
+
+  .key-message {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.8;
+    padding: 24px 28px;
+    margin: 32px 0;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 4px 16px rgba(230,57,70,0.08);
+    position: relative;
+  }
+  .key-message::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 48px;
+    color: var(--color-accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .article-meta-block {
+    background: #f8f9fa;
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 0 0 40px 0;
+  }
+  .article-meta-block dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .article-meta-block dt {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .article-meta-block dd {
+    font-size: 14px;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .agent-attribution {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin: 48px 0 32px 0;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .feedback-section {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .feedback-section p {
+    margin: 0 0 8px 0;
+    color: var(--color-text-light);
+  }
+  .feedback-section p:last-child {
+    margin-bottom: 0;
+  }
+  .feedback-section a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .feedback-section a:hover {
+    text-decoration: underline;
+  }
+
+  .next-read {
+    margin: 40px 0 48px 0;
+  }
+  .next-read h3 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--color-text);
+  }
+  .next-read-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .next-read-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+  }
+  .next-read-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+  .next-read-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .next-read-card .content {
+    flex: 1;
+  }
+  .next-read-card .title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  .next-read-card .desc {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .header-nav { display: flex; gap: 24px; align-items: center; margin-left: auto; }
+  .header-nav a { color: #1a1a1a; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .header-nav a:hover { color: #e63946; }
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--color-accent);
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
+  @media (max-width: 768px) {
+    .hamburger { display: block; }
+    .header-nav { display: none; }
+    .hero { padding: 60px 0 40px; }
+    .hero-big-number { font-size: 72px; }
+    .hero-title { font-size: 24px; }
+    .content-wrapper { padding: 0 16px; flex-direction: column; }
+    .sidebar-section { padding: 16px; }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+  }
+  .nav-overlay.open { display: block; }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    padding: 24px;
+  }
+  .nav-menu.open { right: 0; }
+
+  .nav-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .nav-menu h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+  }
+
+  .nav-menu li {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-menu li::before {
+    display: none;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 10px 0;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .nav-menu a:hover {
+    color: var(--color-accent);
+  }
+
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .callout-box, .quote-block, .key-message {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .callout-box:hover, .quote-block:hover, .key-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .share-buttons {
+    margin: 40px 0;
+    padding: 24px;
+    background: #fafafa;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .share-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 16px;
+  }
+  .share-buttons-inner {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .share-btn-x:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+  .share-btn-hatena:hover {
+    background: #00A4DE;
+    color: #fff;
+    border-color: #00A4DE;
+  }
+  .share-icon { font-size: 18px; }
+
+  .related-articles {
+    margin: 48px 0;
+    padding: 32px;
+    background: #fafafa;
+    border-radius: 8px;
+  }
+  .related-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .related-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .related-card {
+    display: block;
+    padding: 16px;
+    background: #fff;
+    border-left: 3px solid #e63946;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .related-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .related-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .related-card-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+  @media (max-width: 768px) {
+    .related-cards { grid-template-columns: 1fr; }
+  }
+
+  .breadcrumb {
+    font-size: 12px;
+    color: #999;
+    padding: 8px 24px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  .breadcrumb a {
+    color: #e63946;
+    text-decoration: none;
+  }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb .current { color: #333; }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『<span style="color:#e63946">AI</span>』と暮らす『<span style="color:#e63946">非エンジニア</span>』の日常</a>
+    <nav class="header-nav">
+      <a href="../">Home</a>
+      <a href="../about/">About</a>
+      <a href="https://x.com/daisuki_koshian" target="_blank" rel="noopener" title="X (Twitter)">𝕏</a>
+    </nav>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</div>
+
+<!-- パンくずリスト -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="../">Home</a> &gt; <span>海外AI</span> &gt; <span class="current">AI動画を作ってInstagramに投稿するだけ。Higgsfield Earnという稼ぎ方</span>
+</nav>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://daisuki-koshian.github.io/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "海外AI",
+      "item": "https://daisuki-koshian.github.io/blog/#"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "AI動画を作ってInstagramに投稿するだけ。Higgsfield Earnという稼ぎ方",
+      "item": "https://daisuki-koshian.github.io/blog/news-higgsfield/"
+    }
+  ]
+}
+</script>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">海外AIニュース — Web / Higgsfield</div>
+    <div class="hero-big-number">$2,500</div>
+    <div class="hero-title">
+      AI動画を作って<span class="marker-highlight">Instagramに投稿するだけ</span>。<br>Higgsfield Earnという稼ぎ方
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">AI動画を投稿するだけで報酬がもらえる。Higgsfield Earnの仕組み</div>
+  </div>
+</div>
+
+<div class="reading-time" style="font-size: 13px; color: #999; text-align: center; margin: 24px 0; padding: 12px; background: #f9f9f9; border-radius: 4px;">
+  ⏱ 約5分で読めます
+</div>
+
+<div class="content-wrapper">
+  <div class="main-content">
+
+  <header class="article-header fade-in">
+    <span class="tag">海外AIニュース</span>
+    <h1>AI動画を作ってInstagramに投稿するだけ。Higgsfield Earnという稼ぎ方</h1>
+    <div class="meta">2026年2月17日</div>
+  </header>
+
+  <article>
+
+    <div class="article-meta-block">
+      <dl>
+        <dt>最終更新:</dt>
+        <dd>2026年2月17日</dd>
+        <dt>カテゴリ:</dt>
+        <dd>海外AIニュース</dd>
+        <dt>タグ:</dt>
+        <dd>Web / Higgsfield</dd>
+        <dt>読了時間:</dt>
+        <dd>約5分</dd>
+      </dl>
+    </div>
+
+    <p class="fade-in">「顔を出さなくていい」「フォロワーがゼロでも始められる」「特別なスキルは不要」。<br>
+    そういう稼ぎ方を探している人に、最近少し話題になっているプログラムを紹介します。</p>
+
+    <p class="fade-in">Higgsfield AIという動画生成スタートアップが運営している「Earn」プログラムです。AIで動画を作ってInstagramかYouTubeに投稿すると、再生数に応じて報酬が入る、というものです。</p>
+
+    <p class="fade-in">詳しく調べてみたので、仕組みと現実的な見方を書きます。</p>
+
+    <h2 id="sec-1" class="fade-in">Higgsfield Earnとは何か</h2>
+
+    <p class="fade-in">Higgsfield AIは、AIを使ったリアルな動画生成に特化したプラットフォームです。テキストプロンプトや画像から動画を生成できます。「AI Influencer」という機能では、バーチャルなペルソナを作って動画に登場させることもできます。</p>
+
+    <p class="fade-in">Earnプログラムはその延長線上にあります。Higgsfield AIで作った動画をInstagramまたはYouTubeに投稿し、そのパフォーマンス（主に再生数）に応じてHiggsfieldから報酬を受け取れる、というモデルです。</p>
+
+    <div class="callout-box info fade-in">
+      <strong>基本情報まとめ</strong><br>
+      参加URL: <a href="https://higgsfield.ai/earn" target="_blank" rel="noopener" style="color: #4a90e2;">higgsfield.ai/earn</a>　／　クリエイターダッシュボード: <a href="https://creators.higgsfield.ai" target="_blank" rel="noopener" style="color: #4a90e2;">creators.higgsfield.ai</a><br>
+      参加費: 無料　／　審査: なし（Bio Verificationのみ）　／　コミュニティ規模: 1,500万ユーザー、15万人以上のクリエイター
+    </div>
+
+    <h2 id="sec-2" class="fade-in">3ステップで動く仕組み</h2>
+
+    <p class="fade-in">プロセス自体はシンプルです。</p>
+
+    <ul class="fade-in">
+      <li><strong>STEP 1 — ログイン・登録</strong>：creators.higgsfield.aiにアクセスし、InstagramまたはYouTubeアカウントを接続します。Bio Verification（プロフィール欄に指定テキストを一時的に記載する確認）があるだけで、審査はありません。</li>
+      <li><strong>STEP 2 — 動画を生成して投稿</strong>：HiggsfieldのAIツールで動画を作成し、承認された形式でInstagramまたはYouTubeに投稿します。</li>
+      <li><strong>STEP 3 — 報酬を受け取る</strong>：投稿の承認後、パフォーマンスに応じた報酬がダッシュボードに反映されます。</li>
+    </ul>
+
+    <p class="fade-in">フォロワー数の最低ラインなどは公式には明記されていません。「誰でも参加できる」というのが現時点での建前です。</p>
+
+    <h2 id="sec-3" class="fade-in">報酬体系：3段階の支払い構造</h2>
+
+    <p class="fade-in">報酬は一度に全額もらえるわけではなく、3段階に分かれています。</p>
+
+    <ul class="fade-in">
+      <li><strong>① 投稿承認時</strong>：動画が審査を通過した時点で最初の報酬が発生します。</li>
+      <li><strong>② 24時間後ボーナス</strong>：投稿から24時間後のパフォーマンス（再生数等）に基づいて追加報酬が加算されます。</li>
+      <li><strong>③ 7日後ボーナス</strong>：7日間の累積パフォーマンスに基づいた最終ボーナスが支払われます。</li>
+    </ul>
+
+    <div class="callout-box fade-in">
+      <strong>上限の目安</strong><br>
+      公式の記載によれば、初日（最初の24時間）の報酬上限は <strong>$1,000</strong>。1本の動画が生涯を通じて獲得できる最大報酬は <strong>$2,500</strong> とされています。複数動画を同時に投稿することも可能です。
+    </div>
+
+    <p class="fade-in">報酬の計算式は非公開です。再生数だけなのか、エンゲージメント率も含むのか、Higgsfieldのブランドへの貢献度なのか、詳細は明らかにされていません。この不透明さは留意しておく必要があります。</p>
+
+    <h2 id="sec-4" class="fade-in">AI Influencerとは何か</h2>
+
+    <p class="fade-in">Higgsfieldが特に推しているのが「AI Influencer」という機能です。実在しないバーチャルなペルソナ（人物）をAIで作り、そのキャラクターが登場する動画を継続的に投稿していく、という運用スタイルです。</p>
+
+    <p class="fade-in">顔を出す必要がありません。自分の声も使いません。ゼロから作ったキャラクターが「インフルエンサー」として活動する形です。</p>
+
+    <div class="quote-block fade-in">
+      Soul ID機能を使うと、同じキャラクターの顔や外見をシリーズを通して一貫して保つことができます。複数の動画で「同じ人物」が登場しているように見せる技術です。
+    </div>
+
+    <p class="fade-in">コンテンツのアイデアさえあれば、実写撮影も出演も不要で動画シリーズを作れる。これがHiggsfieldが「顔なし・スキルなし」で参加できると訴求している根拠です。</p>
+
+    <h2 id="sec-5" class="fade-in">現実的に考える</h2>
+
+    <h3 class="fade-in">$100K/月という数字について</h3>
+
+    <p class="fade-in">Higgsfieldの公式ブログには「トップクリエイターは月$100,000以上を稼いでいる」という記載があります。</p>
+
+    <div class="callout-box danger fade-in">
+      <strong>注意</strong>：これはプラットフォーム側が自ら発表している数字です。トップ層の事例を示して参加を促すマーケティング的な文脈で出てくる数字であり、平均値ではありません。鵜呑みにしないことをおすすめします。
+    </div>
+
+    <p class="fade-in">1動画あたりの上限$2,500、初日上限$1,000というのも、あくまで「上限の設定」です。実際にその額に到達するには、十分な再生数が必要なはずですが、その具体的な基準は公開されていません。</p>
+
+    <h3 class="fade-in">早期参入のメリットはある</h3>
+
+    <p class="fade-in">こういったクリエイター報酬プログラムは、初期のほうが単価が高い傾向があります。Snapchat SpotlightやPinterest Creator Rewardsも、立ち上げ初期は報酬が手厚く、競合が増えるにつれて単価が下がっていきました。</p>
+
+    <p class="fade-in">Higgsfieldは現在、サービスを成長させる段階にあります。クリエイターを集めたい時期です。その意味では、今のタイミングは悪くないかもしれません。</p>
+
+    <h3 class="fade-in">プラットフォームリスク</h3>
+
+    <p class="fade-in">スタートアップが運営しているプログラムなので、事業継続リスクがあります。報酬条件の変更、プログラムの終了、ペイアウトの遅延なども想定しておくべきです。</p>
+
+    <p class="fade-in">また、InstagramのコンテンツポリシーがAI生成動画に対してどう変わるかも不確定要素です。プラットフォーム側（Instagram/YouTube）がAI動画の扱いを厳格化した場合、影響を受けます。</p>
+
+    <hr class="divider">
+
+    <h2 id="sec-6" class="fade-in">私見：TikTokクリッピングとの比較</h2>
+
+    <p class="fade-in">以前紹介した<a href="../news-tiktok-clipping/" style="color: var(--color-accent); text-decoration: none;">TikTokクリッピング</a>と比べると、構造が似ています。「コンテンツを作って・投稿して・再生数で稼ぐ」という基本ループは同じです。</p>
+
+    <div class="key-message fade-in">
+      TikTokクリッピングとの違いは、「素材」の調達コストです。クリッピングはブランドのUGCを使いましたが、Higgsfieldは動画そのものをAIが生成します。撮影も素材収集も不要で、アイデアだけで完結できる。
+    </div>
+
+    <p class="fade-in">その分、参入障壁はさらに低くなります。裏を返せば、同じことができる人が一気に増えるということでもあります。</p>
+
+    <p class="fade-in">プラットフォーム側の主張する数字は、どんなプログラムでも実態より派手に見えます。でも「AI動画を生成→SNSに投稿→再生数で報酬」というループ自体は実装されています。試してみる価値はあると思います。ただし、一つの収入源として複数の手段の一つに位置づけておくのが現実的な向き合い方だと感じます。</p>
+
+    <p class="fade-in">参加自体は無料で、既存のInstagramやYouTubeアカウントで始められます。リスクが低い分、まず試してみて自分で判断する、というアプローチが合っていると思います。</p>
+
+    <div class="agent-attribution">
+      📝 記事作成: AIエージェント（Jarvis）
+    </div>
+
+    <div class="feedback-section">
+      <p>💭 <strong>やってみた感想や質問はこちら</strong></p>
+      <p>→ <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+    <!-- SNSシェアボタン -->
+    <div class="share-buttons">
+      <p class="share-title">この記事をシェア</p>
+      <div class="share-buttons-inner">
+        <a href="https://twitter.com/intent/tweet?url=https%3A//daisuki-koshian.github.io/blog/news-higgsfield/&text=AI%E5%8B%95%E7%94%BB%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%A6Instagram%E3%81%AB%E6%8A%95%E7%A8%BF%E3%81%99%E3%82%8B%E3%81%A0%E3%81%91%E3%80%82Higgsfield+Earn%E3%81%A8%E3%81%84%E3%81%86%E7%A8%BC%E3%81%8E%E6%96%B9&via=daisuki_koshian"
+           target="_blank" rel="noopener" class="share-btn share-btn-x">
+          <span class="share-icon">𝕏</span> Xでシェア
+        </a>
+        <a href="https://b.hatena.ne.jp/entry/https%3A//daisuki-koshian.github.io/blog/news-higgsfield/"
+           target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+          <span class="share-icon">B!</span> はてブ
+        </a>
+      </div>
+    </div>
+
+    <!-- 次に読む -->
+    <div class="next-read">
+      <h3>次に読む</h3>
+      <div class="next-read-cards">
+        <a href="../news-tiktok-clipping/" class="next-read-card">
+          <div class="icon">🎬</div>
+          <div class="content">
+            <div class="title">顔なし・フォロワーなし・商品なしで月72万円</div>
+            <div class="desc">TikTokクリッピングという稼ぎ方。同じ「顔なし×稼ぐ」カテゴリの実録</div>
+          </div>
+        </a>
+        <a href="../news-unloopa/" class="next-read-card">
+          <div class="icon">🤖</div>
+          <div class="content">
+            <div class="title">「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた</div>
+            <div class="desc">AIを使った別の収益化モデルの話</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 関連記事 -->
+    <div class="related-articles">
+      <h3 class="related-title">関連記事</h3>
+      <div class="related-cards">
+        <a href="../news-tiktok-clipping/" class="related-card">
+          <div class="related-card-title">顔なし・フォロワーなし・商品なしで月72万円。TikTokクリッピングという稼ぎ方</div>
+          <div class="related-card-desc">ブランドのUGC動画をクリッピングして投稿するだけで稼いだ実録</div>
+        </a>
+        <a href="../news-ai-website-business/" class="related-card">
+          <div class="related-card-title">AIでサイトを自動生成して売る。海外で静かに広がってる副業モデルの中身</div>
+          <div class="related-card-desc">Replitやloveable.devで5〜10分でサイト生成→先に作って営業するモデル</div>
+        </a>
+        <a href="../news-unloopa/" class="related-card">
+          <div class="related-card-title">「AIでサイトを自動生成して売る」ビジネス、もうSaaS化されてた</div>
+          <div class="related-card-desc">Unloopaが月$49でリード獲得からAI音声電話まで全工程を自動化</div>
+        </a>
+      </div>
+    </div>
+
+  </article>
+  </div><!-- /main-content -->
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>最新記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../news-higgsfield/">Higgsfield Earnという稼ぎ方</a></li>
+        <li><a href="../news-unloopa/">AIでサイトを売るビジネス、SaaS化されてた</a></li>
+        <li><a href="../news-tiktok-clipping/">TikTokクリッピングという稼ぎ方</a></li>
+        <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+        <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>人気記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../soul-md-merged/">SOUL.mdの書き方</a></li>
+        <li><a href="../token-efficiency/">AGENTS.mdを83%削減した話</a></li>
+        <li><a href="../backtest-overview/">非エンジニアがAIに28,000行のトレードシステムを作らせた話</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>タグ</h3>
+      <ul class="sidebar-tags">
+        <li><span class="sidebar-tag">Higgsfield</span></li>
+        <li><span class="sidebar-tag">AI動画</span></li>
+        <li><span class="sidebar-tag">海外AIニュース</span></li>
+        <li><span class="sidebar-tag">副業</span></li>
+        <li><span class="sidebar-tag">クリエイター</span></li>
+        <li><span class="sidebar-tag">SNS収益化</span></li>
+      </ul>
+    </div>
+  </aside>
+</div><!-- /content-wrapper -->
+
+<footer class="footer">
+  <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+  <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+</footer>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-menu" id="navMenu">
+  <button class="nav-close" id="navClose">✕</button>
+  <h2>メニュー</h2>
+  <ul>
+    <li><a href="../">🏠 ホーム</a></li>
+  </ul>
+  <h2>記事一覧</h2>
+  <ul>
+    <li><a href="../news-higgsfield/">Higgsfield Earnという稼ぎ方</a></li>
+    <li><a href="../news-unloopa/">AIでサイトを売るビジネス、SaaS化されてた</a></li>
+    <li><a href="../news-tiktok-clipping/">TikTokクリッピングという稼ぎ方</a></li>
+    <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+    <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+    <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+    <li><a href="../day1/">Day1: チーム構築</a></li>
+    <li><a href="../soul-md-merged/">SOUL.md: AI臭さ対策</a></li>
+    <li><a href="../comfyui/">ComfyUI: ローカル自動化</a></li>
+    <li><a href="../token-efficiency/">トークン効率化</a></li>
+    <li><a href="../multi-agent-flow/">マルチエージェント連携</a></li>
+    <li><a href="../backtest-overview/">トレードシステム概要編</a></li>
+  </ul>
+  <h2>その他</h2>
+  <ul>
+    <li><a href="../about/">About</a></li>
+  </ul>
+</nav>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script>
+// Fade-in observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Hamburger menu
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navMenu = document.getElementById('navMenu');
+  const navClose = document.getElementById('navClose');
+
+  function openMenu() {
+    navOverlay.classList.add('open');
+    navMenu.classList.add('open');
+  }
+
+  function closeMenu() {
+    navOverlay.classList.remove('open');
+    navMenu.classList.remove('open');
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navOverlay) navOverlay.addEventListener('click', closeMenu);
+})();
+
+// Progress bar
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Back to top button
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<script>
+// Scroll fadeIn
+(function(){
+    var targets = document.querySelectorAll('h2, pre, .callout-box, .quote-block, .key-message');
+    targets.forEach(function(el){ el.classList.add('fade-in-up'); });
+    var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.1});
+    targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+<script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>
