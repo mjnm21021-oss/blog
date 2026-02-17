@@ -8,6 +8,14 @@
     <atom:link href="https://mjnm21021-oss.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>25歳がOpenClawで「AI会社」を月$50で24時間回してる話</title>
+      <link>https://daisuki-koshian.github.io/blog/news-openclaw-50/</link>
+      <description>9体のAIエージェントが一晩で$100溶かした失敗から、Mac Mini 1台で月$50運用に辿り着くまで。Ziwen（Copanion AI創業者）が公開した構成の全貌。</description>
+      <pubDate>Mon, 17 Feb 2026 15:50:00 +0900</pubDate>
+      <guid>https://daisuki-koshian.github.io/blog/news-openclaw-50/</guid>
+    </item>
+
+    <item>
       <title>Anthropicが「100万円相当」のAIコースを無料公開。全5コースの中身</title>
       <link>https://daisuki-koshian.github.io/blog/news-anthropic-academy/</link>
       <description>AI Fluency、API開発、MCP、Claude Code、企業導入。条件なし・0円で学べるAnthropic Academy。CodePathとの提携で75万人の学生にClaude Pro無料提供も発表。</description>

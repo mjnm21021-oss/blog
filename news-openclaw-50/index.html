@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>25歳がOpenClawで「AI会社」を月$50で24時間回してる話 | 『AI』と暮らす『非エンジニア』の日常</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="25歳がOpenClawで「AI会社」を月$50で24時間回してる話">
+<meta property="og:description" content="9体のAIエージェントが一晩で$100溶かした失敗から、Mac Mini 1台で月$50運用に辿り着くまで。Ziwen（Copanion AI創業者）が公開した構成の全貌。">
+<meta property="og:url" content="https://daisuki-koshian.github.io/blog/news-openclaw-50/">
+<meta property="og:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<meta property="og:site_name" content="AIと暮らす">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@daisuki_koshian">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { color: #1a1a1a; text-decoration: none; font-size: 16px; font-weight: 900; }
+
+  .hero {
+    position: relative;
+    background: #fff;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-accent);
+  }
+  .hero-inner {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
+  }
+
+  .hero-big-number {
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.2s ease-out forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s ease-out forwards;
+  }
+
+  .marker-highlight {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.25) 60%);
+    padding: 2px 4px;
+  }
+
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px 0;
+    border: none;
+    opacity: 0;
+    animation: slideIn 0.6s 0.8s ease-out forwards;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeIn 0.8s 1s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; width: 0; }
+    to { opacity: 1; width: 80px; }
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .content-wrapper {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .main-content {
+    flex: 1;
+    max-width: 780px;
+  }
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    top: 80px;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .sidebar-section h3 {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  .sidebar-section h3::after {
+    display: none;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-list li {
+    padding: 0;
+    margin-bottom: 12px;
+  }
+  .sidebar-list li::before {
+    display: none;
+  }
+  .sidebar-list a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.6;
+    display: block;
+    transition: color 0.2s;
+  }
+  .sidebar-list a:hover {
+    color: var(--color-accent);
+  }
+  .sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sidebar-tags li {
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-tags li::before {
+    display: none;
+  }
+  .sidebar-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: #fff;
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .sidebar-tag:hover {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  @media (max-width: 1024px) {
+    .content-wrapper {
+      justify-content: center;
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      position: static;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+  }
+  article h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  article ul {
+    margin: 16px 0 24px 0;
+    padding: 0;
+    list-style: none;
+  }
+  article ul li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 15px;
+  }
+  article ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .quote-block {
+    position: relative;
+    padding: 28px 32px 28px 48px;
+    margin: 36px 0;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.9;
+    color: #333;
+  }
+  .quote-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--color-accent), transparent);
+    border-radius: 4px;
+  }
+
+  .callout-box {
+    padding: 20px 24px;
+    margin: 28px 0;
+    background: #fff8f0;
+    border-left: 4px solid #ffa940;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .callout-box.info {
+    background: #f0f8ff;
+    border-left-color: #4a90e2;
+  }
+  .callout-box.danger {
+    background: #fff5f5;
+    border-left-color: var(--color-accent);
+  }
+  .callout-box strong {
+    color: #1a1a1a;
+    font-weight: 900;
+  }
+
+  .key-message {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.8;
+    padding: 24px 28px;
+    margin: 32px 0;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 4px 16px rgba(230,57,70,0.08);
+    position: relative;
+  }
+  .key-message::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    font-size: 48px;
+    color: var(--color-accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 48px 0;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 48px 0;
+    font-size: 13px;
+    color: #aaa;
+    border-top: 1px solid var(--color-border);
+    margin-top: 64px;
+  }
+  .footer .brand {
+    font-weight: 900;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .article-meta-block {
+    background: #f8f9fa;
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 0 0 40px 0;
+  }
+  .article-meta-block dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 16px;
+    margin: 0;
+  }
+  .article-meta-block dt {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+  .article-meta-block dd {
+    font-size: 14px;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .agent-attribution {
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+    margin: 48px 0 32px 0;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .feedback-section {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .feedback-section p {
+    margin: 0 0 8px 0;
+    color: var(--color-text-light);
+  }
+  .feedback-section p:last-child {
+    margin-bottom: 0;
+  }
+  .feedback-section a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .feedback-section a:hover {
+    text-decoration: underline;
+  }
+
+  .next-read {
+    margin: 40px 0 48px 0;
+  }
+  .next-read h3 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--color-text);
+  }
+  .next-read-cards {
+    display: grid;
+    gap: 16px;
+  }
+  .next-read-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    padding: 20px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+  }
+  .next-read-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+  .next-read-card .icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .next-read-card .content {
+    flex: 1;
+  }
+  .next-read-card .title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+  .next-read-card .desc {
+    font-size: 13px;
+    color: var(--color-text-light);
+    line-height: 1.6;
+  }
+
+  .header-nav { display: flex; gap: 24px; align-items: center; margin-left: auto; }
+  .header-nav a { color: #1a1a1a; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .header-nav a:hover { color: #e63946; }
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--color-accent);
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #e63946;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    width: 0%;
+  }
+
+  article { counter-reset: section-counter; }
+  article h2 { counter-increment: section-counter; }
+  article h2::before {
+    content: counter(section-counter, decimal-leading-zero) ' ';
+    display: inline-block;
+    color: #e63946;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    opacity: 0.7;
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .back-to-top.visible { opacity: 1; }
+  .back-to-top:hover { background: #c5303c; }
+
+  @media (max-width: 768px) {
+    .hamburger { display: block; }
+    .header-nav { display: none; }
+    .hero { padding: 60px 0 40px; }
+    .hero-big-number { font-size: 72px; }
+    .hero-title { font-size: 24px; }
+    .content-wrapper { padding: 0 16px; flex-direction: column; }
+    .sidebar-section { padding: 16px; }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+  }
+  .nav-overlay.open { display: block; }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    padding: 24px;
+  }
+  .nav-menu.open { right: 0; }
+
+  .nav-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .nav-menu h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+  }
+
+  .nav-menu li {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-menu li::before {
+    display: none;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 10px 0;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .nav-menu a:hover {
+    color: var(--color-accent);
+  }
+
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .callout-box, .quote-block, .key-message {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .callout-box:hover, .quote-block:hover, .key-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .breadcrumb {
+    font-size: 12px;
+    color: #999;
+    padding: 8px 24px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  .breadcrumb a {
+    color: #e63946;
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  .breadcrumb .current {
+    color: #333;
+  }
+
+  .share-buttons {
+    margin: 40px 0;
+    padding: 24px;
+    background: #fafafa;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .share-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 16px;
+  }
+  .share-buttons-inner {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .share-btn-x:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+  .share-btn-hatena:hover {
+    background: #00A4DE;
+    color: #fff;
+    border-color: #00A4DE;
+  }
+  .share-icon {
+    font-size: 18px;
+  }
+
+  .related-articles {
+    margin: 48px 0;
+    padding: 32px;
+    background: #fafafa;
+    border-radius: 8px;
+  }
+  .related-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .related-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .related-card {
+    display: block;
+    padding: 16px;
+    background: #fff;
+    border-left: 3px solid #e63946;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .related-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .related-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .related-card-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+  @media (max-width: 768px) {
+    .related-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『<span style="color:#e63946">AI</span>』と暮らす『<span style="color:#e63946">非エンジニア</span>』の日常</a>
+    <nav class="header-nav">
+      <a href="../">Home</a>
+      <a href="../about/">About</a>
+      <a href="https://x.com/daisuki_koshian" target="_blank" rel="noopener" title="X (Twitter)">𝕏</a>
+    </nav>
+    <button class="hamburger" id="hamburger">☰</button>
+  </div>
+</div>
+
+<!-- パンくずリスト -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="../">Home</a> &gt; <span>海外AI</span> &gt; <span class="current">OpenClawで月$50のAI会社</span>
+</nav>
+
+<!-- Schema.org BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://daisuki-koshian.github.io/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "海外AI",
+      "item": "https://daisuki-koshian.github.io/blog/#"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "OpenClawで月$50のAI会社",
+      "item": "https://daisuki-koshian.github.io/blog/news-openclaw-50/"
+    }
+  ]
+}
+</script>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">海外AIニュース — OpenClaw実践事例</div>
+    <div class="hero-big-number">$50/月</div>
+    <div class="hero-title">
+      25歳が<span class="marker-highlight">OpenClawでAI会社</span>を<br>月$50で24時間回してる話
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">9体のAIチームが一晩で$100溶かした。そこから月$50の運用に辿り着くまで</div>
+  </div>
+</div>
+
+<div class="reading-time" style="font-size: 13px; color: #999; text-align: center; margin: 24px 0; padding: 12px; background: #f9f9f9; border-radius: 4px;">
+  ⏱ 約7分で読めます
+</div>
+
+<div class="content-wrapper">
+  <div class="main-content">
+
+  <header class="article-header fade-in">
+    <span class="tag">海外AIニュース</span>
+    <h1>25歳がOpenClawで「AI会社」を月$50で24時間回してる話</h1>
+    <div class="meta">2026年2月17日</div>
+  </header>
+
+  <article>
+
+    <div class="article-meta-block">
+      <dl>
+        <dt>最終更新:</dt>
+        <dd>2026年2月17日</dd>
+        <dt>カテゴリ:</dt>
+        <dd>海外AIニュース</dd>
+        <dt>読了時間:</dt>
+        <dd>約7分</dd>
+        <dt>元ソース:</dt>
+        <dd><a href="https://x.com/ziwenxu_/status/2023610499024171077" target="_blank" rel="noopener" style="color: var(--color-accent); text-decoration: none;">@ziwenxu_ on X</a></dd>
+      </dl>
+    </div>
+
+    <figure class="fade-in" style="margin: 0 0 2.5em 0;">
+      <img src="source-screenshot.png" alt="Ziwenによる元ツイートのスクリーンショット" loading="lazy" style="width:100%; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+      <figcaption style="font-size: 12px; color: #999; margin-top: 8px; text-align: center;">出典: <a href="https://x.com/ziwenxu_/status/2023610499024171077" target="_blank" rel="noopener" style="color: #999;">@ziwenxu_ on X</a></figcaption>
+    </figure>
+
+    <p class="fade-in">Ziwen（25歳、Copanion AI創業者）がXに長文を投稿した。タイトルにするなら「OpenClawで自律AI会社を月$50で動かす方法」といったところ。</p>
+
+    <p class="fade-in">OpenClawを自分でも使っているから、読みながらずっと「わかる」と頷いていた。特に序盤の失敗談が。</p>
+
+    <h2 id="sec-1" class="fade-in">9体のAIエージェントが一晩で$100溶かした話</h2>
+
+    <p class="fade-in">最初にZiwenがやったのは、9体のAIエージェントで「ドリームチーム」を組むことだった。CEOエージェント、マーケターエージェント、エンジニアエージェント……それぞれに役割を与えて、全員で動かす。絵として美しい。</p>
+
+    <p class="fade-in">結果は一晩で$100の消費。原因はロボット同士の雑談だった。</p>
+
+    <div class="callout-box danger fade-in">
+      <strong>AIエージェントは「タスクが終わったら止まる」という前提で動かない。</strong>明示的に終了条件を与えないと、延々とメッセージを交わし続ける。9体×Claude Pro×一晩、これがどれだけ重なるか、想像すれば分かる話ではある。でも実際にやってみないと実感できないものでもある。
+    </div>
+
+    <p class="fade-in">自分のOpenClaw環境でも、初期に似たような経験をした。エージェント数を絞らず「とりあえず全部動かそう」とした結果、想定外のトークン消費が発生した。Ziwenの話は対岸の火事ではない。</p>
+
+    <h2 id="sec-2" class="fade-in">100時間と$1,000から得た教訓</h2>
+
+    <p class="fade-in">Ziwenはその後、試行錯誤に100時間と$1,000をかけた。そこで辿り着いた結論がシンプルだった。</p>
+
+    <div class="key-message fade-in">
+      複雑さは高くつく。
+    </div>
+
+    <p class="fade-in">9体のエージェントは豪華に見えるが、それだけ連携のコストがかかる。エラーが伝播する。ループが発生する。デバッグが難しくなる。シンプルな構成で確実に動くほうが、長期的にははるかに安い。</p>
+
+    <p class="fade-in">この判断を受けて、Ziwenは大胆な整理に踏み切る。</p>
+
+    <h2 id="sec-3" class="fade-in">「Pro」課金を全部切った</h2>
+
+    <p class="fade-in">Claude Pro、Gemini Pro、その他「Pro」と名のつくサービスを全部解約した。</p>
+
+    <p class="fade-in">Pro課金は便利だ。制限が緩くなる。使い勝手がいい。でも月額が積み重なる。特に複数のサービスを並行して使っていると、気づいたら毎月数万円が飛んでいく。</p>
+
+    <p class="fade-in">自分もOpenClaw運用を始めた当初、ちょうど同じことを考えた。どのモデルをどのプランで使うか。課金を重ねるほど管理が複雑になって、結局どこにいくら払っているか分からなくなる。Ziwenの「Pro全部切る」という決断は、その問いへの一つの答えだと思う。</p>
+
+    <h2 id="sec-4" class="fade-in">代わりに選んだ構成：ドラえもんとMiniMax</h2>
+
+    <p class="fade-in">Pro課金を切った代わりに、Ziwenが選んだのは2つだ。</p>
+
+    <h3 class="fade-in">M4 Mac Mini、通称「ドラえもん」</h3>
+
+    <p class="fade-in">自宅に置いたM4 Mac Mini。名前は「ドラえもん」。理由は書いていないが、24時間なんでも出してくれる存在だからだろう（おそらく）。</p>
+
+    <p class="fade-in">ここにnode.jsとOpenClawをインストールして、AIエージェントのホストにする。クラウドのコンピューティング費用を払わず、手元のマシンで動かす。月額は電気代だけ。</p>
+
+    <h3 class="fade-in">MiniMax M2.5のMax Plan（月$50）</h3>
+
+    <p class="fade-in">AIモデルとしてMiniMax M2.5を採用。月$50のMax Planで、1,000プロンプト/5時間が使える。</p>
+
+    <div class="callout-box info fade-in">
+      <strong>Google Cloud $300無料クレジット</strong>を使えば、Gemini 2/2.5/3も活用できる。ただしレート制限がきつい。Ziwenはこれを補助的に使い、メインをMiniMaxに据えた構成にしている。
+    </div>
+
+    <p class="fade-in">必要なものはあと2つ。Brave Search API（有料、ただし月数百円程度）と、Telegram Bot Token（無料）。後者はエージェントとのやり取りに使う。</p>
+
+    <h2 id="sec-5" class="fade-in">月$50で24時間自律運転が実現する仕組み</h2>
+
+    <p class="fade-in">構成をまとめると、こうなる。</p>
+
+    <ul class="fade-in">
+      <li>ハードウェア：M4 Mac Mini（一括購入済み、以降は電気代のみ）</li>
+      <li>AIモデル：MiniMax M2.5 Max Plan → 月$50</li>
+      <li>補助モデル：Google Cloud 無料枠でGemini（レート制限あり）</li>
+      <li>検索：Brave Search API → 月数ドル</li>
+      <li>通知・制御：Telegram Bot Token → 無料</li>
+      <li>フレームワーク：OpenClaw（node.js上で動作）</li>
+    </ul>
+
+    <p class="fade-in">合計の変動コストはほぼMiniMaxの$50のみ。Mac Miniの初期投資は別として、毎月かかる費用は$50ちょっとで、AIエージェントが24時間動き続ける。</p>
+
+    <div class="quote-block fade-in">
+      「月$50で、眠っている間も会社が動いている」
+    </div>
+
+    <p class="fade-in">これがZiwenの言いたいことの核心だろう。スタートアップの創業者が人件費や外注費をかけずに、AIエージェントに実務をやらせる。OpenClawはそのためのフレームワークだ。</p>
+
+    <h2 id="sec-6" class="fade-in">OpenClawを使っている立場から</h2>
+
+    <p class="fade-in">自分はいま5体のエージェントをOpenClaw上で動かしている。Jarvis（メインアシスタント）を中心に、情報収集・記事作成・コード生成などを分担させている。この記事自体もそのエージェントが書いている。</p>
+
+    <p class="fade-in">Ziwenの話で一番共感したのは「複雑さは高くつく」という部分だ。最初、自分もエージェントをどんどん増やしたくなった。でも管理が煩雑になると、結局動かなくなる。シンプルに保つことが、継続運用のコツだと今は思っている。</p>
+
+    <p class="fade-in">もう一つ共感したのは「Pro全部切る」の判断。課金サービスは気軽に始められるが、見直しのタイミングを逃すと積み重なる。Ziwenのように一度全部リセットして「本当に必要なものだけ残す」という整理は、定期的にやる価値がある。</p>
+
+    <div class="callout-box fade-in">
+      <strong>OpenClawは「AIエージェントのOS」だ。</strong>どのモデルを使うか、どんなツールを与えるか、どう組み合わせるか——その設計次第でコストも能力も大きく変わる。Ziwenの実験は、その設計の最適解を探す旅でもある。
+    </div>
+
+    <h2 id="sec-7" class="fade-in">始め方：Mac Miniとnode.jsがあればいい</h2>
+
+    <p class="fade-in">Ziwenが示した手順は明快だ。</p>
+
+    <ul class="fade-in">
+      <li>Mac Mini（M4推奨）を用意する</li>
+      <li>node.jsをインストールする</li>
+      <li>OpenClawをインストールする</li>
+      <li>MiniMax M2.5のMax Planを契約する（月$50）</li>
+      <li>Brave Search APIキーを取得する</li>
+      <li>Telegram Bot Tokenを発行する</li>
+    </ul>
+
+    <p class="fade-in">クラウドのサーバーは不要。GPUも不要。専門的なインフラ知識も、さほど要らない。Mac Miniの電源を入れておけば、あとはOpenClawが動き続ける。</p>
+
+    <p class="fade-in">「25歳の起業家」という肩書きに引っ張られると遠い話に見えるが、やっていることの本質はシンプルだ。自分のマシンに、安いモデルを乗せた自律エージェントを動かす。それだけ。</p>
+
+    <hr class="divider">
+
+    <p class="fade-in">Ziwenがこの構成に辿り着くまでに費やした100時間と$1,000は、後から来る人にとっての「授業料を肩代わりしてもらった」経験でもある。失敗の記録を公開してくれることで、同じ道を歩く人が同じ穴に落ちずに済む。</p>
+
+    <p class="fade-in">月$50という数字は、何かを作ろうとしている人にとってかなり現実的な水準だ。Claude Proの月額とほとんど変わらない金額で、24時間動くAIエージェントのチームが持てる。</p>
+
+    <p class="fade-in">OpenClawの可能性を、改めて実感した投稿だった。</p>
+
+    <p class="fade-in" style="font-size: 13px; color: #999; margin-top: 40px;">
+      📎 元ソース: <a href="https://x.com/ziwenxu_/status/2023610499024171077" target="_blank" rel="noopener" style="color: var(--color-accent);">@ziwenxu_ on X</a>
+    </p>
+
+    <div class="agent-attribution">
+      📝 記事作成: AIエージェント（Jarvis）
+    </div>
+
+    <div class="feedback-section">
+      <p>OpenClaw使っている方、構成について話しましょう → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+    <!-- SNSシェアボタン -->
+    <div class="share-buttons">
+      <p class="share-title">この記事をシェア</p>
+      <div class="share-buttons-inner">
+        <a href="https://twitter.com/intent/tweet?url=https%3A//daisuki-koshian.github.io/blog/news-openclaw-50/&text=25%E6%AD%B3%E3%81%8COpenClaw%E3%81%A7%E3%80%8CAI%E4%BC%9A%E7%A4%BE%E3%80%8D%E3%82%92%E6%9C%88%2450%E3%81%A724%E6%99%82%E9%96%93%E5%9B%9E%E3%81%97%E3%81%A6%E3%82%8B%E8%A9%B1&via=daisuki_koshian"
+           target="_blank" rel="noopener" class="share-btn share-btn-x">
+          <span class="share-icon">𝕏</span> Xでシェア
+        </a>
+        <a href="https://b.hatena.ne.jp/entry/https%3A//daisuki-koshian.github.io/blog/news-openclaw-50/"
+           target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+          <span class="share-icon">B!</span> はてブ
+        </a>
+      </div>
+    </div>
+
+    <!-- 関連記事 -->
+    <div class="related-articles">
+      <h3 class="related-title">関連記事</h3>
+      <div class="related-cards">
+        <a href="../multi-agent-flow/" class="related-card">
+          <div class="related-card-title">マルチエージェント連携の実践</div>
+          <div class="related-card-desc">OpenClawで複数エージェントを連携させる構成の話</div>
+        </a>
+        <a href="../news-solo-founder/" class="related-card">
+          <div class="related-card-title">Solo Founderとして生き残る</div>
+          <div class="related-card-desc">AIと1人で会社を回す、現実的な話</div>
+        </a>
+        <a href="../news-shumer/" class="related-card">
+          <div class="related-card-title">Xで8100万回読まれたAI起業家の話</div>
+          <div class="related-card-desc">HyperWrite CEOが「もう自分の仕事、いらなくなった」と書いたエッセイ</div>
+        </a>
+      </div>
+    </div>
+
+  </article>
+  </div><!-- /main-content -->
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>最新記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../news-openclaw-50/">OpenClawで月$50のAI会社</a></li>
+        <li><a href="../news-anthropic-academy/">Anthropic Academy無料公開</a></li>
+        <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+        <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+        <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>人気記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../soul-md-merged/">SOUL.mdの書き方</a></li>
+        <li><a href="../token-efficiency/">AGENTS.mdを83%削減した話</a></li>
+        <li><a href="../backtest-overview/">非エンジニアがAIに28,000行のトレードシステムを作らせた話</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>タグ</h3>
+      <ul class="sidebar-tags">
+        <li><span class="sidebar-tag">OpenClaw</span></li>
+        <li><span class="sidebar-tag">AIエージェント</span></li>
+        <li><span class="sidebar-tag">海外AIニュース</span></li>
+        <li><span class="sidebar-tag">Claude Code</span></li>
+        <li><span class="sidebar-tag">自動化</span></li>
+        <li><span class="sidebar-tag">スタートアップ</span></li>
+      </ul>
+    </div>
+  </aside>
+</div><!-- /content-wrapper -->
+
+<footer class="footer">
+  <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+  <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+</footer>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-menu" id="navMenu">
+  <button class="nav-close" id="navClose">✕</button>
+  <h2>メニュー</h2>
+  <ul>
+    <li><a href="../">🏠 ホーム</a></li>
+  </ul>
+  <h2>記事一覧</h2>
+  <ul>
+    <li><a href="../news-openclaw-50/">OpenClawで月$50のAI会社</a></li>
+    <li><a href="../news-anthropic-academy/">Anthropic Academy</a></li>
+    <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+    <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+    <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+    <li><a href="../day1/">Day1: チーム構築</a></li>
+    <li><a href="../soul-md-merged/">SOUL.md: AI臭さ対策</a></li>
+    <li><a href="../comfyui/">ComfyUI: ローカル自動化</a></li>
+    <li><a href="../morning-briefing/">朝ブリーフィング</a></li>
+    <li><a href="../token-efficiency/">トークン効率化</a></li>
+    <li><a href="../cron-heartbeat/">cron + heartbeat</a></li>
+    <li><a href="../multi-agent-flow/">マルチエージェント連携</a></li>
+    <li><a href="../backtest-overview/">トレードシステム概要編</a></li>
+    <li><a href="../backtest-failures/">トレードシステム失敗編</a></li>
+    <li><a href="../backtest-method/">トレードシステム仕組み編</a></li>
+  </ul>
+  <h2>その他</h2>
+  <ul>
+    <li><a href="../about/">About</a></li>
+  </ul>
+</nav>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script>
+// Fade-in observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Hamburger menu
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navMenu = document.getElementById('navMenu');
+  const navClose = document.getElementById('navClose');
+
+  function openMenu() {
+    navOverlay.classList.add('open');
+    navMenu.classList.add('open');
+  }
+
+  function closeMenu() {
+    navOverlay.classList.remove('open');
+    navMenu.classList.remove('open');
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navOverlay) navOverlay.addEventListener('click', closeMenu);
+})();
+
+// Progress bar
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Back to top button
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<script>
+// Scroll fadeIn for headings and special blocks
+(function(){
+    var targets = document.querySelectorAll('h2, pre, .callout-box, .quote-block, .key-message');
+    targets.forEach(function(el){ el.classList.add('fade-in-up'); });
+    var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.1});
+    targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+<script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>
