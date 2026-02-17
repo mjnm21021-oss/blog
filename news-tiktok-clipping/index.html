@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>顔なし・フォロワーなし・商品なしで月72万円。TikTokクリッピングという稼ぎ方 | 『AI』と暮らす『非エンジニア』の日常</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="顔なし・フォロワーなし・商品なしで月72万円。TikTokクリッピングという稼ぎ方">
+<meta property="og:description" content="ブランドのUGC動画をクリッピングして投稿するだけで、8ヶ月で累計330万円を稼いだ実録。">
+<meta property="og:url" content="https://daisuki-koshian.github.io/blog/news-tiktok-clipping/">
+<meta property="og:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<meta property="og:site_name" content="AIと暮らす">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@daisuki_koshian">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { color: #1a1a1a; text-decoration: none; font-size: 16px; font-weight: 900; }
+
+  .hero {
+    position: relative;
+    background: #fff;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-accent);
+  }
+  .hero-inner {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
+  }
+
+  .hero-big-number {
+    display: inline-block;
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    opacity: 0;
+    animation: fadeInUp 0.6s 0.2s ease-out forwards;
+    margin-bottom: 8px;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.3s ease-out forwards;
+  }
+
+  .marker-highlight {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.25) 60%);
+    padding: 2px 4px;
+  }
+
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px 0;
+    border: none;
+    opacity: 0;
+    animation: slideIn 0.6s 0.6s ease-out forwards;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; width: 0; }
+    to { opacity: 1; width: 80px; }
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .content-wrapper {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .main-content {
+    flex: 1;
+    max-width: 780px;
+  }
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    top: 80px;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .sidebar-section h3 {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--color-text);
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  .sidebar-section h3::after {
+    display: none;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-list li {
+    padding: 0;
+    margin-bottom: 12px;
+  }
+  .sidebar-list li::before {
+    display: none;
+  }
+  .sidebar-list a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1.6;
+    display: block;
+    transition: color 0.2s;
+  }
+  .sidebar-list a:hover {
+    color: var(--color-accent);
+  }
+  .sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sidebar-tags li {
+    margin: 0;
+    padding: 0;
+  }
+  .sidebar-tags li::before {
+    display: none;
+  }
+  .sidebar-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: #fff;
+    border: 1px solid var(--color-accent);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .sidebar-tag:hover {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  @media (max-width: 1024px) {
+    .content-wrapper {
+      justify-content: center;
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      position: static;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+  }
+
+  .article-header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .article-header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  .article-header .meta {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+
+  article p {
+    margin-bottom: 1.8em;
+    font-size: 16px;
+  }
+
+  article h2 {
+    position: relative;
+    font-size: 22px;
+    font-weight: 900;
+    padding: 16px 20px;
+    margin: 56px 0 28px;
+    background: #fff;
+    border-left: 5px solid var(--color-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border-radius: 0 4px 4px 0;
+  }
+  article h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, var(--color-accent) 0%, transparent 100%);
+  }
+
+  article h3 {
+    font-size: 18px;
+    font-weight: 900;
+    padding-left: 12px;
+    margin: 40px 0 20px;
+    border-left: 3px solid var(--color-accent);
+    color: #333;
+  }
+
+  article ul {
+    margin: 20px 0 40px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  article ul li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+
+  article ul li::before {
+    content: '●';
+    position: absolute;
+    left: 4px;
+    color: var(--color-accent);
+    font-size: 12px;
+    top: 0.3em;
+  }
+
+  article strong {
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  article a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: all 0.2s;
+    border-bottom: 1px solid rgba(230, 57, 70, 0.3);
+  }
+
+  article a:hover {
+    opacity: 0.7;
+    border-bottom-color: var(--color-accent);
+  }
+
+  pre {
+    background: #f9f9f9;
+    border-left: 4px solid var(--color-accent);
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-x: auto;
+    color: #333;
+    font-family: 'Courier New', monospace;
+  }
+
+  .quote-block {
+    background: #f9f9f9;
+    border-left: 4px solid var(--color-accent);
+    padding: 20px 24px;
+    margin: 32px 0;
+    font-size: 15px;
+    color: #555;
+    border-radius: 4px;
+    line-height: 1.8;
+  }
+
+  .quote-block p {
+    margin: 0;
+  }
+
+  .callout-box {
+    background: #fff;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 32px 0;
+  }
+
+  .callout-box.info {
+    border-color: #4dabf7;
+    background: #f0f8ff;
+  }
+
+  .callout-box.danger {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+  }
+
+  .callout-box p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .callout-box strong {
+    display: block;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .key-message {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+    border: 2px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 40px 0;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 32px 0;
+    display: block;
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 56px;
+    height: 56px;
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 1000;
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .back-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  }
+
+  #progressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent), #ff8787);
+    width: 0%;
+    z-index: 9999;
+    transition: width 0.1s ease;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+  }
+  .hamburger span {
+    width: 25px;
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .nav-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100%;
+    background: #fff;
+    z-index: 9999;
+    padding: 80px 24px 24px;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.1);
+  }
+  .nav-menu.open {
+    right: 0;
+  }
+
+  .nav-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .nav-links {
+    list-style: none;
+  }
+  .nav-links li {
+    margin-bottom: 20px;
+  }
+  .nav-links a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    .header-nav { display: none; }
+    .hero { padding: 48px 0 40px; }
+    .hero-big-number { font-size: 64px; }
+    .hero-title { font-size: 24px; }
+    article h2 { font-size: 20px; padding: 12px 16px; margin: 40px 0 20px; }
+    article h3 { font-size: 17px; margin: 32px 0 16px; }
+    .back-to-top { width: 48px; height: 48px; bottom: 24px; right: 24px; font-size: 20px; }
+  }
+
+  .breadcrumb-bar { max-width: 1200px; margin: 0 auto; padding: 6px 24px; font-size: 13px; color: #999; }
+  .breadcrumb-bar a { color: #e63946; text-decoration: none; }
+  .breadcrumb-bar a:hover { text-decoration: underline; }
+
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 24px;
+}
+
+.breadcrumb a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .current {
+    color: #666;
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://daisuki-koshian.github.io/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "海外AI",
+      "item": "https://daisuki-koshian.github.io/blog/#"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "TikTokクリッピング",
+      "item": "https://daisuki-koshian.github.io/blog/news-tiktok-clipping/"
+    }
+  ]
+}
+</script>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">海外AIニュース — X / @jessieclipping</div>
+    <div class="hero-big-number">¥720,000</div>
+    <div class="hero-title">
+      顔なし・フォロワーなし・商品なしで月72万円。<br>TikTokクリッピングという稼ぎ方
+    </div>
+    <hr class="hero-sep">
+    <div class="hero-sub">顔なし × フォロワーなし × 8ヶ月</div>
+  </div>
+</div>
+
+<div class="breadcrumb-bar"><a href="../">ホーム</a> / 顔なし・フォロワーなし・商品なしで月72万円。TikTokクリッピングという稼ぎ方</div>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">『AI』と暮らす『非エンジニア』の日常</a>
+    <nav class="header-nav">
+      <!-- ナビゲーション項目 -->
+    </nav>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" id="navClose">&times;</button>
+  <ul class="nav-links">
+    <li><a href="../">ホーム</a></li>
+    <li><a href="../about/">私について</a></li>
+  </ul>
+</div>
+
+<nav class="breadcrumb">
+  <a href="../">Home</a>
+  <span>/</span>
+  <a href="../#">海外AI</a>
+  <span>/</span>
+  <span class="current">顔なし・フォロワーなし・商品なしで月72万円。TikTokクリッピングという稼ぎ方</span>
+</nav>
+
+<div class="content-wrapper">
+<div class="main-content">
+
+<article class="container" style="padding-top: 48px; padding-bottom: 80px;">
+
+<p><strong>⏱ 約6分</strong></p>
+
+<p>Jessie（@jessieclipping）という人物が、8ヶ月でTikTokとInstagramから累計約330万円（$22,347）を稼いだ。</p>
+
+<p>顔出しも、フォロワーも、自社商品も不要。ブランドのキャンペーンに沿って動画を作り、自分のアカウントから投稿するだけで、ビュー数に応じて報酬が支払われる。それが「Content Rewardsクリッピング」という仕組みです。</p>
+
+<p>Jessieのポストには、実際の収益スクリーンショットとともに、誰でも再現できる具体的な方法が公開されていました。私自身は試していませんが、初期投資ほぼゼロで月72万円というのは、データを見る限り現実的な数字に見えます。</p>
+
+<h2>Content Rewardsクリッピングとは何か</h2>
+
+<p>Content Rewardsクリッピングは、次のような流れで収益が発生します。</p>
+
+<ul>
+<li>ブランドが「Content Rewards」というプラットフォームでキャンペーンを立ち上げる</li>
+<li>クリッパーは、そのブランドのガイドライン（製品画像、推奨スクリプト、禁止事項など）に沿ってコンテンツを作成</li>
+<li>自分のTikTokまたはInstagramアカウントから投稿</li>
+<li>ビュー数に応じて報酬が支払われる（RPM約$1/1000ビュー）</li>
+</ul>
+
+<p>UGC（User Generated Content）と呼ばれる動画広告制作の一種ですが、企業に納品する形式ではなく、自分のアカウントから発信する点が特徴です。ブランド側は広告らしさを抑えた口コミ風の拡散を得られ、クリッパー側は投稿すればするほど収益が増える仕組みになっています。</p>
+
+<h2>Jessieの実績：月1.8万円から月72万円へ</h2>
+
+<p>Jessieの収益推移は次の通りです。</p>
+
+<div class="quote-block">
+<p><strong>月1</strong>: 約1.8万円（週2回投稿）<br>
+<strong>月8</strong>: 約72万円<br>
+<strong>累計8ヶ月</strong>: 約330万円（$22,347）<br>
+<strong>週の作業時間</strong>: 6-8時間</p>
+</div>
+
+<p>1本あたりの制作時間は20-30分。毎日午後に6本をバッチ制作し、翌日の投稿分をストックする運用スタイルです。週7投稿を継続することで、アルゴリズムに優遇され、ビューが伸びやすくなったとのこと。</p>
+
+<p>月8に達した時点で、収益は月72万円。時給換算すると約3万円です。特別なスキルが不要なわりに、かなり高い数字に見えます。</p>
+
+<h2>必要なもの：月コスト約3,000円</h2>
+
+<p>Jessieが実際に使っていたツールとコストは次の通りです。</p>
+
+<ul>
+<li><strong>Content Rewardsアカウント</strong>（無料）</li>
+<li><strong>TikTok &amp; Instagramアカウント</strong>（複数運用）</li>
+<li><strong>CapCut Pro</strong>（動画編集）</li>
+<li><strong>Canva</strong>（サムネイル作成）</li>
+<li><strong>ElevenLabs</strong>（AI音声生成、月約750円）</li>
+<li><strong>プロキシ</strong>（複数アカウント管理用）</li>
+</ul>
+
+<p>合計で月約3,000円。初期投資はほぼゼロ。必要なのは時間とデータ改善のサイクルだけです。</p>
+
+<div class="callout-box info">
+<p><strong>AI活用のポイント</strong><br>
+ElevenLabsで音声を生成し、CapCutのAI編集機能で動画を自動化。この2つがあれば、台本さえ用意すれば動画が完成します。</p>
+</div>
+
+<h2>機能するコンテンツ形式</h2>
+
+<p>Jessieが検証した結果、次の形式が特に効果的だったとのことです。</p>
+
+<ul>
+<li><strong>スライドショー</strong>: 最も簡単。製品画像 + AI音声 + BGM。20-30分で完成</li>
+<li><strong>Brainrotクイズ</strong>: 「どっちが正解？」形式。5,000〜200万ビューを記録</li>
+<li><strong>ビフォーアフター比較</strong>: スキンケアや健康食品で効果的</li>
+<li><strong>POV系</strong>: 「こんなとき、あなたならどうする？」形式</li>
+</ul>
+
+<p>いずれも「顔出し不要」「フォロワー不要」。新規アカウントでも、ビューさえ稼げれば収益になる仕組みです。</p>
+
+<h2>成功の鍵：高RPMキャンペーン選択とデータ改善</h2>
+
+<p>Jessieが強調していたのは、次の5つです。</p>
+
+<ul>
+<li><strong>高RPMキャンペーンを選ぶ</strong>: 同じビューでも、報酬単価が高いブランドを狙う</li>
+<li><strong>週7投稿を継続</strong>: アルゴリズムに優遇される</li>
+<li><strong>バッチ制作</strong>: 1日午後に6本まとめて作る</li>
+<li><strong>複数アカウント運用</strong>: リスク分散とテスト効率化</li>
+<li><strong>データ改善</strong>: どのサムネ、スクリプト、BGMが伸びたかを記録して改善</li>
+</ul>
+
+<p>この5つを守れば、誰でも再現できるとJessieは書いています。逆に言えば、これをサボると収益は伸びません。</p>
+
+<div class="key-message">
+「止めれば収入も止まる」労働収入。でも、初期投資ほぼゼロ・スキル不要で月72万円は現実的。
+</div>
+
+<h2>私の考え：労働収入だが、AIで自動化できそう</h2>
+
+<p>このモデルは、完全な労働収入です。投稿を止めれば収益も止まります。フォロワーが積み上がるわけでも、資産性があるわけでもありません。</p>
+
+<p>ただし、初期投資がほぼゼロで、スキルも不要。月72万円を稼げるという実績がある以上、「やってみる価値はある」と思います。</p>
+
+<p>さらに、AIツールでさらに効率化できそうです。たとえば、次のような流れです。</p>
+
+<div class="quote-block">
+<p>1. エージェントが台本を自動生成<br>
+2. ElevenLabsで音声を生成<br>
+3. CapCut APIで動画を自動編集<br>
+4. TikTok APIで自動投稿</p>
+</div>
+
+<p>この流れが実現すれば、週6-8時間の作業がほぼゼロになります。エージェントに「毎日午後6本投稿」と指示するだけで、あとは放置。データ改善も、エージェントが自動でA/Bテストを回してくれる。</p>
+
+<p>そうなれば、労働収入から「半自動収入」に変わります。面白そうです。</p>
+
+<h2>まとめ</h2>
+
+<p>Jessieの事例は、次のことを教えてくれます。</p>
+
+<ul>
+<li>顔出し・フォロワー・商品がなくても、月72万円は稼げる</li>
+<li>Content Rewardsというプラットフォームを使えば、初期投資ほぼゼロで始められる</li>
+<li>AIツール（ElevenLabs、CapCut）を使えば、さらに効率化できる</li>
+<li>労働収入だが、エージェントで自動化すれば半自動収入になる可能性がある</li>
+</ul>
+
+<p>私自身はまだ試していませんが、データを見る限り、再現性は高そうです。興味がある人は、まず1本作ってみるといいかもしれません。</p>
+
+<div class="share-buttons">
+  <p class="share-title">この記事をシェア</p>
+  <div class="share-buttons-inner">
+    <a href="https://twitter.com/intent/tweet?url=https://daisuki-koshian.github.io/blog/news-tiktok-clipping/&text=顔なし・フォロワーなし・商品なしで月72万円。TikTokクリッピングという稼ぎ方" 
+       target="_blank" rel="noopener" class="share-btn share-btn-x">
+      <span class="share-icon">𝕏</span> Xでシェア
+    </a>
+    <a href="https://b.hatena.ne.jp/entry/s/daisuki-koshian.github.io/blog/news-tiktok-clipping/" 
+       target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+      <span class="share-icon">B!</span> はてブ
+    </a>
+  </div>
+</div>
+
+<style>
+.share-buttons {
+  margin: 48px 0;
+  padding: 32px;
+  background: #fafafa;
+  border-radius: 8px;
+  text-align: center;
+}
+.share-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+}
+.share-buttons-inner {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.share-btn-x {
+  background: #000;
+  color: #fff;
+}
+.share-btn-hatena {
+  background: #00a4de;
+  color: #fff;
+}
+.share-icon {
+  font-size: 18px;
+  font-weight: 900;
+}
+@media (max-width: 600px) {
+  .share-buttons-inner {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .share-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+
+<div class="related-articles">
+  <h3 class="related-title">関連記事</h3>
+  <div class="related-cards">
+
+        <a href="../news-solo-founder/" class="related-card">
+          <div class="related-card-title">1人の創業者、15体のAIエージェント、従業員ゼロ</div>
+          <div class="related-card-desc">The Councilという実験</div>
+        </a>
+
+        <a href="../news-ai-finance/" class="related-card">
+          <div class="related-card-title">金融庁、AI専門チーム「AI Finance Lab」設立</div>
+          <div class="related-card-desc">金融機関のAI活用を支援する新組織</div>
+        </a>
+
+        <a href="../news-nvidia-dms/" class="related-card">
+          <div class="related-card-title">NVIDIA DMSの衝撃</div>
+          <div class="related-card-desc">AIの推論速度が30倍高速化された技術の話</div>
+        </a>
+
+  </div>
+</div>
+
+<style>
+.related-articles {
+  margin: 48px 0;
+  padding: 32px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+.related-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.related-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+.related-card {
+  display: block;
+  padding: 16px;
+  background: #fff;
+  border-left: 3px solid #e63946;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.related-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #333;
+}
+.related-card-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .related-cards {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+</article>
+
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-section">
+    <h3>最近の記事</h3>
+    <ul class="sidebar-list">
+      <li><a href="../news-klarna/">AIで700人分の仕事を消したKlarna、結局また人間を雇い始めた話</a></li>
+      <li><a href="../news-solo-founder/">1人の創業者、15体のAIエージェント、従業員ゼロ</a></li>
+      <li><a href="../news-ai-finance/">金融庁、AI専門チーム「AI Finance Lab」設立</a></li>
+    </ul>
+  </div>
+  <div class="sidebar-section">
+    <h3>タグ</h3>
+    <ul class="sidebar-tags">
+      <li><a href="../#" class="sidebar-tag">海外AI</a></li>
+      <li><a href="../#" class="sidebar-tag">収益化</a></li>
+      <li><a href="../#" class="sidebar-tag">TikTok</a></li>
+    </ul>
+  </div>
+</aside>
+
+</div>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navMenu = document.getElementById('navMenu');
+  const navClose = document.getElementById('navClose');
+
+  function openMenu() {
+    navOverlay.classList.add('open');
+    navMenu.classList.add('open');
+  }
+
+  function closeMenu() {
+    navOverlay.classList.remove('open');
+    navMenu.classList.remove('open');
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navOverlay) navOverlay.addEventListener('click', closeMenu);
+})();
+
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  btn.classList.toggle('visible', window.scrollY > 500);
+});
+btn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+<script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+// Scroll fadeIn
+(function(){
+    var targets = document.querySelectorAll('h2, pre, .callout-box, .quote-block, .key-message');
+    targets.forEach(function(el){ el.classList.add('fade-in-up'); });
+
+    var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, {threshold: 0.1});
+    targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+</body>
+</html>
