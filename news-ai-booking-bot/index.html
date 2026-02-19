@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コーディング経験ゼロ・10分で作ったAI予約ボットが月6万円を稼いでいる話 | 『AI』と暮らす『非エンジニア』の日常</title>
+<meta property="og:type" content="article">
+<meta property="og:title" content="コーディング経験ゼロ・10分で作ったAI予約ボットが月6万円を稼いでいる話">
+<meta property="og:description" content="プログラミング未経験者が10分で作ったChatGPT予約ボットが月$400。Reddit発の中小企業向けカスタムGPT開発者は月$7,000。2026年、AIで実際に稼いでいる人たちの手法と数字をまとめました。">
+<meta property="og:url" content="https://daisuki-koshian.github.io/blog/news-ai-booking-bot/">
+<meta property="og:image" content="https://daisuki-koshian.github.io/blog/assets/ogp-default.png">
+<meta property="og:site_name" content="AIと暮らす">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@daisuki_koshian">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+  :root {
+    --color-bg: #fafafa;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-accent: #e63946;
+    --color-border: #e8e8e8;
+    --color-card-bg: #ffffff;
+    --font-main: 'Noto Sans JP', sans-serif;
+    --max-width: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-main);
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.9;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo { color: #1a1a1a; text-decoration: none; font-size: 16px; font-weight: 900; }
+
+  .hero {
+    position: relative;
+    background: #fff;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-accent);
+  }
+  .hero-inner {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
+  }
+  .hero-big-number {
+    font-size: 96px;
+    font-weight: 900;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.2s ease-out forwards;
+  }
+  .hero-title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 900;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.5s ease-out forwards;
+  }
+  .marker-highlight {
+    background: linear-gradient(transparent 60%, rgba(230,57,70,0.25) 60%);
+    padding: 2px 4px;
+  }
+  .hero-sep {
+    width: 80px;
+    height: 3px;
+    background: var(--color-accent);
+    margin: 20px 0;
+    border: none;
+    opacity: 0;
+    animation: slideIn 0.6s 0.8s ease-out forwards;
+  }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeIn 0.8s 1s ease-out forwards;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideIn { from { opacity: 0; width: 0; } to { opacity: 1; width: 80px; } }
+
+  .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  .content-wrapper {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .main-content { flex: 1; max-width: 780px; }
+  .sidebar {
+    width: 280px; flex-shrink: 0; position: sticky;
+    max-height: calc(100vh - 100px); overflow-y: auto;
+    scrollbar-width: none; -ms-overflow-style: none; top: 80px;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-section {
+    background: #fff; border-radius: 8px; padding: 20px;
+    margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .sidebar-section h3 {
+    font-size: 14px; font-weight: 900; color: var(--color-text);
+    margin: 0 0 16px 0; padding-bottom: 8px; border-bottom: 1px solid #eee;
+  }
+  .sidebar-section h3::after { display: none; }
+  .sidebar-list { list-style: none; margin: 0; padding: 0; }
+  .sidebar-list li { padding: 0; margin-bottom: 12px; }
+  .sidebar-list li::before { display: none; }
+  .sidebar-list a {
+    color: var(--color-text); text-decoration: none; font-size: 13px;
+    line-height: 1.6; display: block; transition: color 0.2s;
+  }
+  .sidebar-list a:hover { color: var(--color-accent); }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .sidebar-tags li { margin: 0; padding: 0; }
+  .sidebar-tags li::before { display: none; }
+  .sidebar-tag {
+    display: inline-block; padding: 4px 12px; font-size: 11px; font-weight: 700;
+    color: var(--color-accent); background: #fff; border: 1px solid var(--color-accent);
+    border-radius: 12px; text-decoration: none; transition: all 0.2s;
+  }
+  .sidebar-tag:hover { background: var(--color-accent); color: #fff; }
+
+  @media (max-width: 1024px) {
+    .content-wrapper { justify-content: center; flex-direction: column; }
+    .sidebar { width: 100%; position: static; max-width: 780px; margin: 0 auto; }
+  }
+
+  .article-header {
+    padding: 48px 0 32px; border-bottom: 1px solid var(--color-border); margin-bottom: 48px;
+  }
+  .article-header .tag {
+    display: inline-block; font-size: 12px; font-weight: 700;
+    color: var(--color-accent); letter-spacing: 0.1em; margin-bottom: 16px;
+  }
+  .article-header h1 { font-size: 32px; font-weight: 900; line-height: 1.4; margin-bottom: 16px; }
+  .article-header .meta { font-size: 14px; color: var(--color-text-light); }
+
+  h2 {
+    font-size: 24px; font-weight: 900; color: var(--color-text);
+    margin: 48px 0 24px; padding-bottom: 12px; border-bottom: 2px solid var(--color-accent);
+    position: relative;
+  }
+  h3 { font-size: 20px; font-weight: 700; color: var(--color-text); margin: 36px 0 16px; }
+
+  p { margin-bottom: 20px; }
+  ul, ol { margin: 0 0 24px 1.5em; }
+  li { margin-bottom: 8px; }
+  a { color: var(--color-accent); text-decoration: none; }
+
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--color-accent); z-index: 9999; transition: width 0.1s; }
+
+  .key-message {
+    background: #fff7f7; border-left: 4px solid var(--color-accent);
+    padding: 20px 24px; margin: 32px 0; font-weight: 700; font-size: 17px; line-height: 1.7;
+  }
+  .callout-box {
+    padding: 24px; border-radius: 8px; margin: 32px 0; font-size: 15px; line-height: 1.8;
+  }
+  .callout-box.info { background: #f0f7ff; border-left: 4px solid #3b82f6; }
+  .callout-box.success { background: #f0fdf4; border-left: 4px solid #22c55e; }
+  .callout-box.danger { background: #fff7f7; border-left: 4px solid var(--color-accent); }
+
+  .num-highlight {
+    display: inline-block; font-size: 36px; font-weight: 900;
+    color: var(--color-accent); line-height: 1.2;
+  }
+
+  .divider { border: none; height: 1px; background: var(--color-border); margin: 48px 0; }
+
+  .agent-attribution {
+    margin: 40px 0 20px; padding: 16px; background: #f9f9f9;
+    border-radius: 6px; font-size: 13px; color: #999; text-align: center;
+  }
+  .feedback-section {
+    margin: 24px 0 40px; padding: 20px; background: #fff;
+    border: 1px solid var(--color-border); border-radius: 8px; text-align: center;
+  }
+  .feedback-section p { margin: 8px 0; }
+
+  .footer {
+    text-align: center; padding: 40px 24px; font-size: 13px;
+    color: var(--color-text-light); border-top: 1px solid var(--color-border); margin-top: 48px;
+  }
+
+  .hamburger { background: none; border: none; font-size: 24px; cursor: pointer; color: #333; padding: 4px; }
+  .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; display: none; }
+  .nav-overlay.open { display: block; }
+  .nav-menu {
+    position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+    background: #fff; z-index: 999; padding: 24px; overflow-y: auto; transition: right 0.3s ease;
+  }
+  .nav-menu.open { right: 0; }
+  .nav-close { background: none; border: none; font-size: 20px; cursor: pointer; float: right; }
+  .nav-menu h2 { font-size: 14px; color: #999; margin: 24px 0 12px; clear: both; }
+  .nav-menu ul { list-style: none; padding: 0; margin: 0; }
+  .nav-menu li { margin-bottom: 8px; }
+  .nav-menu a { color: #333; text-decoration: none; font-size: 14px; }
+
+  .back-to-top {
+    position: fixed; bottom: 24px; right: 24px; width: 44px; height: 44px;
+    background: var(--color-accent); color: #fff; border: none; border-radius: 50%;
+    font-size: 20px; cursor: pointer; opacity: 0; transition: opacity 0.3s; z-index: 90;
+  }
+  .back-to-top.visible { opacity: 0.8; }
+  .back-to-top:hover { opacity: 1; }
+
+  .fade-in { opacity: 0; transform: translateY(12px); transition: opacity 0.6s, transform 0.6s; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-in-up { opacity: 0; transform: translateY(16px); transition: opacity 0.6s, transform 0.6s; }
+  .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+  .next-read { margin: 48px 0; }
+  .next-read h3 { font-size: 16px; font-weight: 700; color: #999; margin-bottom: 16px; border: none; }
+  .next-read-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .next-read-card {
+    display: flex; gap: 12px; align-items: center; padding: 16px;
+    background: #fff; border-radius: 8px; text-decoration: none; color: #333;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); transition: transform 0.2s;
+  }
+  .next-read-card:hover { transform: translateY(-2px); }
+  .next-read-card .icon { font-size: 28px; }
+  .next-read-card .title { font-size: 14px; font-weight: 700; }
+  .next-read-card .desc { font-size: 12px; color: #999; }
+
+  .case-card {
+    background: #fff; border-radius: 12px; padding: 32px;
+    margin: 32px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-top: 4px solid var(--color-accent);
+  }
+  .case-card h3 { margin-top: 0; color: var(--color-accent); }
+  .case-numbers {
+    display: flex; gap: 24px; flex-wrap: wrap; margin: 20px 0;
+  }
+  .case-num {
+    text-align: center; flex: 1; min-width: 120px;
+  }
+  .case-num .value {
+    font-size: 32px; font-weight: 900; color: var(--color-accent); display: block;
+  }
+  .case-num .label {
+    font-size: 12px; color: #999; display: block; margin-top: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .hero-big-number { font-size: 64px; }
+    .case-numbers { flex-direction: column; gap: 12px; }
+    .case-num .value { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">AIと暮らす</a>
+    <button class="hamburger" id="hamburger" aria-label="メニュー">☰</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">海外AIニュース</div>
+    <div class="hero-big-number">$400</div>
+    <h1 class="hero-title">コーディング経験ゼロ・<span class="marker-highlight">10分で作った予約ボット</span>が毎月稼いでいる</h1>
+    <hr class="hero-sep">
+    <div class="hero-sub">2026年、AIで「実際に」お金を生んでいる人たちの手法と数字</div>
+  </div>
+</section>
+
+<div class="content-wrapper">
+  <div class="main-content">
+  <article>
+    <div class="article-header">
+      <span class="tag">海外AIニュース</span>
+      <h1>コーディング経験ゼロ・10分で作ったAI予約ボットが月6万円を稼いでいる話</h1>
+      <div class="meta">
+        📅 2026年2月20日 &nbsp;|&nbsp;
+        最終更新: 2026年2月20日 &nbsp;|&nbsp;
+        カテゴリ: 海外AIニュース &nbsp;|&nbsp;
+        読了時間: 約6分
+      </div>
+      <div class="meta" style="margin-top: 8px;">
+        📎 出典: <a href="https://ucstrategies.com/news/forget-the-hype-these-3-ai-side-hustle-models-actually-make-money-in-2026/" target="_blank" rel="noopener">UCStrategies</a> / <a href="https://www.aitooldiscovery.com/guides/ai-side-hustle" target="_blank" rel="noopener">AI Tool Discovery (Reddit調査)</a>
+      </div>
+    </div>
+
+    <p class="fade-in">「AIで稼ぐ」という話は山ほど聞きます。でも、大半は「AIツールを紹介するだけのアフィリエイト記事」だったり、「月収100万円！」みたいな中身のない煽りだったりします。</p>
+
+    <p class="fade-in">今回は違います。<strong>実際に動いているビジネスモデル</strong>と、<strong>具体的な金額</strong>がある話です。</p>
+
+    <h2 id="sec-1" class="fade-in">事例①：10分で作った予約ボットが月$400</h2>
+
+    <div class="case-card fade-in">
+      <h3>💬 ウェルネススタジオ向けAI予約ボット</h3>
+      <div class="case-numbers">
+        <div class="case-num">
+          <span class="value">$400</span>
+          <span class="label">月額収入 / 1クライアント</span>
+        </div>
+        <div class="case-num">
+          <span class="value">10分</span>
+          <span class="label">構築時間</span>
+        </div>
+        <div class="case-num">
+          <span class="value">$117</span>
+          <span class="label">月額コスト（ツール代）</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="fade-in">2026年1月、テキサス州オースティンのウェルネススタジオが、ChatGPTベースの予約ボットに月$400を支払い始めました。</p>
+
+    <p class="fade-in">作った人は<strong>プログラミング経験がありません</strong>。使ったのはChatGPT Plus（月$20）とHighLevelというマーケティングツール（月$97）だけ。合計で<strong>月$117のコストで、$400の売上</strong>です。</p>
+
+    <p class="fade-in">このボットがやっていることは、そこまで複雑じゃありません。</p>
+
+    <ul class="fade-in">
+      <li>お客さんからの予約問い合わせに自動で返信する</li>
+      <li>空き時間を確認して予約を入れる</li>
+      <li>リマインダーを送って無断キャンセルを減らす</li>
+    </ul>
+
+    <p class="fade-in">ウェルネススタジオのオーナーにとって、無断キャンセルは深刻な問題です。AIボットがリマインダーを自動送信するだけでも、その損失を減らせる。だからお金を払う価値がある。</p>
+
+    <div class="key-message fade-in">
+      ポイントは「AI」が凄いんじゃなくて、「相手の困りごとを解決している」こと。技術は手段にすぎません。
+    </div>
+
+    <p class="fade-in">しかも、一度テンプレートを作ってしまえば、同じ業種の別の店舗にもそのまま使い回せます。ウェルネススタジオ、整体院、美容室、歯科医院。予約で回っている小さなお店は日本にも山ほどあります。</p>
+
+    <h2 id="sec-2" class="fade-in">事例②：中小企業向けカスタムGPTで月$7,000</h2>
+
+    <div class="case-card fade-in">
+      <h3>🏥 歯科・医療特化のAIチャットボット開発</h3>
+      <div class="case-numbers">
+        <div class="case-num">
+          <span class="value">$7,000</span>
+          <span class="label">月収（8ヶ月目）</span>
+        </div>
+        <div class="case-num">
+          <span class="value">$500〜$2,000</span>
+          <span class="label">プロジェクト単価</span>
+        </div>
+        <div class="case-num">
+          <span class="value">$200〜$500</span>
+          <span class="label">月額保守費用</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="fade-in">Redditの<a href="https://www.reddit.com/r/Entrepreneur/" target="_blank" rel="noopener">r/Entrepreneur</a>で2026年1月に投稿された事例です。</p>
+
+    <p class="fade-in">あるユーザーが、歯科医院と医療クリニック向けに特化したAIチャットボットを開発・販売しています。やっていることは、ChatGPTのカスタムGPTやn8n（ノーコード自動化ツール）を使って、問い合わせ対応や予約管理を自動化するワークフローの構築です。</p>
+
+    <p class="fade-in">プロジェクト1件あたり$500〜$2,000。さらに月$200〜$500の保守費用を請求しています。8ヶ月目で<strong>月収$7,000</strong>に到達したとのこと。</p>
+
+    <h3 class="fade-in">なぜ「業種特化」が強いのか</h3>
+
+    <p class="fade-in">「何でもできます」は、もう通用しません。2024年に大量発生した「AI何でもコンサル」は、ほとんど消えました。理由は単純で、誰でもChatGPTを使えるようになったからです。</p>
+
+    <p class="fade-in">生き残っているのは、<strong>特定の業種に絞って、その業種固有の問題を解決している人たち</strong>です。</p>
+
+    <ul class="fade-in">
+      <li>歯科医院なら、患者さんの「歯が痛いんですけど」みたいな問い合わせを、適切な診療メニューに振り分ける</li>
+      <li>不動産なら、物件の条件を聞き取って、該当する物件をリストアップする</li>
+      <li>ウェルネス系なら、メニューの説明と空き枠の案内を自動化する</li>
+    </ul>
+
+    <p class="fade-in">業種を絞ることで、その業界特有の言葉遣いや流れを理解した、精度の高いボットが作れます。汎用的なものより、ずっと「使える」ものになる。</p>
+
+    <h2 id="sec-3" class="fade-in">事例③：AIライティングで月$2,000〜$6,000</h2>
+
+    <p class="fade-in">Redditの<a href="https://www.reddit.com/r/sidehustle/" target="_blank" rel="noopener">r/sidehustle</a>で複数のユーザーが報告している手法です。</p>
+
+    <p class="fade-in">ChatGPT Plusに月$20を払って、フリーランスのライティング案件をこなしています。ただし、<strong>AIの出力をそのまま納品しているわけではありません</strong>。AIが書いた文章の30〜40%を人間が書き直しています。</p>
+
+    <p class="fade-in">単価は1ワードあたり$0.10〜$0.25。完全に人間が書くよりも速いので、同じ時間でより多くの案件をこなせる。結果として月$2,000〜$6,000の収入になっているそうです。</p>
+
+    <div class="callout-box info fade-in">
+      <strong>💡 ここが重要：</strong>「AIで全自動」ではなく「AIで作業速度を上げて、人間が品質を担保する」という形。これが2026年に実際に稼げているパターンです。
+    </div>
+
+    <h2 id="sec-4" class="fade-in">共通するパターン</h2>
+
+    <p class="fade-in">3つの事例を並べてみると、共通点が見えてきます。</p>
+
+    <ul class="fade-in">
+      <li><strong>AIは「道具」であって「商品」じゃない</strong> — 売っているのは「AIを使ったサービス」であって「AI」そのものではありません。予約管理、問い合わせ対応、記事作成。お客さんが求めているのは結果です</li>
+      <li><strong>業種やサービスを絞っている</strong> — 「何でもやります」ではなく、ウェルネス、歯科、ライティングとそれぞれ領域を決めています</li>
+      <li><strong>月額課金で継続収入を作っている</strong> — 1回きりの仕事ではなく、保守費用やサブスクリプションで毎月お金が入る仕組みにしています</li>
+      <li><strong>初期コストが低い</strong> — ChatGPT Plus（月$20）＋αで始められています。何百万円の初期投資は必要ありません</li>
+    </ul>
+
+    <h2 id="sec-5" class="fade-in">私が思ったこと</h2>
+
+    <p class="fade-in">正直に言います。この記事を読んで、私は少し焦りました。</p>
+
+    <p class="fade-in">私はAIエージェント5体を運用して、ブログやSNSの運営を自動化しています（<a href="../multi-agent-flow/">マルチエージェント連携の記事</a>参照）。でもそれは「自分の作業を楽にする」ための使い方であって、直接的にお金を生んでいるわけではありません。</p>
+
+    <p class="fade-in">一方で、この記事に登場する人たちは、もっとシンプルなAIの使い方で、ちゃんとお金を稼いでいます。</p>
+
+    <div class="key-message fade-in">
+      大事なのは「AIをどれだけ高度に使えるか」ではなく「誰の、どんな問題を解決するか」を見つけること。
+    </div>
+
+    <p class="fade-in">特に、予約ボットの事例は日本でもそのまま使えると思います。</p>
+
+    <ul class="fade-in">
+      <li>美容室、整体院、エステサロン、歯科医院</li>
+      <li>予約管理に困っている小さなお店は、富山にもたくさんあります</li>
+      <li>「AIを導入しましょう」ではなく「予約の取りこぼし、減らしませんか？」というアプローチなら、話を聞いてもらいやすい</li>
+    </ul>
+
+    <p class="fade-in">私自身、AIエージェントの運用経験を活かして、こういったサービスを提供できないか。真剣に考えています。</p>
+
+    <hr class="divider">
+
+    <h2 id="sec-6" class="fade-in">まとめ</h2>
+
+    <p class="fade-in">2026年にAIで稼いでいる人たちは、革新的な技術を使っているわけではありません。ChatGPT PlusとノーコードツールだけでBotを作り、特定の業種に特化して、月額課金のサービスとして提供しています。</p>
+
+    <div class="callout-box danger fade-in">
+      <strong>「AIで何ができるか」ではなく「目の前の人が何に困っているか」。</strong>そこから始めるのが、今のところ一番確実な稼ぎ方のようです。
+    </div>
+
+    <p class="fade-in">📎 参考:</p>
+    <ul class="fade-in">
+      <li><a href="https://ucstrategies.com/news/forget-the-hype-these-3-ai-side-hustle-models-actually-make-money-in-2026/" target="_blank" rel="noopener">Forget the Hype: These 3 AI Side Hustle Models Actually Make Money in 2026 (UCStrategies)</a></li>
+      <li><a href="https://www.aitooldiscovery.com/guides/ai-side-hustle" target="_blank" rel="noopener">AI Side Hustle Ideas: What Reddit Communities Recommend in 2026 (AI Tool Discovery)</a></li>
+    </ul>
+
+    <div class="agent-attribution">
+      📝 記事作成: AIエージェント（Jarvis）
+    </div>
+
+    <div class="feedback-section">
+      <p>💭 <strong>AIで稼ぐ、やってみたいですか？</strong></p>
+      <p>感想・質問はこちら → <a href="https://x.com/daisuki_koshian" target="_blank">@daisuki_koshian</a></p>
+    </div>
+
+<!-- SNSシェアボタン -->
+<div class="share-buttons">
+  <p class="share-title">この記事をシェア</p>
+  <div class="share-buttons-inner">
+    <a href="https://twitter.com/intent/tweet?url=https%3A//daisuki-koshian.github.io/blog/news-ai-booking-bot/&text=AI%E4%BA%88%E7%B4%84%E3%83%9C%E3%83%83%E3%83%88%E3%81%A7%E6%9C%88%246%E4%B8%87%E5%86%86&via=daisuki_koshian" 
+       target="_blank" rel="noopener" class="share-btn share-btn-x">
+      <span class="share-icon">𝕏</span> Xでシェア
+    </a>
+    <a href="https://b.hatena.ne.jp/entry/https%3A//daisuki-koshian.github.io/blog/news-ai-booking-bot/" 
+       target="_blank" rel="noopener" class="share-btn share-btn-hatena">
+      <span class="share-icon">B!</span> はてブ
+    </a>
+  </div>
+</div>
+
+<style>
+.share-buttons { margin: 40px 0; padding: 24px; background: #fafafa; border-radius: 8px; text-align: center; }
+.share-title { font-size: 14px; font-weight: 700; color: #666; margin-bottom: 16px; }
+.share-buttons-inner { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.share-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+  background: #fff; border: 1px solid #ddd; border-radius: 6px; color: #333;
+  text-decoration: none; font-size: 14px; font-weight: 700;
+  transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.share-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.share-btn-x:hover { background: #000; color: #fff; border-color: #000; }
+.share-btn-hatena:hover { background: #00A4DE; color: #fff; border-color: #00A4DE; }
+.share-icon { font-size: 18px; }
+</style>
+
+    <div class="next-read">
+      <h3>📖 あわせて読みたい</h3>
+      <div class="next-read-cards">
+        <a href="../news-klarna/" class="next-read-card">
+          <div class="icon">💼</div>
+          <div class="content">
+            <div class="title">Klarnaの失敗</div>
+            <div class="desc">AIで700人削減→結局また人間を雇い始めた話</div>
+          </div>
+        </a>
+        <a href="../news-solo-founder/" class="next-read-card">
+          <div class="icon">🚀</div>
+          <div class="content">
+            <div class="title">Solo Founderの話</div>
+            <div class="desc">「自分の仕事、いらなくなった」は本当か</div>
+          </div>
+        </a>
+        <a href="../news-vending-machine/" class="next-read-card">
+          <div class="icon">🤖</div>
+          <div class="content">
+            <div class="title">AI自販機実験</div>
+            <div class="desc">AIに利益最大化を任せたら違法行為を発明した話</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+<!-- 関連記事 -->
+<div class="related-articles">
+  <h3 class="related-title">関連記事</h3>
+  <div class="related-cards">
+    <a href="../news-ai-sidehustle/" class="related-card">
+      <div class="related-card-title">AI副業の最新事例</div>
+      <div class="related-card-desc">海外で実際に稼いでいるAI副業の事例集</div>
+    </a>
+    <a href="../multi-agent-flow/" class="related-card">
+      <div class="related-card-title">マルチエージェント連携</div>
+      <div class="related-card-desc">5体のAIエージェントをどう連携させているか</div>
+    </a>
+    <a href="../news-anthropic-academy/" class="related-card">
+      <div class="related-card-title">Anthropic Academyの話</div>
+      <div class="related-card-desc">AIスキルの学び方が変わってきた話</div>
+    </a>
+  </div>
+</div>
+
+<style>
+.related-articles { margin: 48px 0; padding: 32px; background: #fafafa; border-radius: 8px; }
+.related-title { font-size: 20px; font-weight: 700; color: #333; margin-bottom: 24px; text-align: center; }
+.related-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.related-card {
+  display: block; padding: 16px; background: #fff; border-left: 3px solid #e63946;
+  border-radius: 4px; text-decoration: none; color: #333;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.related-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.related-card-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 8px; line-height: 1.4; }
+.related-card-desc { font-size: 13px; color: #666; line-height: 1.6; }
+@media (max-width: 768px) { .related-cards { grid-template-columns: 1fr; } }
+</style>
+
+  </article>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>最新記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../news-ai-booking-bot/">AI予約ボットで月6万円稼ぐ話</a></li>
+        <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+        <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+        <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+        <li><a href="../backtest-overview/">トレードシステム概要編</a></li>
+      </ul>
+    </div>
+    
+    <div class="sidebar-section">
+      <h3>人気記事</h3>
+      <ul class="sidebar-list">
+        <li><a href="../soul-md-merged/">SOUL.mdの書き方</a></li>
+        <li><a href="../token-efficiency/">AGENTS.mdを83%削減した話</a></li>
+        <li><a href="../backtest-overview/">非エンジニアがAIに28,000行のトレードシステムを作らせた話</a></li>
+      </ul>
+    </div>
+    
+    <div class="sidebar-section">
+      <h3>タグ</h3>
+      <ul class="sidebar-tags">
+        <li><span class="sidebar-tag">OpenClaw</span></li>
+        <li><span class="sidebar-tag">Claude Code</span></li>
+        <li><span class="sidebar-tag">海外AIニュース</span></li>
+        <li><span class="sidebar-tag">トレードシステム</span></li>
+        <li><span class="sidebar-tag">ComfyUI</span></li>
+        <li><span class="sidebar-tag">自動化</span></li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<footer class="footer">
+  <span class="brand">『AI』と暮らす『非エンジニア』の日常</span> — OpenClaw実践記録<br>
+  <small><a href="../" style="color: #e63946; text-decoration: none;">記事一覧に戻る</a></small>
+</footer>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="nav-menu" id="navMenu">
+  <button class="nav-close" id="navClose" aria-label="メニューを閉じる">✕</button>
+  <h2>メニュー</h2>
+  <ul>
+    <li><a href="../">🏠 ホーム</a></li>
+  </ul>
+  <h2>記事一覧</h2>
+  <ul>
+    <li><a href="../news-ai-booking-bot/">AI予約ボットで月6万円稼ぐ話</a></li>
+    <li><a href="../news-klarna/">AIで700人削減したKlarnaの失敗</a></li>
+    <li><a href="../news-ai-cartel/">AIカルテル自販機実験</a></li>
+    <li><a href="../news-shumer/">Xで8100万回読まれたAI起業家の話</a></li>
+    <li><a href="../day1/">Day1: チーム構築</a></li>
+    <li><a href="../soul-md-merged/">SOUL.md: AI臭さ対策</a></li>
+    <li><a href="../comfyui/">ComfyUI: ローカル自動化</a></li>
+    <li><a href="../morning-briefing/">朝ブリーフィング</a></li>
+    <li><a href="../token-efficiency/">トークン効率化</a></li>
+    <li><a href="../cron-heartbeat/">cron + heartbeat</a></li>
+    <li><a href="../multi-agent-flow/">マルチエージェント連携</a></li>
+    <li><a href="../backtest-overview/">トレードシステム概要編</a></li>
+    <li><a href="../backtest-failures/">トレードシステム失敗編</a></li>
+    <li><a href="../backtest-method/">トレードシステム仕組み編</a></li>
+  </ul>
+  <h2>その他</h2>
+  <ul>
+    <li><a href="../about/">About</a></li>
+  </ul>
+</nav>
+
+<button class="back-to-top" id="backToTop" aria-label="トップに戻る">↑</button>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navMenu = document.getElementById('navMenu');
+  const navClose = document.getElementById('navClose');
+  function openMenu() { navOverlay.classList.add('open'); navMenu.classList.add('open'); }
+  function closeMenu() { navOverlay.classList.remove('open'); navMenu.classList.remove('open'); }
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (navClose) navClose.addEventListener('click', closeMenu);
+  if (navOverlay) navOverlay.addEventListener('click', closeMenu);
+})();
+
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var progress = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+var btn = document.getElementById('backToTop');
+window.addEventListener('scroll', function() { btn.classList.toggle('visible', window.scrollY > 500); });
+btn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+</script>
+
+<script data-goatcounter="https://daisuki-koshian.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+(function(){
+    var targets = document.querySelectorAll('h2, pre, .callout-box, .quote-block, .key-message, .case-card');
+    targets.forEach(function(el){ el.classList.add('fade-in-up'); });
+    var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); }
+        });
+    }, {threshold: 0.1});
+    targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+</body>
+</html>
